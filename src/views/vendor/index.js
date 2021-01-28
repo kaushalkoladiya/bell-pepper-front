@@ -6,10 +6,10 @@ import axios from "axios";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 
-import Page from "../../../components/Page";
+import Page from "../../components/Page";
 import Results from "./Results";
-import { getUsers } from "../../../redux/user/actions";
-import TableToolbar from "../../../components/TableToolbar";
+import { getVendor } from "../../redux/vendor/actions";
+import TableToolbar from "../../components/TableToolbar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,11 +20,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CustomerListView = () => {
+const VednorListView = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const userData = useSelector((state) => state.user.data);
+  const vendorData = useSelector((state) => state.vendor.data);
 
   useEffect(() => {
     fetchData();
@@ -32,23 +32,22 @@ const CustomerListView = () => {
 
   const fetchData = async () => {
     try {
-      const { data } = await axios.get("/user");
-      dispatch(getUsers(data.data.users));
+      const { data } = await axios.get("/vendor");
+      dispatch(getVendor(data.data.vendors));
     } catch (error) {
       console.log(error);
     }
   };
-
   return (
-    <Page className={classes.root} title="Customers">
+    <Page className={classes.root} title="Vendors">
       <Container maxWidth={false}>
-        <TableToolbar title="Customer" hideAddButton />
+        <TableToolbar title="Vendor" hideAddButton />
         <Box mt={3}>
-          <Results customers={userData} />
+          <Results vendors={vendorData} />
         </Box>
       </Container>
     </Page>
   );
 };
 
-export default CustomerListView;
+export default VednorListView;
