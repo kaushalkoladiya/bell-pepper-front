@@ -21,6 +21,7 @@ import {
   User as UserIcon,
   UserPlus as UserPlusIcon,
   Users as UsersIcon,
+  Briefcase as BookingIcon,
 } from "react-feather";
 import NavItem from "./NavItem";
 
@@ -50,6 +51,11 @@ const items = [
     href: "/app/services",
     icon: ShoppingBagIcon,
     title: "Services",
+  },
+  {
+    href: "/app/bookings",
+    icon: BookingIcon,
+    title: "Bookings",
   },
   {
     href: "/app/account",

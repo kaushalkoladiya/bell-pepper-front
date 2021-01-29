@@ -130,7 +130,7 @@ const Results = ({ className, customers, ...rest }) => {
                   <TableCell>{setEmptyStr(customer.gender)}</TableCell>
                   <TableCell>{setEmptyStr(customer.dob)}</TableCell>
                   <TableCell>
-                    {setEmptyStr(customer.lon)}-{setEmptyStr(customer.lat)}
+                    {customer.lon}-{customer.lat}
                   </TableCell>
                   <TableCell>{setEmptyStr(customer.city)}</TableCell>
                   <TableCell>

@@ -4,6 +4,7 @@ import thunk from "redux-thunk";
 import userReducer from "./user/reducer";
 import vendorReducer from "./vendor/reducer";
 import serviceReducer from "./service/reducer";
+import bookingReducer from "./booking/reducer";
 
 const initialState = {};
 
@@ -13,6 +14,7 @@ const reducers = combineReducers({
   user: userReducer,
   vendor: vendorReducer,
   service: serviceReducer,
+  booking: bookingReducer,
 });
 
 const composeEnhancers =

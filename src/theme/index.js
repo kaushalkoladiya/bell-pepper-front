@@ -27,6 +27,12 @@ const theme = createMuiTheme({
       root: {
         padding: 0,
       },
+      body: {
+        textAlign: "center",
+      },
+      head: {
+        textAlign: "center",
+      },
     },
   },
 });

@@ -13,6 +13,7 @@ const Image = ({ image, extraLarge, ...props }) => {
         height: extraLarge ? 200 : 80,
         objectFit: "cover",
         borderRadius: 5,
+        margin: 2,
         boxShadow: "rgba(0, 0, 0, 0.3) 2px 3px 5px 1px",
       }}
       {...props}

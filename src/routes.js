@@ -8,6 +8,7 @@ import DashboardView from "./views/reports/DashboardView";
 import LoginView from "./views/auth/LoginView";
 import NotFoundView from "./views/errors/NotFoundView";
 import ServiceListView from "./views/service";
+import BookingListView from "./views/Booking";
 import RegisterView from "./views/auth/RegisterView";
 import SettingsView from "./views/settings/SettingsView";
 import VendorListView from "./views/vendor";
@@ -22,6 +23,7 @@ const routes = [
       { path: "vendors", element: <VendorListView /> },
       { path: "dashboard", element: <DashboardView /> },
       { path: "services", element: <ServiceListView /> },
+      { path: "bookings", element: <BookingListView /> },
       { path: "settings", element: <SettingsView /> },
       { path: "*", element: <Navigate to="/404" /> },
     ],

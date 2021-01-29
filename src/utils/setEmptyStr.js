@@ -1,1 +1,1 @@
-export default (str) => (str ? str : "null");
+export default (str) => (str ? str : "-");
