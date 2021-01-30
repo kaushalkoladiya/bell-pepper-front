@@ -4,9 +4,12 @@ import PropTypes from "prop-types";
 import { BASE_URL } from "../constrants";
 
 const Image = ({ image, extraLarge, ...props }) => {
+  const imageURL =
+    image.search("storage") !== -1 ? `${BASE_URL}${image}` : image;
+
   return (
     <img
-      src={`${BASE_URL}${image}`}
+      src={imageURL}
       alt={image}
       style={{
         width: extraLarge ? 200 : 80,

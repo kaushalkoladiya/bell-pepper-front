@@ -13,20 +13,37 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
   makeStyles,
-  IconButton,
+  Button,
+  Chip as MuiChip,
+  Avatar,
+  colors,
 } from "@material-ui/core";
+
+// icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
+import AssignmentIcon from "@material-ui/icons/Assignment";
+import DeleteIcon from "@material-ui/icons/DeleteForeverRounded";
+
 import setEmptyStr from "../../utils/setEmptyStr";
-
 import trimStr from "../../utils/trimStr";
-
-import { openBookingDialog } from "../../redux/booking/actions";
+import {
+  openBookingDialog,
+  openStaffDialog,
+} from "../../redux/booking/actions";
+import ToolTipButton from "../../components/ToolTipButton";
+import { warning } from "../../utils/alert";
+import Chip from "../../components/Chip";
+import getInitials from "../../utils/getInitials";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   avatar: {
     marginRight: theme.spacing(2),
+  },
+  description: {
+    margin: theme.spacing(1),
   },
 }));
 
@@ -89,6 +106,21 @@ const Results = ({ className, bookings, ...rest }) => {
     dispatch(openBookingDialog(id));
   };
 
+  const handleOpenStaffAssignDialog = (bookingId, vendorId) => {
+    dispatch(openStaffDialog({ bookingId, vendorId }));
+  };
+
+  const handleDelete = (id) => {
+    const data = warning();
+    data
+      .then((isDeleted) => {
+        if (isDeleted) {
+          // delete
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
       <PerfectScrollbar>
@@ -107,21 +139,25 @@ const Results = ({ className, bookings, ...rest }) => {
                     onChange={handleSelectAll}
                   />
                 </TableCell>
-                <TableCell>Vendor's Company Name</TableCell>
-                <TableCell>Service Name</TableCell>
+                <TableCell>Company Name</TableCell>
+                <TableCell>Service Title</TableCell>
                 <TableCell>User Name</TableCell>
                 <TableCell>Description</TableCell>
                 <TableCell>Material</TableCell>
                 <TableCell>Frequency</TableCell>
                 <TableCell>Hours</TableCell>
-                <TableCell>Profession</TableCell>
+                <TableCell>Professions</TableCell>
                 <TableCell>Days</TableCell>
-                <TableCell>Time Duration</TableCell>
+                <TableCell>Time</TableCell>
+                <TableCell>Profession</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {bookings.slice(0, limit).map((booking) => (
+              {(limit > 0
+                ? bookings.slice(page * limit, page * limit + limit)
+                : bookings
+              ).map((booking) => (
                 <TableRow
                   hover
                   key={booking._id}
@@ -136,9 +172,20 @@ const Results = ({ className, bookings, ...rest }) => {
                   </TableCell>
                   <TableCell>{booking.vendorId.companyName}</TableCell>
                   <TableCell>{booking.serviceId.title}</TableCell>
-                  <TableCell>{setEmptyStr(booking.userId.name)}</TableCell>
+                  <TableCell>{setEmptyStr(booking?.userId?.name)}</TableCell>
                   <TableCell>
-                    {trimStr(setEmptyStr(booking.description))}
+                    <Tooltip title={setEmptyStr(booking.description)}>
+                      <Button
+                        className={classes.description}
+                        disableElevation
+                        disableFocusRipple
+                        disableRipple
+                        disableTouchRipple
+                        variant="text"
+                      >
+                        {trimStr(setEmptyStr(booking.description))}
+                      </Button>
+                    </Tooltip>
                   </TableCell>
                   <TableCell>
                     {booking.isMaterialRequired ? "on" : "off"}
@@ -148,15 +195,66 @@ const Results = ({ className, bookings, ...rest }) => {
                   <TableCell>
                     {setEmptyStr(booking.howManyProfessions)}
                   </TableCell>
-                  <TableCell>{booking.date}</TableCell>
-                  <TableCell>{booking.time}</TableCell>
+                  <TableCell>{trimStr(booking.date)}</TableCell>
+                  <TableCell>{trimStr(booking.time)}</TableCell>
+                  <TableCell>
+                    {!booking.profession && !booking.isCancelled && (
+                      <ToolTipButton
+                        onClick={() =>
+                          handleOpenStaffAssignDialog(
+                            booking._id,
+                            booking.vendorId._id
+                          )
+                        }
+                        title="Assign Employee"
+                        placement="top"
+                      >
+                        <AssignmentIcon color="action" fontSize="small" />
+                      </ToolTipButton>
+                    )}
+                    {booking.profession && !booking.isCancelled && (
+                      <MuiChip
+                        label={booking.profession.name}
+                        size="small"
+                        style={{
+                          backgroundColor:
+                            booking.profession &&
+                            booking.isDone &&
+                            colors.green[500],
+                          color:
+                            booking.profession &&
+                            booking.isDone &&
+                            colors.common.white,
+                        }}
+                        icon={<Avatar />}
+                      />
+                    )}
+                    {booking.isCancelled && booking.cancelledByWhom && (
+                      <Chip type="cancel" label={booking.cancelledByWhom} />
+                    )}
+                    {booking.profession && booking.isDone && (
+                      <Chip type="success" />
+                    )}
+                    {booking.profession && !booking.isDone && (
+                      <Chip type="success" label="Assigned" />
+                    )}
+                  </TableCell>
 
                   <TableCell>
-                    <IconButton
+                    <ToolTipButton
                       onClick={() => handleOpenBookingDialog(booking._id)}
+                      title="Edit"
+                      placement="top"
                     >
-                      <VisibilityIcon color="primary" />
-                    </IconButton>
+                      <VisibilityIcon color="primary" fontSize="small" />
+                    </ToolTipButton>
+                    <ToolTipButton
+                      onClick={handleDelete}
+                      title="Delete"
+                      placement="top"
+                    >
+                      <DeleteIcon color="error" fontSize="small" />
+                    </ToolTipButton>
                   </TableCell>
                 </TableRow>
               ))}

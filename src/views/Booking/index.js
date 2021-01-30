@@ -12,6 +12,7 @@ import Results from "./Results";
 import TableToolbar from "../../components/TableToolbar";
 import { getBooking } from "../../redux/booking/actions";
 import Dialog from "./Dialog";
+import StaffDialog from "./StaffDialog";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,7 +36,6 @@ const BookingListView = () => {
   const fetchData = async () => {
     try {
       const { data } = await axios.get("/booking");
-      console.log(data);
       dispatch(getBooking(data.data.bookings));
     } catch (error) {
       console.log(error);
@@ -50,6 +50,7 @@ const BookingListView = () => {
         </Box>
       </Container>
       <Dialog />
+      <StaffDialog />
     </Page>
   );
 };

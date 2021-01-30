@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import moment from "moment";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import {
-  Avatar,
   Box,
   Card,
   Checkbox,
@@ -14,10 +13,8 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography,
   makeStyles,
 } from "@material-ui/core";
-import getInitials from "../../utils/getInitials";
 import setEmptyStr from "../../utils/setEmptyStr";
 import ProfileName from "../../components/ProfileName";
 
@@ -121,7 +118,7 @@ const Results = ({ className, vendors, ...rest }) => {
                     <ProfileName name={vendor.companyName} />
                   </TableCell>
                   <TableCell>{setEmptyStr(vendor.mobile)}</TableCell>
-                  <TableCell>{setEmptyStr(vendor.address)}</TableCell>
+                  <TableCell>{`${vendor.address.houseNumber}, ${vendor.address.street} ${vendor.address.city}`}</TableCell>
                   <TableCell>{setEmptyStr(vendor.city)}</TableCell>
                   <TableCell>
                     {moment(vendor.createdAt).format("DD/MM/YYYY")}

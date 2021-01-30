@@ -137,7 +137,7 @@ const Dialog = () => {
               <div className={classes.dataLine}>
                 <Typography variant="h5">Date & Time:&nbsp;</Typography>
                 <Typography variant="h6" color="textSecondary">
-                  {booking.date},&nbsp;{booking.time}
+                  {booking.date} &nbsp;{booking.time}
                 </Typography>
               </div>
 
@@ -255,6 +255,12 @@ const Dialog = () => {
                     <div>
                       <ProfileName name={booking.vendorId.companyName} />
                       <div className={classes.dataLine}>
+                        <Typography variant="h5">Email:&nbsp;</Typography>
+                        <Typography variant="h6" color="textSecondary">
+                          {setEmptyStr(booking.vendorId.email)}
+                        </Typography>
+                      </div>
+                      <div className={classes.dataLine}>
                         <Typography variant="h5">Mobile:&nbsp;</Typography>
                         <Typography variant="h6" color="textSecondary">
                           {setEmptyStr(booking.vendorId.mobile)}
@@ -263,7 +269,7 @@ const Dialog = () => {
                       <div className={classes.dataLine}>
                         <Typography variant="h5">Address:&nbsp;</Typography>
                         <Typography variant="h6" color="textSecondary">
-                          {setEmptyStr(booking.vendorId.address)}
+                          {`${booking.vendorId.address.houseNumber}, ${booking.vendorId.address.street} ${booking.vendorId.address.city}`}
                         </Typography>
                       </div>
                       <div className={classes.dataLine}>

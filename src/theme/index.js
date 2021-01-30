@@ -25,7 +25,7 @@ const theme = createMuiTheme({
   overrides: {
     MuiTableCell: {
       root: {
-        padding: 0,
+        padding: 2,
       },
       body: {
         textAlign: "center",
@@ -34,6 +34,26 @@ const theme = createMuiTheme({
         textAlign: "center",
       },
     },
+    MuiTooltip: {
+      tooltip: {
+        backgroundColor: "rgba(0, 0, 0, 0.87)",
+        color: "#f5f5f9",
+        maxWidth: 220,
+        border: "1px solid #dadde9",
+      },
+      arrow: {
+        color: "rgba(0, 0, 0)",
+      },
+    },
+  },
+  props: {
+    MuiIcon: {
+      fontSize: "small",
+    },
+    MuiTooltip: {
+      arrow: true,
+    },
+    MuiButton: {},
   },
 });
 
