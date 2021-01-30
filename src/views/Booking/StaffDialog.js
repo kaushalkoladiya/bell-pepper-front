@@ -27,7 +27,6 @@ export default function StaffDialog({ onChange }) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = React.useState(false);
   const [staffs, setStaffs] = React.useState([]);
   const [selectedStaff, setSelectedStaff] = React.useState("");
 
@@ -41,10 +40,8 @@ export default function StaffDialog({ onChange }) {
 
   const fetchData = async () => {
     try {
-      setLoading(true);
       const { data } = await axios.get(`/staff/vendor/${vendorId}`);
       setStaffs(data.data.staffs);
-      setLoading(false);
     } catch (error) {
       console.log(error);
     }

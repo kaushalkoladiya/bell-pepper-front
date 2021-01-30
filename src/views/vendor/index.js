@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const VednorListView = () => {
+const VendorListView = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -50,4 +50,4 @@ const VednorListView = () => {
   );
 };
 
-export default VednorListView;
+export default VendorListView;

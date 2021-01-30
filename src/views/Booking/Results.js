@@ -35,7 +35,6 @@ import {
 import ToolTipButton from "../../components/ToolTipButton";
 import { warning } from "../../utils/alert";
 import Chip from "../../components/Chip";
-import getInitials from "../../utils/getInitials";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
