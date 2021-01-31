@@ -30,17 +30,17 @@ const BookingListView = () => {
   const bookingData = useSelector((state) => state.booking.data);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get("/booking");
+        dispatch(getBooking(data.data.bookings));
+      } catch (error) {
+        console.log(error);
+      }
+    };
     fetchData();
-  }, []);
+  }, [dispatch]);
 
-  const fetchData = async () => {
-    try {
-      const { data } = await axios.get("/booking");
-      dispatch(getBooking(data.data.bookings));
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <Page className={classes.root} title="Bookings">
       <Container maxWidth={false}>

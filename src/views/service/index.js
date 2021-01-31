@@ -22,24 +22,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const VednorListView = () => {
+const VendorListView = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const serviceData = useSelector((state) => state.service.data);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get("/service");
+        dispatch(getService(data.data.services));
+      } catch (error) {
+        console.log(error);
+      }
+    };
     fetchData();
-  }, []);
+  }, [dispatch]);
 
-  const fetchData = async () => {
-    try {
-      const { data } = await axios.get("/service");
-      dispatch(getService(data.data.services));
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <Page className={classes.root} title="Services">
       <Container maxWidth={false}>
@@ -53,4 +53,4 @@ const VednorListView = () => {
   );
 };
 
-export default VednorListView;
+export default VendorListView;

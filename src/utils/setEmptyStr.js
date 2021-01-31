@@ -1,1 +1,2 @@
-export default (str) => (str ? str : "-");
+const setEmptyStr = (str) => (str ? str : "-");
+export default setEmptyStr;

@@ -27,17 +27,16 @@ const CustomerListView = () => {
   const userData = useSelector((state) => state.user.data);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get("/user");
+        dispatch(getUsers(data.data.users));
+      } catch (error) {
+        console.log(error);
+      }
+    };
     fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const { data } = await axios.get("/user");
-      dispatch(getUsers(data.data.users));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  }, [dispatch]);
 
   return (
     <Page className={classes.root} title="Customers">

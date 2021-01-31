@@ -35,17 +35,16 @@ export default function StaffDialog({ onChange }) {
   );
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get(`/staff/vendor/${vendorId}`);
+        setStaffs(data.data.staffs);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     if (vendorId) fetchData();
   }, [vendorId]);
-
-  const fetchData = async () => {
-    try {
-      const { data } = await axios.get(`/staff/vendor/${vendorId}`);
-      setStaffs(data.data.staffs);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const handleClose = () => {
     dispatch(closeStaffDialog());

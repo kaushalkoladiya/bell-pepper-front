@@ -27,17 +27,17 @@ const VendorListView = () => {
   const vendorData = useSelector((state) => state.vendor.data);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get("/vendor");
+        dispatch(getVendor(data.data.vendors));
+      } catch (error) {
+        console.log(error);
+      }
+    };
     fetchData();
-  }, []);
+  }, [dispatch]);
 
-  const fetchData = async () => {
-    try {
-      const { data } = await axios.get("/vendor");
-      dispatch(getVendor(data.data.vendors));
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <Page className={classes.root} title="Vendors">
       <Container maxWidth={false}>
