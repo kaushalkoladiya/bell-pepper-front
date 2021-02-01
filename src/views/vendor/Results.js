@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
-import moment from "moment";
 import PerfectScrollbar from "react-perfect-scrollbar";
+// Mui
 import {
   Box,
   Card,
@@ -15,8 +15,15 @@ import {
   TableRow,
   makeStyles,
 } from "@material-ui/core";
+
+// icons
+import VisibilityIcon from "@material-ui/icons/Visibility";
+// utils
 import setEmptyStr from "../../utils/setEmptyStr";
+// components
 import ProfileName from "../../components/ProfileName";
+import ToolTipButton from "../../components/ToolTipButton";
+import setDate from "../../utils/setDate";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -96,8 +103,9 @@ const Results = ({ className, vendors, ...rest }) => {
                 <TableCell>Company Name</TableCell>
                 <TableCell>Phone</TableCell>
                 <TableCell>Address</TableCell>
-                <TableCell>Staff</TableCell>
-                <TableCell>Registration date</TableCell>
+                {/* <TableCell>Staff</TableCell> */}
+                <TableCell>Joined On</TableCell>
+                <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -119,9 +127,12 @@ const Results = ({ className, vendors, ...rest }) => {
                   </TableCell>
                   <TableCell>{setEmptyStr(vendor.mobile)}</TableCell>
                   <TableCell>{`${vendor.address.houseNumber}, ${vendor.address.street} ${vendor.address.city}`}</TableCell>
-                  <TableCell>{setEmptyStr(vendor.city)}</TableCell>
+                  {/* <TableCell>{setEmptyStr(vendor.city)}</TableCell> */}
+                  <TableCell>{setDate(vendor.createdAt)}</TableCell>
                   <TableCell>
-                    {moment(vendor.createdAt).format("DD/MM/YYYY")}
+                    <ToolTipButton title="Edit">
+                      <VisibilityIcon color="primary" />
+                    </ToolTipButton>
                   </TableCell>
                 </TableRow>
               ))}

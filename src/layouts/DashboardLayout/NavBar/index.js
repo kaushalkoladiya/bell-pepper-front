@@ -32,37 +32,37 @@ const user = {
 
 const items = [
   {
-    href: "/app/dashboard",
+    href: "/partners/dashboard",
     icon: BarChartIcon,
     title: "Dashboard",
   },
   {
-    href: "/app/customers",
+    href: "/partners/customers",
     icon: UsersIcon,
     title: "Customers",
   },
   {
-    href: "/app/vendors",
+    href: "/partners/vendors",
     icon: UsersIcon,
     title: "Vendors",
   },
   {
-    href: "/app/services",
+    href: "/partners/services",
     icon: ShoppingBagIcon,
     title: "Services",
   },
   {
-    href: "/app/bookings",
+    href: "/partners/bookings",
     icon: BookingIcon,
     title: "Bookings",
   },
   {
-    href: "/app/account",
+    href: "/partners/account",
     icon: UserIcon,
     title: "Account",
   },
   {
-    href: "/app/settings",
+    href: "/partners/settings",
     icon: SettingsIcon,
     title: "Settings",
   },
@@ -117,7 +117,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           className={classes.avatar}
           component={RouterLink}
           src={user.avatar}
-          to="/app/account"
+          to="/partners/account"
         />
         <Typography className={classes.name} color="textPrimary" variant="h5">
           {user.name}

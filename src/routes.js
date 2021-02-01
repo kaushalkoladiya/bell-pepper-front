@@ -15,12 +15,13 @@ import VendorListView from "./views/vendor";
 
 const routes = [
   {
-    path: "app",
+    path: "partners",
     element: <DashboardLayout />,
     children: [
       { path: "account", element: <AccountView /> },
       { path: "customers", element: <CustomerListView /> },
       { path: "vendors", element: <VendorListView /> },
+      { path: "vendors/:vendorId", element: <SettingsView /> },
       { path: "dashboard", element: <DashboardView /> },
       { path: "services", element: <ServiceListView /> },
       { path: "bookings", element: <BookingListView /> },
@@ -35,7 +36,7 @@ const routes = [
       { path: "login", element: <LoginView /> },
       { path: "register", element: <RegisterView /> },
       { path: "404", element: <NotFoundView /> },
-      { path: "/", element: <Navigate to="/app/dashboard" /> },
+      { path: "/", element: <Navigate to="/partners/dashboard" /> },
       { path: "*", element: <Navigate to="/404" /> },
     ],
   },

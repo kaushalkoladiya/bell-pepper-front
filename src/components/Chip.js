@@ -12,7 +12,7 @@ const Chip = ({ type = "success", label = "" }) => {
       size="small"
       label={label}
       style={{
-        backgroundColor: isSuccess ? colors.green[500] : colors.red[500],
+        backgroundColor: isSuccess ? colors.indigo[500] : colors.red[500],
         color: colors.common.white,
         margin: 2,
       }}

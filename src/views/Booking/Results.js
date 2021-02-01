@@ -232,7 +232,7 @@ const Results = ({ className, bookings, ...rest }) => {
                       <Chip type="cancel" label={booking.cancelledByWhom} />
                     )}
                     {booking.profession && booking.isDone && (
-                      <Chip type="success" />
+                      <Chip type="success" label="Completed" />
                     )}
                     {booking.profession && !booking.isDone && (
                       <Chip type="success" label="Assigned" />
