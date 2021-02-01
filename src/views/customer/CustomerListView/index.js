@@ -33,6 +33,8 @@ const CustomerListView = () => {
         dispatch(getUsers(data.data.users));
       } catch (error) {
         console.log(error);
+        console.log(error.response?.data);
+        console.log(error.response);
       }
     };
     fetchData();
