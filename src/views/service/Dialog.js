@@ -160,13 +160,7 @@ const Dialog = () => {
                       <div className={classes.dataLine}>
                         <Typography variant="h5">Address:&nbsp;</Typography>
                         <Typography variant="h6" color="textSecondary">
-                          {setEmptyStr(service.vendorId.address)}
-                        </Typography>
-                      </div>
-                      <div className={classes.dataLine}>
-                        <Typography variant="h5">City:&nbsp;</Typography>
-                        <Typography variant="h6" color="textSecondary">
-                          {setEmptyStr(service.vendorId.city)}
+                          {`${service.vendorId.address.houseNumber}, ${service.vendorId.address.street} ${service.vendorId.address.city}`}
                         </Typography>
                       </div>
                     </div>

@@ -32,6 +32,8 @@ const theme = createMuiTheme({
       },
       head: {
         textAlign: "center",
+        backgroundColor: "#f1f1f1",
+        fontWeight: "bold",
       },
     },
     MuiTooltip: {

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link as RouterLink, useLocation } from "react-router-dom";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
   Avatar,
@@ -20,12 +20,15 @@ import {
   User as UserIcon,
   UserPlus as UserPlusIcon,
   Users as UsersIcon,
+  LogOut as LogOutIcon,
   Briefcase as BookingIcon,
 } from "react-feather";
 import NavItem from "./NavItem";
+import { logoutAdmin } from "../../../redux/admin/actions";
+import { useDispatch } from "react-redux";
 
 const user = {
-  avatar: "/static/images/avatars/avatar_6.png",
+  avatar: "../../../images/icon.jpeg",
   jobTitle: "Root Admin",
   name: "Dummy User",
 };
@@ -61,26 +64,6 @@ const items = [
     icon: UserIcon,
     title: "Account",
   },
-  {
-    href: "/partners/settings",
-    icon: SettingsIcon,
-    title: "Settings",
-  },
-  {
-    href: "/login",
-    icon: LockIcon,
-    title: "Login",
-  },
-  {
-    href: "/register",
-    icon: UserPlusIcon,
-    title: "Register",
-  },
-  {
-    href: "/404",
-    icon: AlertCircleIcon,
-    title: "Error",
-  },
 ];
 
 const useStyles = makeStyles(() => ({
@@ -102,6 +85,8 @@ const useStyles = makeStyles(() => ({
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
+  const dispatch = useDispatch();
+  const navigation = useNavigate();
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -109,6 +94,11 @@ const NavBar = ({ onMobileClose, openMobile }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
+
+  const handleLogOut = () => {
+    dispatch(logoutAdmin());
+    navigation("/login", { replace: true });
+  };
 
   const content = (
     <Box height="100%" display="flex" flexDirection="column">
@@ -137,6 +127,11 @@ const NavBar = ({ onMobileClose, openMobile }) => {
               icon={item.icon}
             />
           ))}
+          <NavItem
+            icon={LogOutIcon}
+            title="Log out"
+            handleOnClick={handleLogOut}
+          />
         </List>
       </Box>
       <Box flexGrow={1} />
