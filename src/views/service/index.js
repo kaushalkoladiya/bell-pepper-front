@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Container, makeStyles } from "@material-ui/core";
 
 import axios from "axios";
@@ -28,6 +28,8 @@ const VendorListView = () => {
 
   const serviceData = useSelector((state) => state.service.data);
 
+  const [services, setServices] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -40,12 +42,39 @@ const VendorListView = () => {
     fetchData();
   }, [dispatch]);
 
+  useEffect(() => {
+    setServices(serviceData);
+  }, [serviceData]);
+
+  const handleSearch = (e) => {
+    const value = e.target.value.toUpperCase();
+    if (value) {
+      const data = serviceData.filter((row) => {
+        return (
+          row?.title?.toUpperCase()?.indexOf(value) > -1 ||
+          row?.description?.toUpperCase()?.indexOf(value) > -1
+        );
+      });
+      setServices(data);
+    } else {
+      setServices(serviceData);
+    }
+  };
+
+  const handleOpenDialog = () => {
+    console.log("Hii");
+  };
+
   return (
     <Page className={classes.root} title="Services">
       <Container maxWidth={false}>
-        <TableToolbar title="Service" hideAddButton />
+        <TableToolbar
+          title="Service"
+          onSearch={handleSearch}
+          onAddButtonClick={handleOpenDialog}
+        />
         <Box mt={3}>
-          <Results services={serviceData} />
+          <Results services={services} />
         </Box>
       </Container>
       <Dialog />

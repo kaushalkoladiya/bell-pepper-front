@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import PropTypes from "prop-types";
 import {
   Box,
   Button,
@@ -10,178 +10,93 @@ import {
   Divider,
   Grid,
   TextField,
-  makeStyles
-} from '@material-ui/core';
+} from "@material-ui/core";
+import Axios from "axios";
+import { setAdminData } from "../../../redux/admin/actions";
+import { alert } from "../../../utils/alert";
 
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  }
-];
-
-const useStyles = makeStyles(() => ({
-  root: {}
-}));
-
-const ProfileDetails = ({ className, ...rest }) => {
-  const classes = useStyles();
-  const [values, setValues] = useState({
-    firstName: 'Katarina',
-    lastName: 'Smith',
-    email: 'demo@devias.io',
-    phone: '',
-    state: 'Alabama',
-    country: 'USA'
+const ProfileDetails = ({ className, userData, ...rest }) => {
+  const dispatch = useDispatch();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
   });
 
+  const [error, setError] = useState({ name: "", email: "" });
+
+  useEffect(() => {
+    setFormData({
+      name: userData.name,
+      email: userData.email,
+    });
+    return () => {
+      setError({ name: "", email: "" });
+    };
+  }, []);
+
   const handleChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
     });
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (formData.name === "") {
+      return setError({ ...error, name: "Name is required!" });
+    } else if (formData.email === "") {
+      return setError({ ...error, email: "Email is required!" });
+    }
+
+    try {
+      const { data } = await Axios.patch("/admin", formData);
+      dispatch(setAdminData(data.data.admin));
+      alert("Done", "Profile updated successfully!", "success");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <form
-      autoComplete="off"
-      noValidate
-      className={clsx(classes.root, className)}
-      {...rest}
-    >
+    <form autoComplete="off" noValidate className={className} {...rest}>
       <Card>
-        <CardHeader
-          subheader="The information can be edited"
-          title="Profile"
-        />
+        <CardHeader subheader="The information can be edited" title="Profile" />
         <Divider />
         <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+          <Grid container spacing={3}>
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                helperText="Please specify the first name"
-                label="First name"
-                name="firstName"
+                helperText="Please specify your name"
+                error={error.name ? true : false}
+                label="Name"
+                name="name"
                 onChange={handleChange}
                 required
-                value={values.firstName}
+                value={formData.name}
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                label="Last name"
-                name="lastName"
-                onChange={handleChange}
-                required
-                value={values.lastName}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Email Address"
+                helperText="Please specify your email"
+                error={error.email ? true : false}
+                label="Email"
                 name="email"
                 onChange={handleChange}
                 required
-                value={values.email}
+                value={formData.email}
                 variant="outlined"
               />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Phone Number"
-                name="phone"
-                onChange={handleChange}
-                type="number"
-                value={values.phone}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Country"
-                name="country"
-                onChange={handleChange}
-                required
-                value={values.country}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Select State"
-                name="state"
-                onChange={handleChange}
-                required
-                select
-                SelectProps={{ native: true }}
-                value={values.state}
-                variant="outlined"
-              >
-                {states.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
             </Grid>
           </Grid>
         </CardContent>
         <Divider />
-        <Box
-          display="flex"
-          justifyContent="flex-end"
-          p={2}
-        >
-          <Button
-            color="primary"
-            variant="contained"
-          >
+        <Box display="flex" justifyContent="flex-end" p={2}>
+          <Button color="primary" variant="contained" onClick={handleSubmit}>
             Save details
           </Button>
         </Box>
@@ -191,7 +106,7 @@ const ProfileDetails = ({ className, ...rest }) => {
 };
 
 ProfileDetails.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default ProfileDetails;

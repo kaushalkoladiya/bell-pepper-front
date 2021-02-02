@@ -24,7 +24,7 @@ import {
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import AssignmentIcon from "@material-ui/icons/Assignment";
-import DeleteIcon from "@material-ui/icons/DeleteForeverRounded";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 import setEmptyStr from "../../utils/setEmptyStr";
 import trimStr from "../../utils/trimStr";

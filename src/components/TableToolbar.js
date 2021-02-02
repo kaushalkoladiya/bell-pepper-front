@@ -23,22 +23,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function TableToolbar({ className, title, hideAddButton, ...rest }) {
+function TableToolbar({
+  className,
+  title,
+  hideAddButton,
+  onSearch,
+  onAddButtonClick,
+  ...rest
+}) {
   const classes = useStyles();
 
   return (
     <div className={clsx(classes.root, className)} {...rest}>
-      {!hideAddButton && (
-        <Box display="flex" justifyContent="flex-end">
-          <Button color="primary" variant="contained">
-            Add {title}
-          </Button>
-        </Box>
-      )}
       <Box mt={3}>
         <Card>
-          <CardContent>
-            <Box maxWidth={500}>
+          <CardContent
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Box minWidth={400}>
               <TextField
                 fullWidth
                 InputProps={{
@@ -52,8 +58,20 @@ function TableToolbar({ className, title, hideAddButton, ...rest }) {
                 }}
                 placeholder={`Search ${title}`}
                 variant="outlined"
+                onChange={onSearch}
               />
             </Box>
+            {!hideAddButton && (
+              <Box display="flex" justifyContent="flex-end">
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={onAddButtonClick}
+                >
+                  Add {title}
+                </Button>
+              </Box>
+            )}
           </CardContent>
         </Card>
       </Box>

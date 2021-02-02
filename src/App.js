@@ -4,14 +4,15 @@ import { useRoutes } from "react-router-dom";
 import { ThemeProvider } from "@material-ui/core";
 import axios from "axios";
 // redux
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import GlobalStyles from "./components/GlobalStyles";
 import "./mixins/chartjs";
 import theme from "./theme";
 import routes from "./routes";
 import { API_BASE_URL } from "./constrants";
-import { loginAdmin } from "./redux/admin/actions";
+import { loginAdmin, setAdminData } from "./redux/admin/actions";
+import Axios from "axios";
 
 axios.defaults.baseURL = API_BASE_URL;
 
@@ -20,12 +21,26 @@ const App = () => {
   const dispatch = useDispatch();
   const routing = useRoutes(routes);
 
+  const userData = useSelector((state) => state.admin.data);
+
   useEffect(() => {
     if (!token) {
       return;
     }
     dispatch(loginAdmin(token));
   }, [token, dispatch]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await Axios.get("/admin");
+        dispatch(setAdminData(data.data.admin));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [userData, dispatch]);
 
   return (
     <ThemeProvider theme={theme}>

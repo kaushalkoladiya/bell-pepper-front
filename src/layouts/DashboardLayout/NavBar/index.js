@@ -12,20 +12,16 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import {
-  AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
-  Lock as LockIcon,
-  Settings as SettingsIcon,
   ShoppingBag as ShoppingBagIcon,
   User as UserIcon,
-  UserPlus as UserPlusIcon,
   Users as UsersIcon,
   LogOut as LogOutIcon,
   Briefcase as BookingIcon,
 } from "react-feather";
 import NavItem from "./NavItem";
 import { logoutAdmin } from "../../../redux/admin/actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const user = {
   avatar: "../../../images/icon.jpeg",
@@ -88,6 +84,8 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   const dispatch = useDispatch();
   const navigation = useNavigate();
 
+  const userData = useSelector((state) => state.admin.data);
+
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();
@@ -110,10 +108,10 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           to="/partners/account"
         />
         <Typography className={classes.name} color="textPrimary" variant="h5">
-          {user.name}
+          {userData.name}
         </Typography>
         <Typography color="textSecondary" variant="body2">
-          {user.jobTitle}
+          {userData.email}
         </Typography>
       </Box>
       <Divider />
