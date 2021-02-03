@@ -30,21 +30,21 @@ export default function StaffDialog({ onChange }) {
   const [staffs, setStaffs] = React.useState([]);
   const [selectedStaff, setSelectedStaff] = React.useState("");
 
-  const { bookingId, vendorId, isBookingDialogOpen: open } = useSelector(
+  const { serviceId, bookingId, isStaffDialogOpen: open } = useSelector(
     (state) => state.booking
   );
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get(`/staff/vendor/${vendorId}`);
+        const { data } = await axios.get(`/staff/service/${serviceId}`);
         setStaffs(data.data.staffs);
       } catch (error) {
         console.log(error);
       }
     };
-    if (vendorId) fetchData();
-  }, [vendorId]);
+    if (serviceId) fetchData();
+  }, [serviceId]);
 
   const handleClose = () => {
     dispatch(closeStaffDialog());
@@ -55,13 +55,13 @@ export default function StaffDialog({ onChange }) {
   };
 
   const handleSubmit = async () => {
-    if (!vendorId || !bookingId) {
-      return alert("Contact your developer!");
+    if (!serviceId || !bookingId) {
+      return alert("An error", "Contact with your developer!", "danger");
     }
     try {
       const formData = {
         staffId: selectedStaff,
-        bookingId: bookingId,
+        bookingId,
       };
       const { data } = await axios.put(`/booking/assignStaff`, formData);
       dispatch(
@@ -74,7 +74,6 @@ export default function StaffDialog({ onChange }) {
       alert("Done", data.message, "success");
       handleClose();
     } catch (error) {
-      console.log(error);
       alert("Warning", error?.response?.data?.message, "warning");
     }
   };

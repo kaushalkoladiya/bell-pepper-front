@@ -2,7 +2,16 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import Axios from "axios";
+// redux
 import { useDispatch } from "react-redux";
+import {
+  deleteBooking,
+  openBookingDialog,
+  openStaffDialog,
+} from "../../redux/booking/actions";
+
+// MUI
 import {
   Box,
   Card,
@@ -26,14 +35,13 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import DeleteIcon from "@material-ui/icons/Delete";
 
+// utils
 import setEmptyStr from "../../utils/setEmptyStr";
 import trimStr from "../../utils/trimStr";
-import {
-  openBookingDialog,
-  openStaffDialog,
-} from "../../redux/booking/actions";
+import { warning, alert } from "../../utils/alert";
+
+// components
 import ToolTipButton from "../../components/ToolTipButton";
-import { warning } from "../../utils/alert";
 import Chip from "../../components/Chip";
 
 const useStyles = makeStyles((theme) => ({
@@ -105,16 +113,26 @@ const Results = ({ className, bookings, ...rest }) => {
     dispatch(openBookingDialog(id));
   };
 
-  const handleOpenStaffAssignDialog = (bookingId, vendorId) => {
-    dispatch(openStaffDialog({ bookingId, vendorId }));
+  const handleOpenStaffAssignDialog = (serviceId, bookingId) => {
+    dispatch(openStaffDialog({ serviceId, bookingId }));
   };
 
   const handleDelete = (id) => {
     const data = warning();
     data
-      .then((isDeleted) => {
+      .then(async (isDeleted) => {
         if (isDeleted) {
-          // delete
+          // delete here
+          try {
+            const { data } = await Axios.delete(`/booking/${id}`);
+            console.log(data);
+            if (data.status === 200) {
+              dispatch(deleteBooking(id));
+              alert("Deleted!", "Booking has been deleted!", "success");
+            }
+          } catch (error) {
+            console.log(error.response);
+          }
         }
       })
       .catch((err) => console.log(err));
@@ -138,10 +156,9 @@ const Results = ({ className, bookings, ...rest }) => {
                     onChange={handleSelectAll}
                   />
                 </TableCell>
-                <TableCell>Company Name</TableCell>
                 <TableCell>Service Title</TableCell>
                 <TableCell>User Name</TableCell>
-                <TableCell>Description</TableCell>
+                <TableCell>Instructions</TableCell>
                 <TableCell>Material</TableCell>
                 <TableCell>Frequency</TableCell>
                 <TableCell>Hours</TableCell>
@@ -169,7 +186,6 @@ const Results = ({ className, bookings, ...rest }) => {
                       value="true"
                     />
                   </TableCell>
-                  <TableCell>{booking.vendorId.companyName}</TableCell>
                   <TableCell>{booking.serviceId.title}</TableCell>
                   <TableCell>{setEmptyStr(booking?.userId?.name)}</TableCell>
                   <TableCell>
@@ -201,8 +217,8 @@ const Results = ({ className, bookings, ...rest }) => {
                       <ToolTipButton
                         onClick={() =>
                           handleOpenStaffAssignDialog(
-                            booking._id,
-                            booking.vendorId._id
+                            booking.serviceId._id,
+                            booking._id
                           )
                         }
                         title="Assign Employee"
@@ -242,13 +258,13 @@ const Results = ({ className, bookings, ...rest }) => {
                   <TableCell>
                     <ToolTipButton
                       onClick={() => handleOpenBookingDialog(booking._id)}
-                      title="Edit"
+                      title="View"
                       placement="top"
                     >
                       <VisibilityIcon color="primary" fontSize="small" />
                     </ToolTipButton>
                     <ToolTipButton
-                      onClick={handleDelete}
+                      onClick={() => handleDelete(booking._id)}
                       title="Delete"
                       placement="top"
                     >

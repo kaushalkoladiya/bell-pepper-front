@@ -5,6 +5,7 @@ import {
   OPEN_STAFF_ASSIGN_DIALOG,
   CLOSE_STAFF_ASSIGN_DIALOG,
   ASSIGN_STAFF,
+  DELETE_BOOKING,
 } from "./type";
 
 export const getBooking = (payload) => ({
@@ -33,4 +34,9 @@ export const assignStaff = (payload) => ({
 
 export const closeStaffDialog = () => ({
   type: CLOSE_STAFF_ASSIGN_DIALOG,
+});
+
+export const deleteBooking = (payload) => ({
+  type: DELETE_BOOKING,
+  payload,
 });

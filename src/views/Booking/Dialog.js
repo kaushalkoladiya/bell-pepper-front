@@ -67,6 +67,7 @@ const Dialog = () => {
   const dispatch = useDispatch();
 
   const [booking, setBooking] = useState({});
+  const [show, setShow] = useState(false);
 
   const { dialogId, isDialogOpen: open, data: _data } = useSelector(
     (state) => state.booking
@@ -76,9 +77,11 @@ const Dialog = () => {
     if (dialogId) {
       const index = _data.findIndex((item) => item._id === dialogId);
       if (index !== -1) {
+        setShow(true);
         setBooking(_data[index]);
       }
     }
+    return () => setShow(false);
   }, [dialogId, _data]);
 
   const handleClose = () => {
@@ -103,8 +106,8 @@ const Dialog = () => {
         <Typography variant="h3">Booking Details</Typography>
       </DialogTitle>
       <MuiDialogContent>
-        {booking.vendorId && (
-          <Grid container>
+        {show && (
+          <Grid container spacing={1}>
             <Grid item md={12}>
               <div className={classes.dataLine}>
                 <Typography variant="h5">Instruction:&nbsp;</Typography>
@@ -149,139 +152,97 @@ const Dialog = () => {
                 Registration Date: {setDate(booking.createdAt)}
               </Typography>
             </Grid>
-            <Grid item md={12}>
-              <div className={classes.accordion}>
-                <Accordion disabled={booking?.userId ? false : true}>
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography className={classes.heading}>
-                      User Details
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <div>
-                      <div className={classes.dataLine}>
-                        <Typography variant="h5">Name:&nbsp;</Typography>
-                        <Typography variant="h6" color="textSecondary">
-                          {booking.userId.name}
-                        </Typography>
-                      </div>
-
-                      <div className={classes.dataLine}>
-                        <Typography variant="h5">Email:&nbsp;</Typography>
-                        <Typography variant="h6" color="textSecondary">
-                          {booking.userId.email}
-                        </Typography>
-                      </div>
-
-                      <div className={classes.dataLine}>
-                        <Typography variant="h5">Location:&nbsp;</Typography>
-                        <Typography variant="h6" color="textSecondary">
-                          {setEmptyStr(booking.userId.location)}
-                        </Typography>
-                      </div>
-
-                      <div className={classes.dataLine}>
-                        <Typography variant="h5">Gender:&nbsp;</Typography>
-                        <Typography variant="h6" color="textSecondary">
-                          {setEmptyStr(booking.userId.gender)}
-                        </Typography>
-                      </div>
-
-                      <Typography
-                        className={classes.dataLine}
-                        variant="caption"
-                        color="textSecondary"
-                      >
-                        Joined Date:&nbsp;
-                        {setDate(booking.serviceId.createdAt)}
+            <Grid item md={6}>
+              <Accordion disabled={booking?.userId ? false : true}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography className={classes.heading}>
+                    User Details
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <div>
+                    <div className={classes.dataLine}>
+                      <Typography variant="h5">Name:&nbsp;</Typography>
+                      <Typography variant="h6" color="textSecondary">
+                        {booking.userId.name}
                       </Typography>
                     </div>
-                  </AccordionDetails>
-                </Accordion>
 
-                <Accordion disabled={booking?.serviceId ? false : true}>
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography className={classes.heading}>
-                      Service Details
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <div style={{ margin: "auto" }}>
-                      <div className={classes.imageContainer}>
-                        <Image image={booking.serviceId.image} extraLarge />
-                      </div>
-                      <div className={classes.dataLine}>
-                        <Typography variant="h5">Title:&nbsp;</Typography>
-                        <Typography variant="h6" color="textSecondary">
-                          {booking.serviceId.title}
-                        </Typography>
-                      </div>
-                      <div className={classes.dataLine}>
-                        <Typography variant="h5">Description:&nbsp;</Typography>
-                        <Typography variant="h6" color="textSecondary">
-                          {booking.serviceId.description}
-                        </Typography>
-                      </div>
-                      <div className={classes.dataLine}>
-                        <Typography variant="h5">Price:&nbsp;</Typography>
-                        <Typography variant="h6" color="textSecondary">
-                          {booking.serviceId.price}
-                        </Typography>
-                      </div>
-
-                      <Typography
-                        className={classes.dataLine}
-                        variant="caption"
-                        color="textSecondary"
-                      >
-                        Created At:&nbsp;
-                        {setDate(booking.serviceId.createdAt)}
+                    <div className={classes.dataLine}>
+                      <Typography variant="h5">Email:&nbsp;</Typography>
+                      <Typography variant="h6" color="textSecondary">
+                        {booking.userId.email}
                       </Typography>
                     </div>
-                  </AccordionDetails>
-                </Accordion>
 
-                <Accordion disabled={booking?.vendorId ? false : true}>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography className={classes.heading}>
-                      Vendor Details
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <div>
-                      <ProfileName name={booking.vendorId.companyName} />
-                      <div className={classes.dataLine}>
-                        <Typography variant="h5">Email:&nbsp;</Typography>
-                        <Typography variant="h6" color="textSecondary">
-                          {setEmptyStr(booking.vendorId.email)}
-                        </Typography>
-                      </div>
-                      <div className={classes.dataLine}>
-                        <Typography variant="h5">Mobile:&nbsp;</Typography>
-                        <Typography variant="h6" color="textSecondary">
-                          {setEmptyStr(booking.vendorId.mobile)}
-                        </Typography>
-                      </div>
-                      <div className={classes.dataLine}>
-                        <Typography variant="h5">Address:&nbsp;</Typography>
-                        <Typography variant="h6" color="textSecondary">
-                          {`${booking.vendorId.address.houseNumber}, ${booking.vendorId.address.street} ${booking.vendorId.address.city}`}
-                        </Typography>
-                      </div>
-                      <div className={classes.dataLine}>
-                        <Typography variant="h5">City:&nbsp;</Typography>
-                        <Typography variant="h6" color="textSecondary">
-                          {setEmptyStr(booking.vendorId.city)}
-                        </Typography>
-                      </div>
+                    <div className={classes.dataLine}>
+                      <Typography variant="h5">Location:&nbsp;</Typography>
+                      <Typography variant="h6" color="textSecondary">
+                        {setEmptyStr(booking.userId.location)}
+                      </Typography>
                     </div>
-                  </AccordionDetails>
-                </Accordion>
-              </div>
+
+                    <div className={classes.dataLine}>
+                      <Typography variant="h5">Gender:&nbsp;</Typography>
+                      <Typography variant="h6" color="textSecondary">
+                        {setEmptyStr(booking.userId.gender)}
+                      </Typography>
+                    </div>
+
+                    <Typography
+                      className={classes.dataLine}
+                      variant="caption"
+                      color="textSecondary"
+                    >
+                      Joined Date:&nbsp;
+                      {setDate(booking.serviceId.createdAt)}
+                    </Typography>
+                  </div>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+            <Grid item md={6}>
+              <Accordion disabled={booking?.serviceId ? false : true}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography className={classes.heading}>
+                    Service Details
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <div style={{ margin: "auto" }}>
+                    <div className={classes.imageContainer}>
+                      <Image image={booking.serviceId.image} extraLarge />
+                    </div>
+                    <div className={classes.dataLine}>
+                      <Typography variant="h5">Title:&nbsp;</Typography>
+                      <Typography variant="h6" color="textSecondary">
+                        {booking.serviceId.title}
+                      </Typography>
+                    </div>
+                    <div className={classes.dataLine}>
+                      <Typography variant="h5">Description:&nbsp;</Typography>
+                      <Typography variant="h6" color="textSecondary">
+                        {booking.serviceId.description}
+                      </Typography>
+                    </div>
+                    <div className={classes.dataLine}>
+                      <Typography variant="h5">Price:&nbsp;</Typography>
+                      <Typography variant="h6" color="textSecondary">
+                        {booking.serviceId.price}
+                      </Typography>
+                    </div>
+
+                    <Typography
+                      className={classes.dataLine}
+                      variant="caption"
+                      color="textSecondary"
+                    >
+                      Created At:&nbsp;
+                      {setDate(booking.serviceId.createdAt)}
+                    </Typography>
+                  </div>
+                </AccordionDetails>
+              </Accordion>
             </Grid>
           </Grid>
         )}

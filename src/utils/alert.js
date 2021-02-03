@@ -1,17 +1,12 @@
 import swal from "sweetalert";
 
-export const success = () => {
+export const warning = (text) => {
   return swal({
-    title: "Are You Sure!",
-  });
-};
-
-export const warning = () => {
-  return swal({
-    title: "Are You Sure!",
+    title: "I hope sure what you are doing!",
     icon: "warning",
     dangerMode: true,
     buttons: true,
+    text,
   });
 };
 
@@ -31,8 +26,4 @@ export const permissionError = () => {
 
 export const alert = (title, data, type) => {
   return swal(title, data, type);
-};
-
-export const approvedPost = () => {
-  return swal("Approved!", `News Post has been approved!`, "success");
 };

@@ -5,15 +5,16 @@ import {
   CLOSE_STAFF_ASSIGN_DIALOG,
   OPEN_STAFF_ASSIGN_DIALOG,
   ASSIGN_STAFF,
+  DELETE_BOOKING,
 } from "./type";
 
 const initialState = {
   data: [],
   dialogId: null,
   isDialogOpen: false,
-  isBookingDialogOpen: false,
+  isStaffDialogOpen: false,
+  serviceId: null,
   bookingId: null,
-  vendorId: null,
 };
 
 const bookingReducer = (state = initialState, { type, payload }) => {
@@ -30,20 +31,20 @@ const bookingReducer = (state = initialState, { type, payload }) => {
     case OPEN_STAFF_ASSIGN_DIALOG:
       return {
         ...state,
+        serviceId: payload.serviceId,
         bookingId: payload.bookingId,
-        vendorId: payload.vendorId,
-        isBookingDialogOpen: true,
+        isStaffDialogOpen: true,
       };
 
     case CLOSE_STAFF_ASSIGN_DIALOG:
       return {
         ...state,
+        serviceId: null,
         bookingId: null,
-        isBookingDialogOpen: false,
+        isStaffDialogOpen: false,
       };
 
     case ASSIGN_STAFF:
-      console.log(payload);
       return {
         ...state,
         data: state.data.map((item) =>
@@ -54,6 +55,14 @@ const bookingReducer = (state = initialState, { type, payload }) => {
               }
             : item
         ),
+      };
+
+    case DELETE_BOOKING:
+      return {
+        ...state,
+        data: state.data.filter((category) => {
+          return category._id !== payload;
+        }),
       };
 
     default:

@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import Axios from "axios";
+
+// redux
+import { useDispatch } from "react-redux";
 // Mui
 import {
   Box,
@@ -17,13 +21,15 @@ import {
 } from "@material-ui/core";
 
 // icons
-import VisibilityIcon from "@material-ui/icons/Visibility";
+import DeleteIcon from "@material-ui/icons/DeleteRounded";
 // utils
 import setEmptyStr from "../../utils/setEmptyStr";
-// components
-import ProfileName from "../../components/ProfileName";
-import ToolTipButton from "../../components/ToolTipButton";
 import setDate from "../../utils/setDate";
+import { warning, alert } from "../../utils/alert";
+// components
+
+import ToolTipButton from "../../components/ToolTipButton";
+import { deleteVendor } from "../../redux/vendor/actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -34,6 +40,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Results = ({ className, vendors, ...rest }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const [selectedVendorIds, setSelectedVendorIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -82,6 +90,28 @@ const Results = ({ className, vendors, ...rest }) => {
     setPage(newPage);
   };
 
+  const handleDelete = (id) => {
+    const data = warning(
+      "Make sure all the related booking and staff will be\n deleted automatically!"
+    );
+    data
+      .then(async (isDeleted) => {
+        if (isDeleted) {
+          // delete here
+          try {
+            const { data } = await Axios.delete(`/vendor/${id}`);
+            if (data.status === 200) {
+              dispatch(deleteVendor(id));
+              alert("Deleted!", "Vendor has been deleted!", "success");
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
       <PerfectScrollbar>
@@ -122,16 +152,17 @@ const Results = ({ className, vendors, ...rest }) => {
                       value="true"
                     />
                   </TableCell>
-                  <TableCell>
-                    <ProfileName name={vendor.companyName} />
-                  </TableCell>
+
+                  <TableCell>{setEmptyStr(vendor.companyName)}</TableCell>
                   <TableCell>{setEmptyStr(vendor.mobile)}</TableCell>
                   <TableCell>{`${vendor.address.houseNumber}, ${vendor.address.street} ${vendor.address.city}`}</TableCell>
-                  {/* <TableCell>{setEmptyStr(vendor.city)}</TableCell> */}
                   <TableCell>{setDate(vendor.createdAt)}</TableCell>
                   <TableCell>
-                    <ToolTipButton title="Edit">
-                      <VisibilityIcon color="primary" />
+                    <ToolTipButton
+                      title="Delete"
+                      onClick={() => handleDelete(vendor._id)}
+                    >
+                      <DeleteIcon color="error" />
                     </ToolTipButton>
                   </TableCell>
                 </TableRow>
