@@ -5,6 +5,7 @@ import axios from "axios";
 
 // redux
 import { useSelector, useDispatch } from "react-redux";
+import { openServiceDialog } from "../../redux/service/actions";
 
 import Page from "../../components/Page";
 import Results from "./Results";
@@ -62,7 +63,7 @@ const VendorListView = () => {
   };
 
   const handleOpenDialog = () => {
-    console.log("Hii");
+    dispatch(openServiceDialog());
   };
 
   return (

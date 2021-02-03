@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import Axios from "axios";
+
+// redux
 import { useDispatch } from "react-redux";
+import { deleteService, openServiceDialog } from "../../redux/service/actions";
+
+// Mui
 import {
   Box,
   Card,
@@ -14,15 +20,23 @@ import {
   TablePagination,
   TableRow,
   makeStyles,
-  IconButton,
+  Tooltip,
+  Button,
 } from "@material-ui/core";
-import VisibilityIcon from "@material-ui/icons/Visibility";
+
+// icons
+import EditIcon from "@material-ui/icons/EditRounded";
+import DeleteIcon from "@material-ui/icons/DeleteRounded";
+
+// util
 import setEmptyStr from "../../utils/setEmptyStr";
-import ProfileName from "../../components/ProfileName";
 import trimStr from "../../utils/trimStr";
-import Image from "../../components/Image";
-import { openServiceDialog } from "../../redux/service/actions";
 import setDate from "../../utils/setDate";
+import { warning, alert } from "../../utils/alert";
+
+// components
+import Image from "../../components/Image";
+import ToolTipButton from "../../components/ToolTipButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -90,6 +104,26 @@ const Results = ({ className, services, ...rest }) => {
     dispatch(openServiceDialog(id));
   };
 
+  const handleDelete = (id) => {
+    const data = warning();
+    data
+      .then(async (isDeleted) => {
+        if (isDeleted) {
+          // delete here
+          try {
+            const { data } = await Axios.delete(`/service/${id}`);
+            if (data.status === 200) {
+              dispatch(deleteService(id));
+              alert("Deleted!", "Service has been deleted!", "success");
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
       <PerfectScrollbar>
@@ -108,17 +142,19 @@ const Results = ({ className, services, ...rest }) => {
                     onChange={handleSelectAll}
                   />
                 </TableCell>
-                <TableCell>Vendor's Company Name</TableCell>
                 <TableCell>Image</TableCell>
                 <TableCell>Title</TableCell>
                 <TableCell>Description</TableCell>
                 <TableCell>Price</TableCell>
-                <TableCell>Registration date</TableCell>
+                <TableCell>Created At</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {services.slice(0, limit).map((service) => (
+              {(limit > 0
+                ? services.slice(page * limit, page * limit + limit)
+                : services
+              ).map((service) => (
                 <TableRow
                   hover
                   key={service._id}
@@ -132,23 +168,38 @@ const Results = ({ className, services, ...rest }) => {
                     />
                   </TableCell>
                   <TableCell>
-                    <ProfileName name={service.vendorId.companyName} />
-                  </TableCell>
-                  <TableCell>
                     <Image image={service.image} />
                   </TableCell>
                   <TableCell>{setEmptyStr(service.title)}</TableCell>
                   <TableCell>
-                    {trimStr(setEmptyStr(service.description))}
+                    <Tooltip title={setEmptyStr(service.description)}>
+                      <Button
+                        className={classes.description}
+                        disableElevation
+                        disableFocusRipple
+                        disableRipple
+                        disableTouchRipple
+                        variant="text"
+                      >
+                        {trimStr(setEmptyStr(service.description))}
+                      </Button>
+                    </Tooltip>
                   </TableCell>
                   <TableCell>{setEmptyStr(service.price)}</TableCell>
                   <TableCell>{setDate(service.createdAt)}</TableCell>
                   <TableCell>
-                    <IconButton
+                    <ToolTipButton
                       onClick={() => handleOpenServiceDialog(service._id)}
+                      title="Edit"
                     >
-                      <VisibilityIcon color="primary" />
-                    </IconButton>
+                      <EditIcon color="primary" />
+                    </ToolTipButton>
+                    <ToolTipButton
+                      title="Delete"
+                      onClick={() => handleDelete(service._id)}
+                    >
+                      <DeleteIcon color="error" />
+                    </ToolTipButton>
                   </TableCell>
                 </TableRow>
               ))}

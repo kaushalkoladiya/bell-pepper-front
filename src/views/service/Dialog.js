@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
+import Axios from "axios";
 
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { closeServiceDialog } from "../../redux/service/actions";
+import {
+  addNewService,
+  closeServiceDialog,
+  updateService,
+} from "../../redux/service/actions";
 
 // Mui
 import { makeStyles } from "@material-ui/core/styles";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialog from "@material-ui/core/Dialog";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
 import MuiDialogContent from "@material-ui/core/DialogContent";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Grid, Typography } from "@material-ui/core";
 import { blue } from "@material-ui/core/colors";
 
@@ -22,11 +25,6 @@ import CloseIcon from "@material-ui/icons/Close";
 // components
 import Image from "../../components/Image";
 import ToolTipButton from "../../components/ToolTipButton";
-import ProfileName from "../../components/ProfileName";
-
-// utils
-import setEmptyStr from "../../utils/setEmptyStr";
-import setDate from "../../utils/setDate";
 
 const useStyles = makeStyles((theme) => ({
   accordion: {
@@ -59,14 +57,31 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "baseline",
   },
-  accordionDetails: {},
+  textField: {
+    margin: "10px 0",
+  },
+  submitButton: {
+    textAlign: "right",
+    marginTop: 20,
+  },
 }));
 
 const Dialog = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [service, setService] = useState({});
+  const [mongoID, setMongoID] = useState(null);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [imageData, setImageData] = useState(null);
+  const [imagePath, setImagePath] = useState(null);
+  const [errors, setErrors] = useState({
+    name: "",
+    image: "",
+    description: "",
+    price: "",
+  });
 
   const { dialogId, isDialogOpen: open, data: _data } = useSelector(
     (state) => state.service
@@ -76,13 +91,84 @@ const Dialog = () => {
     if (dialogId) {
       const index = _data.findIndex((item) => item._id === dialogId);
       if (index !== -1) {
-        setService(_data[index]);
+        const _service = _data[index];
+
+        setMongoID(_service._id);
+        setTitle(_service.title);
+        setDescription(_service.description);
+        setPrice(_service.price);
+        setImagePath(_service.image);
+
+        // setService(_data[index]);
       }
     }
   }, [dialogId, _data]);
 
   const handleClose = () => {
     dispatch(closeServiceDialog());
+  };
+
+  const handleInputFileChange = (e) => {
+    if (e.target.files[0]) {
+      setImageData(e.target.files[0]);
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImagePath(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
+  const handleEditImage = () => {
+    document.getElementById("serviceImage").click();
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (mongoID) {
+      if (!imageData && !imagePath)
+        return setErrors({ ...errors, image: "Please select an image." });
+    } else if (!mongoID) {
+      if (!imageData || !imagePath)
+        return setErrors({ ...errors, image: "Please select an image." });
+    }
+
+    if (!title) return setErrors({ ...errors, title: "Invalid title" });
+    if (!description)
+      return setErrors({ ...errors, description: "Invalid description" });
+    if (!price) return setErrors({ ...errors, price: "Invalid price" });
+
+    const formData = new FormData();
+    if (imageData) formData.append("image", imageData);
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("price", price);
+
+    if (dialogId && mongoID) {
+      // Update
+      const data = await networkRequest(
+        `/service/${mongoID}`,
+        "patch",
+        formData
+      );
+      dispatch(updateService({ data: data.data.service, id: mongoID }));
+      handleClose();
+    } else {
+      // Create
+      const data = await networkRequest("/service", "post", formData);
+      dispatch(addNewService(data.data.service));
+      handleClose();
+    }
+  };
+
+  const networkRequest = async (url, method, _data) => {
+    try {
+      const { data } = await Axios[method](url, _data);
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -103,73 +189,70 @@ const Dialog = () => {
         <Typography variant="h3">Service Details</Typography>
       </DialogTitle>
       <MuiDialogContent>
-        {service.title && (
+        <form onSubmit={handleSubmit}>
           <Grid container>
-            <Grid item md={12}>
-              <div className={classes.imageContainer}>
-                <Image image={service.image} extraLarge />
-              </div>
-              <div className={classes.dataLine}>
-                <Typography variant="h5">Title:&nbsp;</Typography>
-                <Typography variant="h6" color="textSecondary">
-                  {service.title}
-                </Typography>
-              </div>
-              <div className={classes.dataLine}>
-                <Typography variant="h5">Description:&nbsp;</Typography>
-                <Typography variant="h6" color="textSecondary">
-                  {service.description}
-                </Typography>
-              </div>
-              <div className={classes.dataLine}>
-                <Typography variant="h5">Price:&nbsp;</Typography>
-                <Typography variant="h6" color="textSecondary">
-                  {service.price}
-                </Typography>
-              </div>
-
-              <Typography
-                className={classes.dataLine}
-                variant="caption"
-                color="textSecondary"
-              >
-                Registration Date: {setDate(service.createdAt)}
-              </Typography>
-            </Grid>
-            <Grid item md={12}>
-              <div className={classes.accordion}>
-                <Accordion disabled={service?.vendorId ? false : true}>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography className={classes.heading}>
-                      Vendor Details
+            <Grid item sm={12}>
+              <div onClick={handleEditImage}>
+                <input
+                  name="serviceImage"
+                  id="serviceImage"
+                  type="file"
+                  hidden
+                  accept="image/*"
+                  onChange={handleInputFileChange}
+                />
+                <Image extraLarge image={imagePath} />
+                {errors.image && (
+                  <div style={{ textAlign: "center" }}>
+                    <Typography variant="caption" color="error">
+                      {errors.image}
                     </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails className={classes.accordionDetails}>
-                    <div>
-                      <ProfileName name={service.vendorId.companyName} />
-                      <div className={classes.dataLine}>
-                        <Typography variant="h5">Mobile:&nbsp;</Typography>
-                        <Typography variant="h6" color="textSecondary">
-                          {setEmptyStr(service.vendorId.mobile)}
-                        </Typography>
-                      </div>
-                      <div className={classes.dataLine}>
-                        <Typography variant="h5">Address:&nbsp;</Typography>
-                        <Typography variant="h6" color="textSecondary">
-                          {`${service.vendorId.address.houseNumber}, ${service.vendorId.address.street} ${service.vendorId.address.city}`}
-                        </Typography>
-                      </div>
-                    </div>
-                  </AccordionDetails>
-                </Accordion>
+                  </div>
+                )}
               </div>
+            </Grid>
+            <Grid item sm={12} className={classes.textField}>
+              <TextField
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                error={errors.title ? true : false}
+                helperText={errors.title}
+                label="Title"
+                pattern="^\w+(\s+\w+)*$"
+                fullWidth
+              />
+            </Grid>
+            <Grid item sm={12} className={classes.textField}>
+              <TextField
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                error={errors.price ? true : false}
+                helperText={errors.price}
+                label="Price"
+                type="number"
+                fullWidth
+              />
+            </Grid>
+            <Grid item sm={12} className={classes.textField}>
+              <TextField
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                error={errors.description ? true : false}
+                helperText={errors.description}
+                label="Description"
+                pattern="^\w+(\s+\w+)*$"
+                fullWidth
+                multiline
+                rows={4}
+              />
+            </Grid>
+            <Grid item sm={12} className={classes.submitButton}>
+              <Button variant="contained" color="primary" type="submit">
+                {!mongoID ? "Submit" : "Update"}
+              </Button>
             </Grid>
           </Grid>
-        )}
+        </form>
       </MuiDialogContent>
     </MuiDialog>
   );

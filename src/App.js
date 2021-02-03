@@ -21,7 +21,7 @@ const App = () => {
   const dispatch = useDispatch();
   const routing = useRoutes(routes);
 
-  const userData = useSelector((state) => state.admin.data);
+  const isAuth = useSelector((state) => state.admin.isAuth);
 
   useEffect(() => {
     if (!token) {
@@ -39,8 +39,8 @@ const App = () => {
         console.log(error);
       }
     };
-    fetchData();
-  }, [userData, dispatch]);
+    if (isAuth) fetchData();
+  }, [isAuth]);
 
   return (
     <ThemeProvider theme={theme}>

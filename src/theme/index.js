@@ -58,7 +58,10 @@ const theme = createMuiTheme({
     MuiTooltip: {
       arrow: true,
     },
-    MuiButton: {},
+    MuiTextField: {
+      variant: "outlined",
+      size: "small",
+    },
   },
 });
 
