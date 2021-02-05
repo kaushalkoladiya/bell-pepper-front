@@ -10,7 +10,7 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import MainLayout from "./layouts/MainLayout";
 import AccountView from "./views/account/AccountView";
 import CustomerListView from "./views/customer/CustomerListView";
-import DashboardView from "./views/reports/DashboardView";
+import DashboardView from "./views/Dashboard";
 import LoginView from "./views/auth/LoginView";
 import NotFoundView from "./views/errors/NotFoundView";
 import ServiceListView from "./views/service";

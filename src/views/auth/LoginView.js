@@ -54,6 +54,7 @@ const LoginView = () => {
               email: "",
               password: "",
             }}
+            enableReinitialize
             validationSchema={Yup.object().shape({
               email: Yup.string()
                 .email("Must be a valid email")
@@ -69,8 +70,9 @@ const LoginView = () => {
                   dispatch(loginAdmin(res.data.data.token));
                 })
                 .catch(({ response }) => {
-                  if (response?.data.error) {
-                    methods.setErrors(response?.data.error);
+                  if (response?.data.message) {
+                    console.log(response.data.message);
+                    methods.setErrors(response?.data.message);
                     methods.setSubmitting(false);
                   }
                 });
@@ -126,6 +128,11 @@ const LoginView = () => {
                   value={values.password}
                   variant="outlined"
                 />
+                {typeof errors === "string" && (
+                  <Typography color="error" variant="body2">
+                    {errors}
+                  </Typography>
+                )}
                 <Box my={2}>
                   <Button
                     color="primary"
