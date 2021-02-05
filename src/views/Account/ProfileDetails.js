@@ -12,8 +12,8 @@ import {
   TextField,
 } from "@material-ui/core";
 import Axios from "axios";
-import { setAdminData } from "../../../redux/admin/actions";
-import { alert } from "../../../utils/alert";
+import { setAdminData } from "../../redux/admin/actions";
+import { alert } from "../../utils/alert";
 
 const ProfileDetails = ({ className, userData, ...rest }) => {
   const dispatch = useDispatch();

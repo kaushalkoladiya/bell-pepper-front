@@ -8,15 +8,15 @@ import AuthRoute from "./utils/AuthRoute";
 // Views
 import DashboardLayout from "./layouts/DashboardLayout";
 import MainLayout from "./layouts/MainLayout";
-import AccountView from "./views/account/AccountView";
-import CustomerListView from "./views/customer/CustomerListView";
+import AccountView from "./views/Account";
+import CustomerListView from "./views/Customer";
 import DashboardView from "./views/Dashboard";
 import LoginView from "./views/auth/LoginView";
 import NotFoundView from "./views/errors/NotFoundView";
-import ServiceListView from "./views/service";
+import ServiceListView from "./views/Service";
 import BookingListView from "./views/Booking";
-import SettingsView from "./views/settings/SettingsView";
-import VendorListView from "./views/vendor";
+import SettingsView from "./views/Settings";
+import VendorListView from "./views/Vendor";
 
 const routes = [
   {

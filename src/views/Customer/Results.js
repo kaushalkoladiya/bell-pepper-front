@@ -15,8 +15,8 @@ import {
   TableRow,
   makeStyles,
 } from "@material-ui/core";
-import setEmptyStr from "../../../utils/setEmptyStr";
-import ProfileName from "../../../components/ProfileName";
+import setEmptyStr from "../../utils/setEmptyStr";
+import ProfileName from "../../components/ProfileName";
 
 const useStyles = makeStyles((theme) => ({
   root: {},

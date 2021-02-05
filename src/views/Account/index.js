@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Grid, makeStyles } from "@material-ui/core";
 import { useSelector } from "react-redux";
-import Page from "../../../components/Page";
+import Page from "../../components/Page";
 import Profile from "./Profile";
 import ProfileDetails from "./ProfileDetails";
 

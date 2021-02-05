@@ -6,10 +6,10 @@ import axios from "axios";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 
-import Page from "../../../components/Page";
+import Page from "../../components/Page";
 import Results from "./Results";
-import { getUsers } from "../../../redux/user/actions";
-import TableToolbar from "../../../components/TableToolbar";
+import { getUsers } from "../../redux/user/actions";
+import TableToolbar from "../../components/TableToolbar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
