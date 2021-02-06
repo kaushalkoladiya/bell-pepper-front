@@ -1,15 +1,21 @@
-import React, { useEffect } from "react";
-import { Box, Container, makeStyles } from "@material-ui/core";
-
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+// mui
+import { Box, Container, makeStyles } from "@material-ui/core";
+// icons
+import DeleteIcon from "@material-ui/icons/DeleteRounded";
 // redux
 import { useSelector, useDispatch } from "react-redux";
-
+import { deleteVendor, getVendor } from "../../redux/vendor/actions";
+// components
 import Page from "../../components/Page";
-import Results from "./Results";
-import { getVendor } from "../../redux/vendor/actions";
 import TableToolbar from "../../components/TableToolbar";
+import DataTable from "../../components/DataTable";
+import SearchBar from "../../components/SearchBar";
+// util
+import { setDate } from "../../utils";
+import { warning, alert } from "../../utils/alert";
+import ToolTipButton from "../../components/ToolTipButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,11 +26,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const VendorListView = () => {
+const VendorList = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const vendorData = useSelector((state) => state.vendor.data);
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    setData(vendorData);
+  }, [setData, vendorData]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,18 +48,101 @@ const VendorListView = () => {
       }
     };
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, setData]);
+
+  const handleSearch = (e) => {
+    const value = e.target.value.toUpperCase();
+    if (value) {
+      const data = vendorData.filter((row) => {
+        return (
+          row?.companyName?.toUpperCase()?.indexOf(value) > -1 ||
+          row?.email?.toUpperCase()?.indexOf(value) > -1 ||
+          row?.mobile?.toUpperCase()?.indexOf(value) > -1 ||
+          row?.address?.street?.toUpperCase()?.indexOf(value) > -1 ||
+          row?.address?.houseNumber?.toUpperCase()?.indexOf(value) > -1 ||
+          row?.address?.city?.toUpperCase()?.indexOf(value) > -1
+        );
+      });
+      setData(data);
+    } else {
+      setData(vendorData);
+    }
+  };
+
+  const handleDelete = (id) => {
+    const data = warning(
+      "Make sure all the related booking and staff will be\n deleted automatically!"
+    );
+    data
+      .then(async (isDeleted) => {
+        if (isDeleted) {
+          // delete here
+          try {
+            const { data } = await axios.delete(`/vendor/${id}`);
+            if (data.status === 200) {
+              dispatch(deleteVendor(id));
+              alert("Deleted!", "Vendor has been deleted!", "success");
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const columns = [
+    {
+      name: "Company Name",
+      selector: "companyName",
+      sortable: true,
+    },
+    {
+      name: "Email",
+      selector: "email",
+      sortable: true,
+    },
+    {
+      name: "Phone",
+      selector: "mobile",
+      sortable: true,
+    },
+    {
+      name: "Address",
+      cell: (row) =>
+        `${row.address.houseNumber}, ${row.address.street} ${row.address.city}`,
+      sortable: true,
+    },
+    {
+      name: "Joined On",
+      cell: (row) => setDate(row.createdAt),
+      sortable: true,
+    },
+    {
+      name: "Actions",
+      cell: (row) => (
+        <ToolTipButton title="Delete" onClick={() => handleDelete(row._id)}>
+          <DeleteIcon color="error" />
+        </ToolTipButton>
+      ),
+    },
+  ];
 
   return (
     <Page className={classes.root} title="Vendors">
       <Container maxWidth={false}>
         <TableToolbar title="Vendor" hideAddButton />
         <Box mt={3}>
-          <Results vendors={vendorData} />
+          <DataTable
+            data={data}
+            title="Vendors"
+            columns={columns}
+            actions={<SearchBar title="Vendors" onSearch={handleSearch} />}
+          />
         </Box>
       </Container>
     </Page>
   );
 };
 
-export default VendorListView;
+export default VendorList;

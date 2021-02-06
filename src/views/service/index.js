@@ -5,14 +5,23 @@ import axios from "axios";
 
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { openServiceDialog } from "../../redux/service/actions";
+import { deleteService, openServiceDialog } from "../../redux/service/actions";
 
 import Page from "../../components/Page";
-import Results from "./Results";
 
 import TableToolbar from "../../components/TableToolbar";
 import { getService } from "../../redux/service/actions";
 import Dialog from "./Dialog";
+import { setDate } from "../../utils";
+import Image from "../../components/Image";
+import SearchBar from "../../components/SearchBar";
+import DataTable from "../../components/DataTable";
+import { warning, alert } from "../../utils/alert";
+import ToolTipButton from "../../components/ToolTipButton";
+
+// icons
+import EditIcon from "@material-ui/icons/EditRounded";
+import DeleteIcon from "@material-ui/icons/DeleteRounded";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,23 +38,24 @@ const VendorListView = () => {
 
   const serviceData = useSelector((state) => state.service.data);
 
-  const [services, setServices] = useState([]);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    setData(serviceData);
+  }, [serviceData, setData]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get("/service");
         dispatch(getService(data.data.services));
+        console.log(data);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
   }, [dispatch]);
-
-  useEffect(() => {
-    setServices(serviceData);
-  }, [serviceData]);
 
   const handleSearch = (e) => {
     const value = e.target.value.toUpperCase();
@@ -56,9 +66,9 @@ const VendorListView = () => {
           row?.description?.toUpperCase()?.indexOf(value) > -1
         );
       });
-      setServices(data);
+      setData(data);
     } else {
-      setServices(serviceData);
+      setData(serviceData);
     }
   };
 
@@ -66,16 +76,85 @@ const VendorListView = () => {
     dispatch(openServiceDialog());
   };
 
+  const handleOpenServiceDialog = (id) => {
+    dispatch(openServiceDialog(id));
+  };
+
+  const handleDelete = (id) => {
+    const data = warning();
+    data
+      .then(async (isDeleted) => {
+        if (isDeleted) {
+          // delete here
+          try {
+            const { data } = await axios.delete(`/service/${id}`);
+            if (data.status === 200) {
+              dispatch(deleteService(id));
+              alert("Deleted!", "Service has been deleted!", "success");
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const columns = [
+    {
+      name: "Image",
+      cell: (row) => <Image image={row.image} />,
+    },
+    {
+      name: "Title",
+      selector: "title",
+      sortable: true,
+    },
+    {
+      name: "Description",
+      selector: "description",
+      sortable: true,
+    },
+    {
+      name: "Price",
+      selector: "price",
+      sortable: true,
+    },
+    {
+      name: "Joined On",
+      cell: (row) => setDate(row.createdAt),
+      sortable: true,
+    },
+    {
+      name: "Actions",
+      cell: (row) => (
+        <div>
+          <ToolTipButton
+            onClick={() => handleOpenServiceDialog(row._id)}
+            title="Edit"
+          >
+            <EditIcon color="primary" />
+          </ToolTipButton>
+          <ToolTipButton title="Delete" onClick={() => handleDelete(row._id)}>
+            <DeleteIcon color="error" />
+          </ToolTipButton>
+        </div>
+      ),
+    },
+  ];
+
   return (
-    <Page className={classes.root} title="Services">
+    <Page className={classes.root} title="data">
       <Container maxWidth={false}>
-        <TableToolbar
-          title="Service"
-          onSearch={handleSearch}
-          onAddButtonClick={handleOpenDialog}
-        />
+        <TableToolbar title="Service" onAddButtonClick={handleOpenDialog} />
         <Box mt={3}>
-          <Results services={services} />
+          <DataTable
+            data={data}
+            title="Services"
+            columns={columns}
+            actions={<SearchBar title="Services" onSearch={handleSearch} />}
+          />
+          {/* <Results data={data} /> */}
         </Box>
       </Container>
       <Dialog />

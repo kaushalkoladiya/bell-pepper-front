@@ -5,12 +5,12 @@ import Avatar from "@material-ui/core/Avatar";
 import { BASE_URL } from "../constrants";
 
 const Image = ({ image, extraLarge, ...props }) => {
-  // const imageURL =
-  //   image.search("storage") !== -1 ? `${BASE_URL}${image}` : image;
+  const imageURL =
+    image.search("storage") !== -1 ? `${BASE_URL}${image}` : image;
 
   return (
     <Avatar
-      src={image || "https://via.placeholder.com/200"}
+      src={imageURL || "https://via.placeholder.com/200"}
       alt={image}
       style={{
         width: extraLarge ? 200 : 80,

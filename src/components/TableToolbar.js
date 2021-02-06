@@ -29,6 +29,7 @@ function TableToolbar({
   hideAddButton,
   onSearch,
   onAddButtonClick,
+  component,
   ...rest
 }) {
   const classes = useStyles();
@@ -44,23 +45,7 @@ function TableToolbar({
               justifyContent: "space-between",
             }}
           >
-            <Box minWidth={400}>
-              <TextField
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SvgIcon fontSize="small" color="action">
-                        <SearchIcon />
-                      </SvgIcon>
-                    </InputAdornment>
-                  ),
-                }}
-                placeholder={`Search ${title}`}
-                variant="outlined"
-                onChange={onSearch}
-              />
-            </Box>
+            <Box minWidth={400}>{component}</Box>
             {!hideAddButton && (
               <Box display="flex" justifyContent="flex-end">
                 <Button

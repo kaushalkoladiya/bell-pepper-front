@@ -88,6 +88,23 @@ const Dialog = () => {
   );
 
   useEffect(() => {
+    return () => {
+      setErrors({
+        name: "",
+        image: "",
+        description: "",
+        price: "",
+      });
+      setMongoID(null);
+      setTitle("");
+      setDescription("");
+      setPrice("");
+      setImagePath("");
+      setImageData("");
+    };
+  }, [open]);
+
+  useEffect(() => {
     if (dialogId) {
       const index = _data.findIndex((item) => item._id === dialogId);
       if (index !== -1) {
