@@ -131,7 +131,6 @@ const VendorList = () => {
   return (
     <Page className={classes.root} title="Vendors">
       <Container maxWidth={false}>
-        <TableToolbar title="Vendor" hideAddButton />
         <Box mt={3}>
           <DataTable
             data={data}

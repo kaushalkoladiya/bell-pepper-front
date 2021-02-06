@@ -119,7 +119,6 @@ const CustomerListView = () => {
   return (
     <Page className={classes.root} title="Customers">
       <Container maxWidth={false}>
-        <TableToolbar title="Customer" hideAddButton />
         <Box mt={3}>
           <DataTable
             data={data}
