@@ -40,7 +40,7 @@ const NotFoundView = () => {
             <img
               alt="Under development"
               className={classes.image}
-              src="/static/images/undraw_page_not_found_su7k.svg"
+              src="https://images.hdqwalls.com/wallpapers/404-error-cyberpuk-girl-9x.jpg"
             />
           </Box>
         </Container>

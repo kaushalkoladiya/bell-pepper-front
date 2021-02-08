@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Avatar from "@material-ui/core/Avatar";
 
-import { BASE_URL } from "../constrants";
+import { BASE_URL } from "../constants";
 
 const Image = ({ image, extraLarge, ...props }) => {
   const imageURL =

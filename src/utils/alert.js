@@ -24,6 +24,13 @@ export const permissionError = () => {
   });
 };
 
+export const underDevelopment = () => {
+  return swal({
+    title: "This section is under development!",
+    icon: "error",
+  });
+};
+
 export const alert = (title, data, type) => {
   return swal(title, data, type);
 };

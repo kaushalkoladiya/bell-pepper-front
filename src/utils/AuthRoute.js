@@ -4,10 +4,14 @@ import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
 
-const AuthRoute = ({ component: Component, isAuth, ...rest }) => (
+const AuthRoute = ({ component: Component, isAuth, userType, ...rest }) => (
   <Fragment>
     {isAuth ? (
-      <Navigate to="/partners/dashboard" />
+      <Navigate
+        to={
+          userType === "ROOT_USER" ? "/admin/dashboard" : "/partners/dashboard"
+        }
+      />
     ) : (
       <Route element={<Component />} {...rest} />
     )}
@@ -21,6 +25,7 @@ AuthRoute.prototype = {
 
 const mapStateToProps = (state) => ({
   isAuth: state.admin.isAuth,
+  userType: state.admin.userType,
 });
 
 export default connect(mapStateToProps)(AuthRoute);

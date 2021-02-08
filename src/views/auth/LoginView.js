@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import {
   Box,
   Button,
   Container,
-  Grid,
-  Link,
   TextField,
   Typography,
   makeStyles,
@@ -16,8 +14,6 @@ import {
 import { useDispatch } from "react-redux";
 
 // Icon
-import FacebookIcon from "../../icons/Facebook";
-import GoogleIcon from "../../icons/Google";
 import Page from "../../components/Page";
 import Axios from "axios";
 import { loginAdmin } from "../../redux/admin/actions";
@@ -64,10 +60,9 @@ const LoginView = () => {
             })}
             onSubmit={(formData, methods) => {
               Axios.post("/admin/login", formData)
-                .then((res) => {
-                  console.log(res.data);
-
-                  dispatch(loginAdmin(res.data.data.token));
+                .then(({ data }) => {
+                  const { userType, token } = data.data;
+                  return dispatch(loginAdmin({ token, userType }));
                 })
                 .catch(({ response }) => {
                   if (response?.data.message) {
@@ -76,7 +71,6 @@ const LoginView = () => {
                     methods.setSubmitting(false);
                   }
                 });
-              // navigate("/app/dashboard", { replace: true });
             }}
           >
             {({

@@ -25,7 +25,6 @@ const DataTable = ({ data, title, columns, ...res }) => {
       data={data}
       customStyles={customStyles}
       responsive
-      dense
       pagination
       {...res}
     />

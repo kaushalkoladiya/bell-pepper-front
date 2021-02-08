@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import Axios from "axios";
 import { setAdminData } from "../../redux/admin/actions";
-import { alert } from "../../utils/alert";
+import { alert, underDevelopment } from "../../utils/alert";
 
 const ProfileDetails = ({ className, userData, ...rest }) => {
   const dispatch = useDispatch();
@@ -43,6 +43,7 @@ const ProfileDetails = ({ className, userData, ...rest }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    return underDevelopment();
 
     if (formData.name === "") {
       return setError({ ...error, name: "Name is required!" });

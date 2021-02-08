@@ -29,39 +29,6 @@ const user = {
   name: "Dummy User",
 };
 
-const items = [
-  {
-    href: "/partners/dashboard",
-    icon: BarChartIcon,
-    title: "Dashboard",
-  },
-  {
-    href: "/partners/customers",
-    icon: UsersIcon,
-    title: "Customers",
-  },
-  {
-    href: "/partners/vendors",
-    icon: UsersIcon,
-    title: "Vendors",
-  },
-  {
-    href: "/partners/services",
-    icon: ShoppingBagIcon,
-    title: "Services",
-  },
-  {
-    href: "/partners/bookings",
-    icon: BookingIcon,
-    title: "Bookings",
-  },
-  {
-    href: "/partners/account",
-    icon: UserIcon,
-    title: "Account",
-  },
-];
-
 const useStyles = makeStyles(() => ({
   mobileDrawer: {
     width: 256,
@@ -79,12 +46,16 @@ const useStyles = makeStyles(() => ({
 }));
 
 const NavBar = ({ onMobileClose, openMobile }) => {
+  let items;
   const classes = useStyles();
   const location = useLocation();
   const dispatch = useDispatch();
   const navigation = useNavigate();
 
   const userData = useSelector((state) => state.admin.data);
+  const userType = useSelector((state) => state.admin.userType);
+  console.log(userType);
+  const isRootUser = userType === "ROOT_USER" ? true : false;
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -98,6 +69,69 @@ const NavBar = ({ onMobileClose, openMobile }) => {
     navigation("/login", { replace: true });
   };
 
+  if (isRootUser) {
+    items = [
+      {
+        href: "/admin/dashboard",
+        icon: BarChartIcon,
+        title: "Dashboard",
+      },
+      {
+        href: "/admin/customers",
+        icon: UsersIcon,
+        title: "Customers",
+      },
+      {
+        href: "/admin/staff",
+        icon: UsersIcon,
+        title: "Staffs",
+      },
+      {
+        href: "/admin/vendors",
+        icon: UsersIcon,
+        title: "Vendors",
+      },
+      {
+        href: "/admin/services",
+        icon: ShoppingBagIcon,
+        title: "Services",
+      },
+      {
+        href: "/admin/bookings",
+        icon: BookingIcon,
+        title: "Bookings",
+      },
+      {
+        href: "/admin/account",
+        icon: UserIcon,
+        title: "Account",
+      },
+    ];
+  } else {
+    items = [
+      {
+        href: "/partners/dashboard",
+        icon: BarChartIcon,
+        title: "Dashboard",
+      },
+      {
+        href: "/partners/staff",
+        icon: UsersIcon,
+        title: "Staffs",
+      },
+      {
+        href: "/partners/bookings",
+        icon: BookingIcon,
+        title: "Bookings",
+      },
+      {
+        href: "/partners/account",
+        icon: UserIcon,
+        title: "Account",
+      },
+    ];
+  }
+
   const content = (
     <Box height="100%" display="flex" flexDirection="column">
       <Box alignItems="center" display="flex" flexDirection="column" p={2}>
@@ -105,7 +139,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           className={classes.avatar}
           component={RouterLink}
           src={user.avatar}
-          to="/partners/account"
+          to={isRootUser ? "/admin/account" : "/partners/account"}
         />
         <Typography className={classes.name} color="textPrimary" variant="h5">
           {userData.name}

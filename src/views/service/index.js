@@ -121,7 +121,7 @@ const VendorListView = () => {
       sortable: true,
     },
     {
-      name: "Joined On",
+      name: "Created At",
       cell: (row) => setDate(row.createdAt),
       sortable: true,
     },
