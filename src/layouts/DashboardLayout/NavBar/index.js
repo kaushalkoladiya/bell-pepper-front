@@ -18,6 +18,7 @@ import {
   Users as UsersIcon,
   LogOut as LogOutIcon,
   Briefcase as BookingIcon,
+  Aperture as CategoryIcon,
 } from "react-feather";
 import NavItem from "./NavItem";
 import { logoutAdmin } from "../../../redux/admin/actions";
@@ -54,7 +55,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
 
   const userData = useSelector((state) => state.admin.data);
   const userType = useSelector((state) => state.admin.userType);
-  console.log(userType);
+
   const isRootUser = userType === "ROOT_USER" ? true : false;
 
   useEffect(() => {
@@ -77,6 +78,16 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         title: "Dashboard",
       },
       {
+        href: "/admin/categories",
+        icon: CategoryIcon,
+        title: "Categories",
+      },
+      {
+        href: "/admin/services",
+        icon: ShoppingBagIcon,
+        title: "Services",
+      },
+      {
         href: "/admin/customers",
         icon: UsersIcon,
         title: "Customers",
@@ -91,11 +102,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         icon: UsersIcon,
         title: "Vendors",
       },
-      {
-        href: "/admin/services",
-        icon: ShoppingBagIcon,
-        title: "Services",
-      },
+
       {
         href: "/admin/bookings",
         icon: BookingIcon,

@@ -14,6 +14,7 @@ import BookingListView from "../views/Booking";
 import SettingsView from "../views/Settings";
 import VendorListView from "../views/Vendor";
 import StaffListView from "../views/Staff";
+import CategoryView from "../views/Category";
 
 const routes = [
   {
@@ -23,6 +24,10 @@ const routes = [
       {
         path: "account",
         element: <PrivateRoute path="/admin" component={AccountView} />,
+      },
+      {
+        path: "categories",
+        element: <PrivateRoute path="/admin" component={CategoryView} />,
       },
       {
         path: "staff",

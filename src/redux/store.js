@@ -7,6 +7,7 @@ import serviceReducer from "./service/reducer";
 import bookingReducer from "./booking/reducer";
 import adminReducer from "./admin/reducer";
 import staffReducer from "./staff/reducer";
+import categoryReducer from "./category/reducer";
 
 const initialState = {};
 
@@ -19,6 +20,7 @@ const reducers = combineReducers({
   booking: bookingReducer,
   admin: adminReducer,
   staff: staffReducer,
+  category: categoryReducer,
 });
 
 const composeEnhancers =

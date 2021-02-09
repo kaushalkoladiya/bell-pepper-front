@@ -5,8 +5,9 @@ import Avatar from "@material-ui/core/Avatar";
 import { BASE_URL } from "../constants";
 
 const Image = ({ image, extraLarge, ...props }) => {
+  let _image = String(image);
   const imageURL =
-    image.search("storage") !== -1 ? `${BASE_URL}${image}` : image;
+    _image.search("storage") !== -1 ? `${BASE_URL}${image}` : image;
 
   return (
     <Avatar

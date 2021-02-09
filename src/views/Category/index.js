@@ -1,27 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { Box, Container, makeStyles } from "@material-ui/core";
-
-import axios from "axios";
-
-// redux
+import React, { useState, useEffect } from "react";
+// Redux
 import { useSelector, useDispatch } from "react-redux";
-import { deleteService, openServiceDialog } from "../../redux/service/actions";
-
+import {
+  openCategoryDialog,
+  deleteCategory,
+  getCategory,
+} from "../../redux/category/actions";
+// MUI
+import { Box, Container, makeStyles } from "@material-ui/core";
+// Components
 import Page from "../../components/Page";
-
 import TableToolbar from "../../components/TableToolbar";
-import { getService } from "../../redux/service/actions";
 import Dialog from "./Dialog";
-import { setDate } from "../../utils";
-import Image from "../../components/Image";
-import SearchBar from "../../components/SearchBar";
-import DataTable from "../../components/DataTable";
-import { warning, alert } from "../../utils/alert";
 import ToolTipButton from "../../components/ToolTipButton";
+import { setDate } from "../../utils";
+import { warning, alert } from "../../utils/alert";
+import axios from "axios";
+import Image from "../../components/Image";
 
 // icons
 import EditIcon from "@material-ui/icons/EditRounded";
 import DeleteIcon from "@material-ui/icons/DeleteRounded";
+import DataTable from "../../components/DataTable";
+import SearchBar from "../../components/SearchBar";
+import EditedChip from "../../components/Chip/Edited";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,23 +34,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const VendorListView = () => {
+const Category = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
-  const serviceData = useSelector((state) => state.service.data);
-
   const [data, setData] = useState([]);
 
+  const { data: categoriesData } = useSelector((state) => state.category);
+
   useEffect(() => {
-    setData(serviceData);
-  }, [serviceData, setData]);
+    setData(categoriesData);
+  }, [categoriesData]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get("/service");
-        dispatch(getService(data.data.services));
+        const { data } = await axios.get("/category");
+        dispatch(getCategory(data.data.categories));
       } catch (error) {
         console.log(error);
       }
@@ -59,24 +60,17 @@ const VendorListView = () => {
   const handleSearch = (e) => {
     const value = e.target.value.toUpperCase();
     if (value) {
-      const data = serviceData.filter((row) => {
-        return (
-          row?.title?.toUpperCase()?.indexOf(value) > -1 ||
-          row?.description?.toUpperCase()?.indexOf(value) > -1
-        );
+      const data = categoriesData.filter((row) => {
+        return row?.name?.toUpperCase()?.indexOf(value) > -1;
       });
       setData(data);
     } else {
-      setData(serviceData);
+      setData(categoriesData);
     }
   };
 
-  const handleOpenDialog = () => {
-    dispatch(openServiceDialog());
-  };
-
-  const handleOpenServiceDialog = (id) => {
-    dispatch(openServiceDialog(id));
+  const handleOpenDialog = (id = null) => {
+    dispatch(openCategoryDialog(id));
   };
 
   const handleDelete = (id) => {
@@ -86,10 +80,10 @@ const VendorListView = () => {
         if (isDeleted) {
           // delete here
           try {
-            const { data } = await axios.delete(`/service/${id}`);
+            const { data } = await axios.delete(`/category/${id}`);
             if (data.status === 200) {
-              dispatch(deleteService(id));
-              alert("Deleted!", "Service has been deleted!", "success");
+              dispatch(deleteCategory(id));
+              alert("Deleted!", "Category has been deleted!", "success");
             }
           } catch (error) {
             console.log(error);
@@ -102,21 +96,11 @@ const VendorListView = () => {
   const columns = [
     {
       name: "Image",
-      cell: (row) => <Image image={row.image} />,
+      cell: (row) => (row.hasImage ? <Image image={row.image} /> : "No Image"),
     },
     {
       name: "Title",
-      selector: "title",
-      sortable: true,
-    },
-    {
-      name: "Description",
-      selector: "description",
-      sortable: true,
-    },
-    {
-      name: "Price",
-      selector: "price",
+      selector: "name",
       sortable: true,
     },
     {
@@ -128,32 +112,29 @@ const VendorListView = () => {
       name: "Actions",
       cell: (row) => (
         <div>
-          <ToolTipButton
-            onClick={() => handleOpenServiceDialog(row._id)}
-            title="Edit"
-          >
+          <ToolTipButton onClick={() => handleOpenDialog(row._id)} title="Edit">
             <EditIcon color="primary" />
           </ToolTipButton>
           <ToolTipButton title="Delete" onClick={() => handleDelete(row._id)}>
             <DeleteIcon color="error" />
           </ToolTipButton>
+          {row.createdAt !== row.updatedAt && <EditedChip />}
         </div>
       ),
     },
   ];
 
   return (
-    <Page className={classes.root} title="data">
+    <Page className={classes.root} title="Categories">
       <Container maxWidth={false}>
-        <TableToolbar title="Service" onAddButtonClick={handleOpenDialog} />
+        <TableToolbar title="Category" onAddButtonClick={handleOpenDialog} />
         <Box mt={3}>
           <DataTable
             data={data}
-            title="Services"
+            title="Categories"
             columns={columns}
-            actions={<SearchBar title="Services" onSearch={handleSearch} />}
+            actions={<SearchBar title="Category" onSearch={handleSearch} />}
           />
-          {/* <Results data={data} /> */}
         </Box>
       </Container>
       <Dialog />
@@ -161,4 +142,4 @@ const VendorListView = () => {
   );
 };
 
-export default VendorListView;
+export default Category;

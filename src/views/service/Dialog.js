@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
 
 // redux
 import { useSelector, useDispatch } from "react-redux";
@@ -25,6 +24,9 @@ import CloseIcon from "@material-ui/icons/Close";
 // components
 import Image from "../../components/Image";
 import ToolTipButton from "../../components/ToolTipButton";
+
+// utile
+import { networkRequest } from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
   accordion: {
@@ -176,15 +178,6 @@ const Dialog = () => {
       const data = await networkRequest("/service", "post", formData);
       dispatch(addNewService(data.data.service));
       handleClose();
-    }
-  };
-
-  const networkRequest = async (url, method, _data) => {
-    try {
-      const { data } = await Axios[method](url, _data);
-      return data;
-    } catch (error) {
-      console.log(error);
     }
   };
 
