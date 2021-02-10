@@ -62,6 +62,14 @@ const theme = createMuiTheme({
       variant: "outlined",
       size: "small",
     },
+    MuiFormControl: {
+      variant: "outlined",
+      size: "small",
+      fullWidth: true,
+    },
+    MuiChip: {
+      size: "small",
+    },
   },
 });
 

@@ -6,6 +6,9 @@ import {
   OPEN_STAFF_ASSIGN_DIALOG,
   ASSIGN_STAFF,
   DELETE_BOOKING,
+  OPEN_VENDOR_ASSIGN_DIALOG,
+  CLOSE_VENDOR_ASSIGN_DIALOG,
+  ASSIGN_VENDOR,
 } from "./type";
 
 const initialState = {
@@ -15,6 +18,7 @@ const initialState = {
   isStaffDialogOpen: false,
   serviceId: null,
   bookingId: null,
+  isVendorDialogOpen: false,
 };
 
 const bookingReducer = (state = initialState, { type, payload }) => {
@@ -31,7 +35,7 @@ const bookingReducer = (state = initialState, { type, payload }) => {
     case OPEN_STAFF_ASSIGN_DIALOG:
       return {
         ...state,
-        serviceId: payload.serviceId,
+        vendorId: payload.vendorId,
         bookingId: payload.bookingId,
         isStaffDialogOpen: true,
       };
@@ -39,7 +43,7 @@ const bookingReducer = (state = initialState, { type, payload }) => {
     case CLOSE_STAFF_ASSIGN_DIALOG:
       return {
         ...state,
-        serviceId: null,
+        vendorId: null,
         bookingId: null,
         isStaffDialogOpen: false,
       };
@@ -52,6 +56,33 @@ const bookingReducer = (state = initialState, { type, payload }) => {
             ? {
                 ...item,
                 profession: payload.bookingData.staffId,
+              }
+            : item
+        ),
+      };
+
+    case OPEN_VENDOR_ASSIGN_DIALOG:
+      return {
+        ...state,
+        bookingId: payload.bookingId,
+        isVendorDialogOpen: true,
+      };
+
+    case CLOSE_VENDOR_ASSIGN_DIALOG:
+      return {
+        ...state,
+        bookingId: null,
+        isVendorDialogOpen: false,
+      };
+
+    case ASSIGN_VENDOR:
+      return {
+        ...state,
+        data: state.data.map((item) =>
+          item._id === payload.vendorId
+            ? {
+                ...item,
+                vendorId: payload.bookingData.vendorId,
               }
             : item
         ),

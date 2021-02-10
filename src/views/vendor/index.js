@@ -16,6 +16,7 @@ import SearchBar from "../../components/SearchBar";
 import { setDate } from "../../utils";
 import { warning, alert } from "../../utils/alert";
 import ToolTipButton from "../../components/ToolTipButton";
+import ProfileName from "../../components/ProfileName";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -92,6 +93,16 @@ const VendorList = () => {
   };
 
   const columns = [
+    {
+      name: "Category",
+      cell: (row) => (
+        <ProfileName
+          name={row.categoryId.name}
+          image={row.categoryId.image}
+          square
+        />
+      ),
+    },
     {
       name: "Company Name",
       selector: "companyName",

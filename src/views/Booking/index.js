@@ -28,15 +28,19 @@ import {
   getBooking,
   openBookingDialog,
   openStaffDialog,
+  openVendorDialog,
 } from "../../redux/booking/actions";
 import Dialog from "./Dialog";
-import StaffDialog from "./StaffDialog";
+import StaffDialog from "../Staff/StaffDialog";
 import { setEmptyStr, trimStr } from "../../utils";
 import DataTable from "../../components/DataTable";
 import SearchBar from "../../components/SearchBar";
 import Chip from "../../components/Chip";
 import ToolTipButton from "../../components/ToolTipButton";
 import { warning, alert } from "../../utils/alert";
+import VendorDialogDropdown from "../Vendor/Dropdown";
+import CancelIcon from "@material-ui/icons/CancelRounded";
+import DoneIcon from "@material-ui/icons/DoneRounded";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,46 +65,101 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const CancelChip = ({ label }) => (
+  <Chip
+    type="cancel"
+    label={label}
+    color={colors.red[500]}
+    icon={
+      <CancelIcon fontSize="small" style={{ color: colors.common.white }} />
+    }
+  />
+);
+
+const AssignedChip = () => (
+  <Chip
+    icon={<DoneIcon fontSize="small" style={{ color: colors.common.white }} />}
+    label="Assigned"
+    color={colors.orange[500]}
+  />
+);
+
+const StaffSuccessChip = ({ label }) => (
+  <MuiChip
+    label={label}
+    size="small"
+    style={{
+      backgroundColor: colors.green[500],
+      color: colors.common.white,
+    }}
+    icon={<Avatar />}
+  />
+);
+
+const StaffPendingChip = ({ label }) => (
+  <MuiChip
+    label={label}
+    size="small"
+    style={{
+      backgroundColor: colors.grey[500],
+      color: colors.common.white,
+    }}
+    icon={<Avatar />}
+  />
+);
+
+const CompletedChip = () => (
+  <Chip
+    icon={<DoneIcon fontSize="small" style={{ color: colors.common.white }} />}
+    label="Completed"
+    color={colors.indigo[500]}
+  />
+);
+
+const AssignedVendor = ({ label }) => (
+  <Chip icon={<Avatar />} label={label} color={colors.teal[500]} />
+);
+
 const Instructions = () => {
   const classes = useStyles();
   return (
     <div className={classes.instructionContainer}>
       <div className={classes.instructionItem}>
         <Typography>Cancel by someone</Typography>
-        <Chip type="cancel" label="Vendor" />
+        <CancelChip label="Admin" />
       </div>
       <div className={classes.instructionItem}>
-        <Typography>Assigned successfully</Typography>
-        <Chip type="success" label="Assigned" />
+        <Typography>Assigned successfully to staff</Typography>
+        <AssignedChip />
       </div>
       <div className={classes.instructionItem}>
         <Typography>Job finished</Typography>
-        <Chip type="success" label="Completed" />
+        <CompletedChip />
       </div>
       <div className={classes.instructionItem}>
         <Typography>Who has done the job</Typography>
-        <MuiChip
-          label={"Staff"}
-          size="small"
-          style={{
-            backgroundColor: colors.green[500],
-            color: colors.common.white,
-          }}
-          icon={<Avatar />}
-        />
+        <StaffSuccessChip label="Staff Name" />
       </div>
       <div className={classes.instructionItem}>
-        <Typography>Assign to whom</Typography>
-        <MuiChip label={"Staff"} size="small" icon={<Avatar />} />
+        <Typography>Assigned to whom</Typography>
+        <StaffPendingChip label="Staff Name" />
+      </div>
+      <div className={classes.instructionItem}>
+        <Typography>Assigned to Vendor</Typography>
+        <AssignedVendor label="Vendor Name" />
       </div>
     </div>
   );
 };
-const BookingListView = () => {
+
+const BookingList = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const bookingData = useSelector((state) => state.booking.data);
+  const userType = useSelector((state) => state.admin.userType);
+
+  const isRootUser = userType === "ROOT_USER" ? true : false;
 
   const [data, setData] = useState([]);
 
@@ -143,8 +202,14 @@ const BookingListView = () => {
     dispatch(openBookingDialog(id));
   };
 
-  const handleOpenStaffAssignDialog = (serviceId, bookingId) => {
-    dispatch(openStaffDialog({ serviceId, bookingId }));
+  const handleOpenAssignDialog = (bookingId, vendorId = null) => {
+    if (bookingId && vendorId) {
+      //staff
+      dispatch(openStaffDialog({ bookingId, vendorId }));
+    } else {
+      // vendor
+      dispatch(openVendorDialog({ bookingId }));
+    }
   };
 
   const handleDelete = (id) => {
@@ -231,38 +296,31 @@ const BookingListView = () => {
       name: "Status",
       cell: (row) => (
         <div>
-          {!row.profession && !row.isCancelled && (
+          {row.vendorId && <AssignedVendor label={row.vendorId.companyName} />}
+          {!row.isCancelled && (
             <ToolTipButton
               onClick={() =>
-                handleOpenStaffAssignDialog(row.serviceId._id, row._id)
+                isRootUser
+                  ? handleOpenAssignDialog(row._id)
+                  : handleOpenAssignDialog(row._id, row.vendorId._id)
               }
-              title="Assign Employee"
+              title={isRootUser ? "Assign Vendor" : "Assign Employee"}
               placement="top"
             >
               <AssignmentIcon color="action" fontSize="small" />
             </ToolTipButton>
           )}
-          {row.profession && !row.isCancelled && (
-            <MuiChip
-              label={row.profession.name}
-              size="small"
-              style={{
-                backgroundColor:
-                  row.profession && row.isDone && colors.green[500],
-                color: row.profession && row.isDone && colors.common.white,
-              }}
-              icon={<Avatar />}
-            />
+          {row.profession && !row.isCancelled && row.isDone && (
+            <StaffSuccessChip label={row.profession.name} />
+          )}
+          {row.profession && !row.isCancelled && !row.isDone && (
+            <StaffPendingChip label={row.profession.name} />
           )}
           {row.isCancelled && row.cancelledByWhom && (
-            <Chip type="cancel" label={row.cancelledByWhom} />
+            <CancelChip label={row.cancelledByWhom} />
           )}
-          {row.profession && row.isDone && (
-            <Chip type="success" label="Completed" />
-          )}
-          {row.profession && !row.isDone && (
-            <Chip type="success" label="Assigned" />
-          )}
+          {row.profession && row.isDone && <CompletedChip />}
+          {row.profession && !row.isDone && <AssignedChip />}
         </div>
       ),
     },
@@ -307,9 +365,11 @@ const BookingListView = () => {
         </Box>
       </Container>
       <Dialog />
+      {/* Dropdown */}
       <StaffDialog />
+      <VendorDialogDropdown />
     </Page>
   );
 };
 
-export default BookingListView;
+export default BookingList;

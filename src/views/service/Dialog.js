@@ -27,19 +27,9 @@ import ToolTipButton from "../../components/ToolTipButton";
 
 // utile
 import { networkRequest } from "../../utils";
+import CategoryDropdown from "../Category/CategoryDropdown";
 
 const useStyles = makeStyles((theme) => ({
-  accordion: {
-    width: "100%",
-  },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: theme.typography.fontWeightRegular,
-  },
-  avatar: {
-    backgroundColor: blue[100],
-    color: blue[600],
-  },
   imageContainer: {
     alignItems: "center",
     textAlign: "center",
@@ -54,17 +44,18 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     padding: 5,
   },
-  dataLine: {
-    margin: "5px 0",
-    display: "flex",
-    alignItems: "baseline",
-  },
-  textField: {
-    margin: "10px 0",
-  },
   submitButton: {
     textAlign: "right",
     marginTop: 20,
+  },
+  topSection: {
+    alignItem: "center",
+  },
+  bottomSection: {
+    marginTop: 20,
+  },
+  textField: {
+    marginBottom: 10,
   },
 }));
 
@@ -73,6 +64,7 @@ const Dialog = () => {
   const dispatch = useDispatch();
 
   const [mongoID, setMongoID] = useState(null);
+  const [categoryId, setCategoryId] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -83,6 +75,7 @@ const Dialog = () => {
     image: "",
     description: "",
     price: "",
+    categoryId: "",
   });
 
   const { dialogId, isDialogOpen: open, data: _data } = useSelector(
@@ -96,8 +89,10 @@ const Dialog = () => {
         image: "",
         description: "",
         price: "",
+        categoryId: "",
       });
       setMongoID(null);
+      setCategoryId("");
       setTitle("");
       setDescription("");
       setPrice("");
@@ -113,6 +108,7 @@ const Dialog = () => {
         const _service = _data[index];
 
         setMongoID(_service._id);
+        setCategoryId(_service.categoryId._id);
         setTitle(_service.title);
         setDescription(_service.description);
         setPrice(_service.price);
@@ -142,6 +138,10 @@ const Dialog = () => {
     document.getElementById("serviceImage").click();
   };
 
+  const handleCategoryChange = (e) => {
+    setCategoryId(e.target.value);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -154,12 +154,15 @@ const Dialog = () => {
     }
 
     if (!title) return setErrors({ ...errors, title: "Invalid title" });
+    if (!categoryId)
+      return setErrors({ ...errors, categoryId: "Please choose a category." });
     if (!description)
       return setErrors({ ...errors, description: "Invalid description" });
     if (!price) return setErrors({ ...errors, price: "Invalid price" });
 
     const formData = new FormData();
     if (imageData) formData.append("image", imageData);
+    formData.append("categoryId", categoryId);
     formData.append("title", title);
     formData.append("description", description);
     formData.append("price", price);
@@ -200,50 +203,59 @@ const Dialog = () => {
       </DialogTitle>
       <MuiDialogContent>
         <form onSubmit={handleSubmit}>
-          <Grid container>
-            <Grid item sm={12}>
-              <div onClick={handleEditImage}>
-                <input
-                  name="serviceImage"
-                  id="serviceImage"
-                  type="file"
-                  hidden
-                  accept="image/*"
-                  onChange={handleInputFileChange}
-                />
-                <Image extraLarge image={imagePath} />
-                {errors.image && (
-                  <div style={{ textAlign: "center" }}>
-                    <Typography variant="caption" color="error">
-                      {errors.image}
-                    </Typography>
+          <div>
+            <div>
+              <Grid container className={classes.topSection} spacing={2}>
+                <Grid item sm={12} md={6} lg={4}>
+                  <div onClick={handleEditImage}>
+                    <input
+                      name="serviceImage"
+                      id="serviceImage"
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      onChange={handleInputFileChange}
+                    />
+                    <Image extraLarge image={imagePath} />
+                    {errors.image && (
+                      <div style={{ textAlign: "center" }}>
+                        <Typography variant="caption" color="error">
+                          {errors.image}
+                        </Typography>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </Grid>
-            <Grid item sm={12} className={classes.textField}>
-              <TextField
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                error={errors.title ? true : false}
-                helperText={errors.title}
-                label="Title"
-                pattern="^\w+(\s+\w+)*$"
-                fullWidth
-              />
-            </Grid>
-            <Grid item sm={12} className={classes.textField}>
-              <TextField
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                error={errors.price ? true : false}
-                helperText={errors.price}
-                label="Price"
-                type="number"
-                fullWidth
-              />
-            </Grid>
-            <Grid item sm={12} className={classes.textField}>
+                </Grid>
+                <Grid item sm={12} md={6} lg={8}>
+                  <TextField
+                    className={classes.textField}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    error={errors.title ? true : false}
+                    helperText={errors.title}
+                    label="Title"
+                    pattern="^\w+(\s+\w+)*$"
+                    fullWidth
+                  />
+                  <TextField
+                    className={classes.textField}
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    error={errors.price ? true : false}
+                    helperText={errors.price}
+                    label="Price"
+                    type="number"
+                    fullWidth
+                  />
+                  <CategoryDropdown
+                    category={categoryId}
+                    onChange={handleCategoryChange}
+                    error={errors.categoryId}
+                  />
+                </Grid>
+              </Grid>
+            </div>
+            <div item sm={12} className={classes.bottomSection}>
               <TextField
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -255,13 +267,13 @@ const Dialog = () => {
                 multiline
                 rows={4}
               />
-            </Grid>
-            <Grid item sm={12} className={classes.submitButton}>
+            </div>
+            <div item sm={12} className={classes.submitButton}>
               <Button variant="contained" color="primary" type="submit">
                 {!mongoID ? "Submit" : "Update"}
               </Button>
-            </Grid>
-          </Grid>
+            </div>
+          </div>
         </form>
       </MuiDialogContent>
     </MuiDialog>

@@ -12,65 +12,53 @@ import Select from "@material-ui/core/Select";
 
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { assignStaff, closeStaffDialog } from "../../redux/booking/actions";
+import { assignVendor, closeVendorDialog } from "../../redux/booking/actions";
 import axios from "axios";
 
 import { alert } from "../../utils/alert";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   formControl: {
     minWidth: 120,
   },
 }));
 
-export default function StaffDialog({ onChange }) {
+export default function VendorDialogDropdown() {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [staffs, setStaffs] = React.useState([]);
-  const [selectedStaff, setSelectedStaff] = React.useState("");
-
-  const { serviceId, bookingId, isStaffDialogOpen: open } = useSelector(
+  const { isVendorDialogOpen: open, bookingId } = useSelector(
     (state) => state.booking
   );
+  const { data: vendorData } = useSelector((state) => state.vendor);
+
+  const [selectedVendor, setSelectedVendor] = React.useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await axios.get(`/staff/service/${serviceId}`);
-        setStaffs(data.data.staffs);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    if (serviceId) fetchData();
-  }, [serviceId]);
+    if (!open) setSelectedVendor("");
+  }, [open]);
 
   const handleClose = () => {
-    dispatch(closeStaffDialog());
+    dispatch(closeVendorDialog());
   };
 
   const handleChange = (event) => {
-    setSelectedStaff(event.target.value);
+    setSelectedVendor(event.target.value);
   };
 
   const handleSubmit = async () => {
-    if (!serviceId || !bookingId) {
-      return alert("An error", "Contact with your developer!", "danger");
-    }
     try {
       const formData = {
-        staffId: selectedStaff,
         bookingId,
+        vendorId: selectedVendor,
       };
-      const { data } = await axios.put(`/booking/assignStaff`, formData);
+      const { data } = await axios.put(`/booking/assignVendor`, formData);
       dispatch(
-        assignStaff({
+        assignVendor({
           bookingId,
           bookingData: data.data.booking,
         })
       );
-
       alert("Done", data.message, "success");
       handleClose();
     } catch (error) {
@@ -85,22 +73,22 @@ export default function StaffDialog({ onChange }) {
       open={open}
       onClose={handleClose}
     >
-      <DialogTitle>Choose Staff for this job!</DialogTitle>
+      <DialogTitle>Choose Vendor for this job!</DialogTitle>
       <DialogContent>
         <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="demo-dialog-native">Choose Staff</InputLabel>
+          <InputLabel htmlFor="vendor-dialog-native">Choose Vendor</InputLabel>
           <Select
-            labelId="demo-dialog-select-label"
-            id="demo-dialog-select"
-            value={selectedStaff}
+            labelId="vendor-dialog-select-label"
+            id="vendor-dialog-select"
+            value={selectedVendor}
             onChange={handleChange}
           >
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {staffs.map((item) => (
+            {vendorData.map((item) => (
               <MenuItem key={item._id} value={item._id}>
-                {item.name}
+                {item.companyName}
               </MenuItem>
             ))}
           </Select>

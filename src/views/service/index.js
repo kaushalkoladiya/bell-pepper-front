@@ -22,6 +22,7 @@ import ToolTipButton from "../../components/ToolTipButton";
 // icons
 import EditIcon from "@material-ui/icons/EditRounded";
 import DeleteIcon from "@material-ui/icons/DeleteRounded";
+import ProfileName from "../../components/ProfileName";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -100,6 +101,16 @@ const VendorListView = () => {
   };
 
   const columns = [
+    {
+      name: "Category",
+      cell: (row) => (
+        <ProfileName
+          name={row.categoryId.name}
+          image={row.categoryId.image}
+          square
+        />
+      ),
+    },
     {
       name: "Image",
       cell: (row) => <Image image={row.image} />,

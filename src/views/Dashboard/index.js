@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
+import axios from "axios";
+// redux
+import { useDispatch } from "react-redux";
+import { getCategory } from "../../redux/category/actions";
 // mui
 import { Container, Grid, makeStyles, colors } from "@material-ui/core";
 // icons
@@ -12,11 +15,6 @@ import {
 import Page from "../../components/Page";
 import Card from "./Card";
 
-import LatestOrders from "./LatestOrders";
-import LatestProducts from "./LatestProducts";
-import Sales from "./Sales";
-import TrafficByDevice from "./TrafficByDevice";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -28,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [counts, setCounts] = useState({
     bookings: 0,
@@ -43,12 +42,24 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get("/category");
+        dispatch(getCategory(data.data.categories));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [dispatch]);
+
+  useEffect(() => {
     fetchData();
   }, [setCounts]);
 
   const fetchData = async () => {
     try {
-      const { data } = await Axios.get("/admin/dashboard");
+      const { data } = await axios.get("/admin/dashboard");
       setCounts(data.data);
     } catch (error) {
       console.log(error);

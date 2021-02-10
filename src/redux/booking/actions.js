@@ -6,6 +6,9 @@ import {
   CLOSE_STAFF_ASSIGN_DIALOG,
   ASSIGN_STAFF,
   DELETE_BOOKING,
+  OPEN_VENDOR_ASSIGN_DIALOG,
+  ASSIGN_VENDOR,
+  CLOSE_VENDOR_ASSIGN_DIALOG,
 } from "./type";
 
 export const getBooking = (payload) => ({
@@ -34,6 +37,20 @@ export const assignStaff = (payload) => ({
 
 export const closeStaffDialog = () => ({
   type: CLOSE_STAFF_ASSIGN_DIALOG,
+});
+
+export const openVendorDialog = (payload) => ({
+  type: OPEN_VENDOR_ASSIGN_DIALOG,
+  payload,
+});
+
+export const assignVendor = (payload) => ({
+  type: ASSIGN_VENDOR,
+  payload,
+});
+
+export const closeVendorDialog = () => ({
+  type: CLOSE_VENDOR_ASSIGN_DIALOG,
 });
 
 export const deleteBooking = (payload) => ({

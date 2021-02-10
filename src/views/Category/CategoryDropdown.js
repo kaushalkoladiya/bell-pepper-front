@@ -14,7 +14,6 @@ import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    margin: theme.spacing(1),
     minWidth: 120,
     marginRight: 30,
   },
@@ -30,12 +29,16 @@ const useStyles = makeStyles((theme) => ({
 
 const CategoryDropdown = ({ category, onChange, error }) => {
   const classes = useStyles();
-
-  const categories = useSelector((state) => state.categories.data);
+  const categories = useSelector((state) => state.category.data);
 
   return (
     <div className={classes.dropdown}>
-      <FormControl className={classes.formControl}>
+      <FormControl
+        className={classes.formControl}
+        variant="outlined"
+        size="small"
+        fullWidth
+      >
         <InputLabel>Category</InputLabel>
         <Select
           value={category}
@@ -44,7 +47,7 @@ const CategoryDropdown = ({ category, onChange, error }) => {
         >
           {categories.map((category, key) => (
             <MenuItem key={key} value={category._id}>
-              {category.title}
+              {category.name}
             </MenuItem>
           ))}
         </Select>

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Avatar, Box, makeStyles, Typography } from "@material-ui/core";
 import getInitials from "../utils/getInitials";
 import setEmptyStr from "../utils/setEmptyStr";
+import { BASE_URL } from "../constants";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -12,11 +13,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ProfileName({ image, name }) {
+function ProfileName({ image, name, square }) {
   const classes = useStyles();
+  let _image = String(image);
+  const imageURL =
+    _image.search("storage") !== -1 ? `${BASE_URL}${image}` : image;
+
   return (
     <Box alignItems="center" display="flex">
-      <Avatar className={classes.avatar} src={image}>
+      <Avatar
+        className={classes.avatar}
+        style={{ borderRadius: square && 2 }}
+        src={imageURL}
+      >
         {getInitials(name)}
       </Avatar>
       <Typography color="textPrimary" variant="body1">
