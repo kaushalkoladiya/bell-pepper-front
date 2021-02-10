@@ -8,6 +8,7 @@ import bookingReducer from "./booking/reducer";
 import adminReducer from "./admin/reducer";
 import staffReducer from "./staff/reducer";
 import categoryReducer from "./category/reducer";
+import bannerReducer from "./banner/reducer";
 
 const initialState = {};
 
@@ -21,6 +22,7 @@ const reducers = combineReducers({
   admin: adminReducer,
   staff: staffReducer,
   category: categoryReducer,
+  banner: bannerReducer,
 });
 
 const composeEnhancers =

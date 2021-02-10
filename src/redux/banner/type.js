@@ -1,0 +1,7 @@
+export const GET_BANNER = "GET_BANNER";
+export const OPEN_BANNER_DIALOG = "OPEN_BANNER_DIALOG";
+export const CLOSE_BANNER_DIALOG = "CLOSE_BANNER_DIALOG";
+export const ADD_NEW_BANNER = "ADD_NEW_BANNER";
+export const DELETE_BANNER = "DELETE_BANNER";
+export const TOGGLE_IS_LIVE = "TOGGLE_IS_LIVE";
+export const TOGGLE_SHOW = "TOGGLE_SHOW";

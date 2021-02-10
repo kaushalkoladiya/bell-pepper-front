@@ -15,6 +15,7 @@ import SettingsView from "../views/Settings";
 import VendorListView from "../views/Vendor";
 import StaffListView from "../views/Staff";
 import CategoryView from "../views/Category";
+import BannerView from "../views/Banner";
 
 const routes = [
   {
@@ -28,6 +29,10 @@ const routes = [
       {
         path: "categories",
         element: <PrivateRoute path="/admin" component={CategoryView} />,
+      },
+      {
+        path: "banners",
+        element: <PrivateRoute path="/admin" component={BannerView} />,
       },
       {
         path: "staff",

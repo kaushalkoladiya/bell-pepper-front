@@ -19,6 +19,7 @@ import {
   LogOut as LogOutIcon,
   Briefcase as BookingIcon,
   Aperture as CategoryIcon,
+  Gift as BannerIcon,
 } from "react-feather";
 import NavItem from "./NavItem";
 import { logoutAdmin } from "../../../redux/admin/actions";
@@ -81,6 +82,11 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         href: "/admin/categories",
         icon: CategoryIcon,
         title: "Categories",
+      },
+      {
+        href: "/admin/banners",
+        icon: BannerIcon,
+        title: "Banners",
       },
       {
         href: "/admin/services",
