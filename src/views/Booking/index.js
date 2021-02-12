@@ -13,7 +13,7 @@ import {
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import AssignmentIcon from "@material-ui/icons/Assignment";
-import DeleteIcon from "@material-ui/icons/Delete";
+import { DeleteIcon } from "../../components/Icon";
 
 import axios from "axios";
 

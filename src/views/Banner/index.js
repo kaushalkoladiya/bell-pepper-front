@@ -13,8 +13,6 @@ import {
 
 // MUI
 import { Box, Container, makeStyles } from "@material-ui/core";
-// Icons
-import DeleteIcon from "@material-ui/icons/Delete";
 import axios from "axios";
 // Components
 import Page from "../../components/Page";
@@ -24,6 +22,7 @@ import ToolTipButton from "../../components/ToolTipButton";
 import Image from "../../components/Image";
 import DataTable from "../../components/DataTable";
 import IOSSwitch from "../../components/IOSSwitch";
+import { DeleteIcon } from "../../components/Icon";
 // utils
 import { warning, alert } from "../../utils/alert";
 import { setDate } from "../../utils";

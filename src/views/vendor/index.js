@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 // mui
 import { Box, Container, makeStyles } from "@material-ui/core";
-// icons
-import DeleteIcon from "@material-ui/icons/DeleteRounded";
+import { DeleteIcon } from "../../components/Icon";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { deleteVendor, getVendor } from "../../redux/vendor/actions";
 // components
 import Page from "../../components/Page";
-import TableToolbar from "../../components/TableToolbar";
 import DataTable from "../../components/DataTable";
 import SearchBar from "../../components/SearchBar";
 // util

@@ -20,8 +20,7 @@ import { warning, alert } from "../../utils/alert";
 import ToolTipButton from "../../components/ToolTipButton";
 
 // icons
-import EditIcon from "@material-ui/icons/EditRounded";
-import DeleteIcon from "@material-ui/icons/DeleteRounded";
+import { DeleteIcon, EditIcon } from "../../components/Icon";
 import ProfileName from "../../components/ProfileName";
 
 const useStyles = makeStyles((theme) => ({
@@ -143,10 +142,10 @@ const VendorListView = () => {
             onClick={() => handleOpenServiceDialog(row._id)}
             title="Edit"
           >
-            <EditIcon color="primary" />
+            <EditIcon />
           </ToolTipButton>
           <ToolTipButton title="Delete" onClick={() => handleDelete(row._id)}>
-            <DeleteIcon color="error" />
+            <DeleteIcon />
           </ToolTipButton>
         </div>
       ),

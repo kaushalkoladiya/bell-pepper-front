@@ -19,8 +19,8 @@ import axios from "axios";
 import Image from "../../components/Image";
 
 // icons
-import EditIcon from "@material-ui/icons/EditRounded";
-import DeleteIcon from "@material-ui/icons/DeleteRounded";
+import { DeleteIcon, EditIcon } from "../../components/Icon";
+
 import DataTable from "../../components/DataTable";
 import SearchBar from "../../components/SearchBar";
 import EditedChip from "../../components/Chip/Edited";

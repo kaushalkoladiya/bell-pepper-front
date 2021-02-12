@@ -1,1 +1,6 @@
-export const GET_STAFFS = "GET_STAFFS";
+export const GET_STAFF = "GET_STAFF";
+export const OPEN_STAFF_DIALOG = "OPEN_STAFF_DIALOG";
+export const CLOSE_STAFF_DIALOG = "CLOSE_STAFF_DIALOG";
+export const ADD_NEW_STAFF = "ADD_NEW_STAFF";
+export const UPDATE_STAFF = "UPDATE_STAFF";
+export const DELETE_STAFF = "DELETE_STAFF";
