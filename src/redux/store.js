@@ -11,6 +11,7 @@ import categoryReducer from "./category/reducer";
 import bannerReducer from "./banner/reducer";
 import tutorialReducer from "./tutorial/reducer";
 import videoReducer from "./video/reducer";
+import UIReducer from "./ui/reducer";
 
 const initialState = {};
 
@@ -27,6 +28,7 @@ const reducers = combineReducers({
   banner: bannerReducer,
   tutorial: tutorialReducer,
   video: videoReducer,
+  UI: UIReducer,
 });
 
 const composeEnhancers =

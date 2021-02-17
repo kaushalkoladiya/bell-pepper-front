@@ -17,6 +17,7 @@ import { API_BASE_URL } from "./constants";
 
 // routes
 import { rootUserRoutes, vendorUserRoutes, defaultRoutes } from "./routes";
+import Snackbar from "./components/Snackbar";
 
 axios.defaults.baseURL = API_BASE_URL;
 
@@ -62,6 +63,8 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       {routing}
+
+      <Snackbar />
     </ThemeProvider>
   );
 };
