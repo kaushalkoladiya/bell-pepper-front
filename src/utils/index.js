@@ -1,4 +1,5 @@
 export { default as setDate } from "./setDate";
+export { default as setDateFromNow } from "./setDateFromNow";
 export { default as AuthRoute } from "./AuthRoute";
 export { default as PrivateRoute } from "./PrivateRoute";
 export { default as getInitials } from "./getInitials";

@@ -16,6 +16,8 @@ import VendorListView from "../views/Vendor";
 import StaffListView from "../views/Staff";
 import CategoryView from "../views/Category";
 import BannerView from "../views/Banner";
+import TutorialView from "../views/Tutorial";
+import VideoView from "../views/Video";
 
 const routes = [
   {
@@ -33,6 +35,14 @@ const routes = [
       {
         path: "banners",
         element: <PrivateRoute path="/admin" component={BannerView} />,
+      },
+      {
+        path: "tutorials",
+        element: <PrivateRoute path="/admin" component={TutorialView} />,
+      },
+      {
+        path: "video/:tutorialId",
+        element: <PrivateRoute path="/admin" component={VideoView} />,
       },
       {
         path: "staff",

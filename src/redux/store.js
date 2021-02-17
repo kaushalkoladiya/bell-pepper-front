@@ -9,6 +9,8 @@ import adminReducer from "./admin/reducer";
 import staffReducer from "./staff/reducer";
 import categoryReducer from "./category/reducer";
 import bannerReducer from "./banner/reducer";
+import tutorialReducer from "./tutorial/reducer";
+import videoReducer from "./video/reducer";
 
 const initialState = {};
 
@@ -23,6 +25,8 @@ const reducers = combineReducers({
   staff: staffReducer,
   category: categoryReducer,
   banner: bannerReducer,
+  tutorial: tutorialReducer,
+  video: videoReducer,
 });
 
 const composeEnhancers =
