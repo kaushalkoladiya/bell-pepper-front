@@ -16,7 +16,7 @@ axios.interceptors.response.use(
     return res;
   },
   (err) => {
-    const payload = { message: err?.response?.message, type: "error" };
+    const payload = { message: err?.response?.data?.message, type: "error" };
     store.dispatch(openSnackbar(payload));
     return Promise.reject(err);
   }
