@@ -83,7 +83,7 @@ const Staff = () => {
           row?.about?.toUpperCase()?.indexOf(value) > -1 ||
           row?.mobile?.toUpperCase()?.indexOf(value) > -1 ||
           row?.gender?.toUpperCase()?.indexOf(value) > -1 ||
-          row?.age?.toUpperCase()?.indexOf(value) > -1 ||
+          row?.age?.toString()?.toUpperCase()?.indexOf(value) > -1 ||
           row?.nationality?.toUpperCase()?.indexOf(value) > -1
         );
       });

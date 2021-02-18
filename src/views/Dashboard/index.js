@@ -3,6 +3,7 @@ import axios from "axios";
 // redux
 import { useDispatch } from "react-redux";
 import { getCategory } from "../../redux/category/actions";
+import { getVendor } from "../../redux/vendor/actions";
 // mui
 import { Container, Grid, makeStyles, colors } from "@material-ui/core";
 // icons
@@ -44,8 +45,11 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get("/category");
-        dispatch(getCategory(data.data.categories));
+        const { data: _categoryData } = await axios.get("/category");
+        dispatch(getCategory(_categoryData.data.categories));
+
+        const { data: _vendorData } = await axios.get("/vendor");
+        dispatch(getVendor(_vendorData.data.vendors));
       } catch (error) {
         console.log(error);
       }
