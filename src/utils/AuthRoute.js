@@ -3,14 +3,13 @@ import { Navigate, Route } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
+import { ROOT_USER } from "../constants";
 
 const AuthRoute = ({ component: Component, isAuth, userType, ...rest }) => (
   <Fragment>
     {isAuth ? (
       <Navigate
-        to={
-          userType === "ROOT_USER" ? "/admin/dashboard" : "/partners/dashboard"
-        }
+        to={userType === ROOT_USER ? "/admin/dashboard" : "/partners/dashboard"}
       />
     ) : (
       <Route element={<Component />} {...rest} />

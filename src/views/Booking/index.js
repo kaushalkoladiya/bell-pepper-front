@@ -41,6 +41,7 @@ import { warning, alert } from "../../utils/alert";
 import VendorDialogDropdown from "../Vendor/Dropdown";
 import CancelIcon from "@material-ui/icons/CancelRounded";
 import DoneIcon from "@material-ui/icons/DoneRounded";
+import { ROOT_USER } from "../../constants";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -159,7 +160,7 @@ const BookingList = () => {
   const bookingData = useSelector((state) => state.booking.data);
   const userType = useSelector((state) => state.admin.userType);
 
-  const isRootUser = userType === "ROOT_USER" ? true : false;
+  const isRootUser = userType === ROOT_USER ? true : false;
 
   const [data, setData] = useState([]);
 

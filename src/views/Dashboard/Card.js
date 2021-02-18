@@ -1,4 +1,5 @@
 import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 // mui
@@ -13,7 +14,15 @@ import {
 
 import CountUp from "react-countup";
 
-const Budget = ({ className, title, count, icon: Icon, color, ...rest }) => {
+const Budget = ({
+  className,
+  title,
+  count,
+  icon: Icon,
+  color,
+  url,
+  ...rest
+}) => {
   const useStyles = makeStyles((theme) => ({
     root: {
       height: "100%",
@@ -29,7 +38,13 @@ const Budget = ({ className, title, count, icon: Icon, color, ...rest }) => {
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
       <CardContent>
-        <Grid container justify="space-between" spacing={3}>
+        <Grid
+          container
+          justify="space-between"
+          spacing={3}
+          component={RouterLink}
+          to={url}
+        >
           <Grid item>
             <Typography color="textSecondary" gutterBottom variant="h6">
               {title}

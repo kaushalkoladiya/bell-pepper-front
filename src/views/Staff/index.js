@@ -30,6 +30,7 @@ import Dialog from "./Dialog";
 import ToolTipButton from "../../components/ToolTipButton";
 import { DeleteIcon, EditIcon } from "../../components/Icon";
 import { warning, alert } from "../../utils/alert";
+import { ROOT_USER } from "../../constants";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,7 +54,7 @@ const Staff = () => {
   const staffData = useSelector((state) => state.staff.data);
   const userType = useSelector((state) => state.admin.userType);
 
-  const isRootUser = userType === "ROOT_USER" ? true : false;
+  const isRootUser = userType === ROOT_USER ? true : false;
 
   const [data, setData] = useState([]);
 
@@ -226,7 +227,7 @@ const Staff = () => {
     <Page className={classes.root} title="Staffs">
       <Container maxWidth={false}>
         {!isRootUser && (
-          <TableToolbar title="Service" onAddButtonClick={handleOpenDialog} />
+          <TableToolbar title="Staff" onAddButtonClick={handleOpenDialog} />
         )}
         <Box mt={3}>
           {isRootUser ? (

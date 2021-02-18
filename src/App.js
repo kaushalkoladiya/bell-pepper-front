@@ -13,7 +13,7 @@ import GlobalStyles from "./components/GlobalStyles";
 // theme
 import theme from "./theme";
 // utils
-import { API_BASE_URL } from "./constants";
+import { API_BASE_URL, ROOT_USER } from "./constants";
 
 // routes
 import { rootUserRoutes, vendorUserRoutes, defaultRoutes } from "./routes";
@@ -28,7 +28,7 @@ const App = () => {
 
   let routes;
 
-  if (userType === "ROOT_USER") routes = rootUserRoutes;
+  if (userType === ROOT_USER) routes = rootUserRoutes;
   else if (userType === "VENDOR_USER") routes = vendorUserRoutes;
   else routes = defaultRoutes;
 
@@ -47,7 +47,7 @@ const App = () => {
     const fetchData = async () => {
       try {
         let url;
-        if (userType === "ROOT_USER") url = "/admin";
+        if (userType === ROOT_USER) url = "/admin";
         else url = "/vendor/data";
 
         const { data } = await axios.get(url);

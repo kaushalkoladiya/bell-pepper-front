@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 // redux
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getCategory } from "../../redux/category/actions";
 import { getVendor } from "../../redux/vendor/actions";
 // mui
@@ -15,6 +15,7 @@ import {
 // component
 import Page from "../../components/Page";
 import Card from "./Card";
+import { ROOT_USER } from "../../constants";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
 const Dashboard = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const userType = useSelector((state) => state.admin.userType);
+  const isRootUser = userType === ROOT_USER ? true : false;
 
   const [counts, setCounts] = useState({
     bookings: 0,
@@ -43,19 +47,21 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data: _categoryData } = await axios.get("/category");
-        dispatch(getCategory(_categoryData.data.categories));
+    if (isRootUser) {
+      const fetchData = async () => {
+        try {
+          const { data: _categoryData } = await axios.get("/category");
+          dispatch(getCategory(_categoryData.data.categories));
 
-        const { data: _vendorData } = await axios.get("/vendor");
-        dispatch(getVendor(_vendorData.data.vendors));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, [dispatch]);
+          const { data: _vendorData } = await axios.get("/vendor");
+          dispatch(getVendor(_vendorData.data.vendors));
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchData();
+    }
+  }, [dispatch, isRootUser]);
 
   useEffect(() => {
     fetchData();
@@ -81,6 +87,7 @@ const Dashboard = () => {
                 count={counts.users}
                 icon={UsersIcon}
                 color={colors.amber[600]}
+                url={`/${isRootUser ? "admin" : "partners"}/customers`}
               />
             </Grid>
           )}
@@ -91,6 +98,7 @@ const Dashboard = () => {
                 count={counts.vendors}
                 icon={UsersIcon}
                 color={colors.blue[600]}
+                url={`/${isRootUser ? "admin" : "partners"}/vendors`}
               />
             </Grid>
           )}
@@ -101,6 +109,7 @@ const Dashboard = () => {
                 count={counts.services}
                 icon={ServiceIcon}
                 color={colors.cyan[600]}
+                url={`/${isRootUser ? "admin" : "partners"}/services`}
               />
             </Grid>
           )}
@@ -111,6 +120,7 @@ const Dashboard = () => {
                 count={counts.bookings}
                 icon={BookingIcon}
                 color={colors.deepOrange[600]}
+                url={`/${isRootUser ? "admin" : "partners"}/bookings`}
               />
             </Grid>
           )}
@@ -121,6 +131,7 @@ const Dashboard = () => {
                 count={counts.staffs}
                 icon={UsersIcon}
                 color={colors.deepPurple[600]}
+                url={`/${isRootUser ? "admin" : "partners"}/staff`}
               />
             </Grid>
           )}

@@ -25,6 +25,7 @@ import {
 import NavItem from "./NavItem";
 import { logoutAdmin } from "../../../redux/admin/actions";
 import { useDispatch, useSelector } from "react-redux";
+import { ROOT_USER, VENDOR_USER } from "../../../constants";
 
 const user = {
   avatar: "../../../images/icon.jpeg",
@@ -49,7 +50,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const NavBar = ({ onMobileClose, openMobile }) => {
-  let items;
+  let items = [];
   const classes = useStyles();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -58,7 +59,8 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   const userData = useSelector((state) => state.admin.data);
   const userType = useSelector((state) => state.admin.userType);
 
-  const isRootUser = userType === "ROOT_USER" ? true : false;
+  const isRootUser = userType === ROOT_USER ? true : false;
+  const isVendorUser = userType === VENDOR_USER ? true : false;
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -126,7 +128,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         title: "Account",
       },
     ];
-  } else {
+  } else if (isVendorUser) {
     items = [
       {
         href: "/partners/dashboard",
