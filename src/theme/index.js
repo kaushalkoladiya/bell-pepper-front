@@ -50,6 +50,12 @@ const theme = createMuiTheme({
         color: "rgba(0, 0, 0)",
       },
     },
+    MuiAlertTitle: {
+      root: {
+        fontVariant: "all-petite-caps",
+        fontWeight: "bold",
+      },
+    },
   },
   props: {
     MuiIcon: {

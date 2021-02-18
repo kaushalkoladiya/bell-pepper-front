@@ -13,12 +13,12 @@ const Snackbar = () => {
 
   return (
     <MuiSnackbar
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       open={open}
       autoHideDuration={6000}
       onClose={handleClose}
     >
-      <Alert severity={type} onClose={handleClose}>
+      <Alert severity={type} onClose={handleClose} variant="filled">
         <AlertTitle>{type}</AlertTitle>
         {message}
       </Alert>
