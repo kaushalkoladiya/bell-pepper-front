@@ -207,7 +207,10 @@ const Dialog = () => {
             <div>
               <Grid container className={classes.topSection} spacing={2}>
                 <Grid item sm={12} md={6} lg={4}>
-                  <div onClick={handleEditImage}>
+                  <div
+                    onClick={handleEditImage}
+                    style={{ textAlign: "center" }}
+                  >
                     <input
                       name="serviceImage"
                       id="serviceImage"

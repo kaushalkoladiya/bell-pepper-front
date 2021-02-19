@@ -243,7 +243,7 @@ const Dialog = () => {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <div onClick={handleEditImage}>
+              <div onClick={handleEditImage} style={{ textAlign: "center" }}>
                 <input
                   name="staffImage"
                   id="staffImage"

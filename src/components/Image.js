@@ -1,15 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Avatar from "@material-ui/core/Avatar";
 
 const Image = ({ image, extraLarge, ...props }) => (
-  <Avatar
+  <img
     src={image || "https://via.placeholder.com/200"}
-    alt={image}
+    alt={"not found"}
     style={{
-      width: extraLarge ? 200 : 80,
-      height: extraLarge ? 200 : 80,
-      objectFit: "cover",
+      maxWidth: extraLarge ? 200 : 80,
+      maxHeight: extraLarge ? 200 : 80,
+      objectFit: "contain",
       borderRadius: 5,
       margin: "auto",
       boxShadow: "rgba(0, 0, 0, 0.3) 2px 3px 5px 1px",

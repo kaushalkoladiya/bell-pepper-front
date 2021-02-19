@@ -163,7 +163,7 @@ const Dialog = () => {
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <div className={classes.tutorialDialog}>
-            <div onClick={handleEditImage}>
+            <div onClick={handleEditImage} style={{ textAlign: "center" }}>
               <input
                 title="tutorialImage"
                 id="tutorialImage"

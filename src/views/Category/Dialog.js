@@ -156,7 +156,7 @@ const Dialog = (props) => {
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <div className={classes.categoryDialog}>
-            <div onClick={handleEditImage}>
+            <div onClick={handleEditImage} style={{ textAlign: "center" }}>
               <input
                 name="categoryImage"
                 id="categoryImage"
