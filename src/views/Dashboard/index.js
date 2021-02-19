@@ -139,9 +139,12 @@ const Dashboard = () => {
           )}
         </Grid>
         <Grid container spacing={3}>
-          <Grid item sm={12} lg={6}>
-            <CustomerChart />
-          </Grid>
+          {isRootUser && (
+            <Grid item sm={12} lg={6}>
+              <CustomerChart />
+            </Grid>
+          )}
+
           {/* <Grid item lg={8} md={12} xl={9} xs={12}>
             <Sales />
           </Grid>
