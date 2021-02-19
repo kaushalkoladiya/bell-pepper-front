@@ -15,7 +15,9 @@ import {
 // component
 import Page from "../../components/Page";
 import Card from "./Card";
+
 import { ROOT_USER } from "../../constants";
+import CustomerChart from "./CustomerChart";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -137,6 +139,9 @@ const Dashboard = () => {
           )}
         </Grid>
         <Grid container spacing={3}>
+          <Grid item sm={12} lg={6}>
+            <CustomerChart />
+          </Grid>
           {/* <Grid item lg={8} md={12} xl={9} xs={12}>
             <Sales />
           </Grid>
