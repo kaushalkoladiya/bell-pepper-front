@@ -26,7 +26,6 @@ import NavItem from "./NavItem";
 import { logoutAdmin } from "../../../redux/admin/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { ROOT_USER, VENDOR_USER } from "../../../constants";
-import NestedNavItem from "./NestedNavItem";
 
 const user = {
   avatar: "../../../images/icon.jpeg",

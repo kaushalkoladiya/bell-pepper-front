@@ -56,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 0,
     color: theme.palette.text.secondary,
   },
+  nestedTitle: { fontSize: "0.875rem !important" },
 }));
 
 const NavItem = ({
@@ -93,7 +94,13 @@ const NavItem = ({
             <ListItemIcon className={classes.nestedIcon}>
               <Icon className={classes.icon} size="20" />
             </ListItemIcon>
-            <ListItemText primary={title} className={classes.title} />
+            <span className={clsx(classes.title, classes.nestedTitle)}>
+              {title}
+            </span>
+            {/* <ListItemText
+              primary={title}
+              className={clsx(classes.title, classes.nestedTitle)}
+            /> */}
             {open ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={open} timeout="auto" unmountOnExit>
