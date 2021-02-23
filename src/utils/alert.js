@@ -5,7 +5,7 @@ export const warning = (text) => {
     title: "I hope sure what you are doing!",
     icon: "warning",
     dangerMode: true,
-    buttons: true,
+    buttons: ["No", "Yes"],
     text,
   });
 };

@@ -26,6 +26,7 @@ import NavItem from "./NavItem";
 import { logoutAdmin } from "../../../redux/admin/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { ROOT_USER, VENDOR_USER } from "../../../constants";
+import NestedNavItem from "./NestedNavItem";
 
 const user = {
   avatar: "../../../images/icon.jpeg",
@@ -82,9 +83,21 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         title: "Dashboard",
       },
       {
-        href: "/admin/categories",
+        array: [
+          {
+            href: "/admin/categories",
+            icon: ShoppingBagIcon,
+            title: "Main Services",
+          },
+          {
+            href: "/admin/services",
+            icon: ShoppingBagIcon,
+            title: "Sub Services",
+          },
+        ],
+        nested: true,
+        title: "Service",
         icon: CategoryIcon,
-        title: "Categories",
       },
       {
         href: "/admin/banners",
@@ -95,11 +108,6 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         href: "/admin/tutorials",
         icon: TutorialIcon,
         title: "Tutorials",
-      },
-      {
-        href: "/admin/services",
-        icon: ShoppingBagIcon,
-        title: "Services",
       },
       {
         href: "/admin/customers",
@@ -172,13 +180,8 @@ const NavBar = ({ onMobileClose, openMobile }) => {
       <Divider />
       <Box p={2}>
         <List>
-          {items.map((item) => (
-            <NavItem
-              href={item.href}
-              key={item.title}
-              title={item.title}
-              icon={item.icon}
-            />
+          {items.map((item, index) => (
+            <NavItem key={index} {...item} />
           ))}
           <NavItem
             icon={LogOutIcon}
