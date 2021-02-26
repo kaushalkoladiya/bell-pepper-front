@@ -125,15 +125,18 @@ const Category = () => {
   ];
 
   return (
-    <Page className={classes.root} title="Categories">
+    <Page className={classes.root} title="Main Service">
       <Container maxWidth={false}>
-        <TableToolbar title="Category" onAddButtonClick={handleOpenDialog} />
+        <TableToolbar
+          title="Main Service"
+          onAddButtonClick={handleOpenDialog}
+        />
         <Box mt={3}>
           <DataTable
             data={data}
-            title="Categories"
+            title="Main Services"
             columns={columns}
-            actions={<SearchBar title="Category" onSearch={handleSearch} />}
+            actions={<SearchBar title="Main Service" onSearch={handleSearch} />}
           />
         </Box>
       </Container>

@@ -150,7 +150,7 @@ const Dialog = (props) => {
         <CloseIcon color="primary" />
       </ToolTipButton>
       <DialogTitle id="responsive-dialog-title">
-        <Typography variant="h3">Category Details</Typography>
+        <Typography variant="h3">Main Service Details</Typography>
       </DialogTitle>
 
       <DialogContent>

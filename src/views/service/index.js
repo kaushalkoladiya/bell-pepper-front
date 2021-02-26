@@ -153,17 +153,19 @@ const VendorListView = () => {
   ];
 
   return (
-    <Page className={classes.root} title="data">
+    <Page className={classes.root} title="Sub Services">
       <Container maxWidth={false}>
-        <TableToolbar title="Service" onAddButtonClick={handleOpenDialog} />
+        <TableToolbar
+          title="Sub Services"
+          onAddButtonClick={handleOpenDialog}
+        />
         <Box mt={3}>
           <DataTable
             data={data}
-            title="Services"
+            title="Sub Services"
             columns={columns}
-            actions={<SearchBar title="Services" onSearch={handleSearch} />}
+            actions={<SearchBar title="Sub Services" onSearch={handleSearch} />}
           />
-          {/* <Results data={data} /> */}
         </Box>
       </Container>
       <Dialog />

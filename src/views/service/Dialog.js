@@ -199,7 +199,7 @@ const Dialog = () => {
         >
           <CloseIcon />
         </ToolTipButton>
-        <Typography variant="h3">Service Details</Typography>
+        <Typography variant="h3">Sub Service Details</Typography>
       </DialogTitle>
       <MuiDialogContent>
         <form onSubmit={handleSubmit}>

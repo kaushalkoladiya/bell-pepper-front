@@ -39,7 +39,7 @@ const CategoryDropdown = ({ category, onChange, error }) => {
         size="small"
         fullWidth
       >
-        <InputLabel>Category</InputLabel>
+        <InputLabel>Main Service</InputLabel>
         <Select
           value={category}
           onChange={onChange}
