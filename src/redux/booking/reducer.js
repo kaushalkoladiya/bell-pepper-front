@@ -79,7 +79,7 @@ const bookingReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         data: state.data.map((item) =>
-          item._id === payload.vendorId
+          item._id === payload.bookingId
             ? {
                 ...item,
                 vendorId: payload.bookingData.vendorId,

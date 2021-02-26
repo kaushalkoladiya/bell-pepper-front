@@ -82,6 +82,11 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         title: "Dashboard",
       },
       {
+        href: "/admin/banners",
+        icon: BannerIcon,
+        title: "Banners",
+      },
+      {
         array: [
           {
             href: "/admin/categories",
@@ -95,39 +100,40 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           },
         ],
         nested: true,
-        title: "Service",
+        title: "Services",
         icon: CategoryIcon,
       },
       {
-        href: "/admin/banners",
-        icon: BannerIcon,
-        title: "Banners",
+        array: [
+          {
+            href: "/admin/customers",
+            icon: UsersIcon,
+            title: "Customers",
+          },
+          {
+            href: "/admin/staff",
+            icon: UsersIcon,
+            title: "Staffs",
+          },
+          {
+            href: "/admin/vendors",
+            icon: UsersIcon,
+            title: "Vendors",
+          },
+        ],
+        nested: true,
+        title: "Users",
+        icon: UsersIcon,
+      },
+      {
+        href: "/admin/bookings",
+        icon: BookingIcon,
+        title: "Bookings",
       },
       {
         href: "/admin/tutorials",
         icon: TutorialIcon,
         title: "Tutorials",
-      },
-      {
-        href: "/admin/customers",
-        icon: UsersIcon,
-        title: "Customers",
-      },
-      {
-        href: "/admin/staff",
-        icon: UsersIcon,
-        title: "Staffs",
-      },
-      {
-        href: "/admin/vendors",
-        icon: UsersIcon,
-        title: "Vendors",
-      },
-
-      {
-        href: "/admin/bookings",
-        icon: BookingIcon,
-        title: "Bookings",
       },
       {
         href: "/admin/account",
