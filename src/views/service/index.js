@@ -22,6 +22,7 @@ import ToolTipButton from "../../components/ToolTipButton";
 // icons
 import { DeleteIcon, EditIcon } from "../../components/Icon";
 import ProfileName from "../../components/ProfileName";
+import ShortString from "../../components/ShortString";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -101,7 +102,7 @@ const VendorListView = () => {
 
   const columns = [
     {
-      name: "Category",
+      name: "Main Service",
       cell: (row) => (
         <ProfileName
           name={row.categoryId.name}
@@ -121,7 +122,7 @@ const VendorListView = () => {
     },
     {
       name: "Description",
-      selector: "description",
+      cell: (row) => <ShortString string={row.description} />,
       sortable: true,
     },
     {

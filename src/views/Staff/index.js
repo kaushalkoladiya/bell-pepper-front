@@ -31,6 +31,7 @@ import ToolTipButton from "../../components/ToolTipButton";
 import { DeleteIcon, EditIcon } from "../../components/Icon";
 import { warning, alert } from "../../utils/alert";
 import { ROOT_USER } from "../../constants";
+import ShortString from "../../components/ShortString";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -126,12 +127,12 @@ const Staff = () => {
     },
     {
       name: "Email",
-      selector: "email",
+      cell: (row) => <ShortString string={row.email} />,
       sortable: true,
     },
     {
       name: "Phone",
-      selector: "mobile",
+      cell: (row) => <ShortString string={row.mobile} />,
       sortable: true,
     },
     {
@@ -156,20 +157,7 @@ const Staff = () => {
     },
     {
       name: "About",
-      cell: (row) => (
-        <Tooltip title={setEmptyStr(row.about)}>
-          <Button
-            className={classes.about}
-            disableElevation
-            disableFocusRipple
-            disableRipple
-            disableTouchRipple
-            variant="text"
-          >
-            {trimStr(setEmptyStr(row.about))}
-          </Button>
-        </Tooltip>
-      ),
+      cell: (row) => <ShortString string={row.about} />,
       sortable: true,
     },
     {

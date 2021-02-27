@@ -42,6 +42,7 @@ import VendorDialogDropdown from "../Vendor/Dropdown";
 import CancelIcon from "@material-ui/icons/CancelRounded";
 import DoneIcon from "@material-ui/icons/DoneRounded";
 import { ROOT_USER } from "../../constants";
+import ShortString from "../../components/ShortString";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -237,30 +238,17 @@ const BookingList = () => {
   const columns = [
     {
       name: "Service",
-      cell: (row) => row.serviceId.title,
+      cell: (row) => <ShortString string={row.serviceId.title} />,
       sortable: true,
     },
     {
       name: "User",
-      cell: (row) => row.userId.name,
+      cell: (row) => <ShortString string={row.userId.name} />,
       sortable: true,
     },
     {
       name: "Instruction",
-      cell: (row) => (
-        <Tooltip title={setEmptyStr(row.description)}>
-          <Button
-            className={classes.description}
-            disableElevation
-            disableFocusRipple
-            disableRipple
-            disableTouchRipple
-            variant="text"
-          >
-            {trimStr(setEmptyStr(row.description))}
-          </Button>
-        </Tooltip>
-      ),
+      cell: (row) => <ShortString string={row.description} />,
       sortable: true,
     },
     {
@@ -284,13 +272,8 @@ const BookingList = () => {
       sortable: true,
     },
     {
-      name: "Date",
-      selector: "date",
-      sortable: true,
-    },
-    {
-      name: "Time",
-      selector: "time",
+      name: "Date & Time",
+      cell: (row) => `${row.date} ${row.time}`,
       sortable: true,
     },
     {

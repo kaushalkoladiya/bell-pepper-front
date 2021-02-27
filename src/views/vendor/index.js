@@ -15,6 +15,7 @@ import { setDate } from "../../utils";
 import { warning, alert } from "../../utils/alert";
 import ToolTipButton from "../../components/ToolTipButton";
 import ProfileName from "../../components/ProfileName";
+import ShortString from "../../components/ShortString";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -103,17 +104,17 @@ const VendorList = () => {
     },
     {
       name: "Company Name",
-      selector: "companyName",
+      cell: (row) => <ShortString string={row.companyName} />,
       sortable: true,
     },
     {
       name: "Email",
-      selector: "email",
+      cell: (row) => <ShortString string={row.email} />,
       sortable: true,
     },
     {
       name: "Phone",
-      selector: "mobile",
+      cell: (row) => <ShortString string={row.mobile} />,
       sortable: true,
     },
     {

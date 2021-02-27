@@ -11,6 +11,7 @@ import Page from "../components/Page";
 import DataTable from "../components/DataTable";
 import { setDate } from "../utils";
 import SearchBar from "../components/SearchBar";
+import ShortString from "../components/ShortString";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,22 +25,22 @@ const useStyles = makeStyles((theme) => ({
 const columns = [
   {
     name: "Name",
-    selector: "name",
+    cell: (row) => <ShortString string={row.name} />,
     sortable: true,
   },
   {
     name: "Email",
-    selector: "email",
+    cell: (row) => <ShortString string={row.email} />,
     sortable: true,
   },
   {
     name: "Location",
-    selector: "location",
+    cell: (row) => <ShortString string={row.location} />,
     sortable: true,
   },
   {
     name: "Phone",
-    selector: "mobile",
+    cell: (row) => <ShortString string={row.mobile} />,
     sortable: true,
   },
   {

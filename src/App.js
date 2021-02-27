@@ -2,6 +2,8 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import "./mixins/chartjs";
 import React, { useEffect } from "react";
 import { useRoutes } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+// Mui
 import { ThemeProvider } from "@material-ui/core";
 import axios from "axios";
 // redux
@@ -63,7 +65,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       {routing}
-
+      <Toaster />
       <Snackbar />
     </ThemeProvider>
   );
