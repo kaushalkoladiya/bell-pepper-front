@@ -11,8 +11,10 @@ import reportWebVitals from "./reportWebVitals";
 
 axios.interceptors.response.use(
   (res) => {
-    const payload = { message: res.data.message, type: "success" };
-    store.dispatch(openSnackbar(payload));
+    if (res.config.method !== "get") {
+      const payload = { message: res.data.message, type: "success" };
+      store.dispatch(openSnackbar(payload));
+    }
     return res;
   },
   (err) => {
