@@ -1,19 +1,26 @@
 import "react-perfect-scrollbar/dist/css/styles.css";
 import "./mixins/chartjs";
+// react router
 import React, { useEffect } from "react";
 import { useRoutes } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
+
+import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
+
 // Mui
 import { ThemeProvider } from "@material-ui/core";
-import axios from "axios";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { loginAdmin, setAdminData } from "./redux/admin/actions";
+import store from "./redux/store";
+import { openSnackbar } from "./redux/ui/actions";
 
 // components
 import GlobalStyles from "./components/GlobalStyles";
+
 // theme
 import theme from "./theme";
+
 // utils
 import { API_BASE_URL, ROOT_USER } from "./constants";
 
@@ -22,6 +29,35 @@ import { rootUserRoutes, vendorUserRoutes, defaultRoutes } from "./routes";
 import Snackbar from "./components/Snackbar";
 
 axios.defaults.baseURL = API_BASE_URL;
+
+axios.interceptors.request.use(
+  (req) => {
+    // const myPromise = Promise(req);
+    // toast.promise(myPromise, {
+    //   loading: "Loading",
+    //   success: "Got the data",
+    //   error: "Error when fetching",
+    // });
+
+    return req;
+  },
+  (err) => {}
+);
+
+axios.interceptors.response.use(
+  (res) => {
+    if (res.config.method !== "get") {
+      const payload = { message: res.data.message, type: "success" };
+      store.dispatch(openSnackbar(payload));
+    }
+    return res;
+  },
+  (err) => {
+    const payload = { message: err?.response?.data?.message, type: "error" };
+    store.dispatch(openSnackbar(payload));
+    return Promise.reject(err);
+  }
+);
 
 const App = () => {
   const token = localStorage.getItem("token");

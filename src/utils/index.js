@@ -7,3 +7,4 @@ export { default as setEmptyStr } from "./setEmptyStr";
 export { default as setToken } from "./setToken";
 export { default as trimStr } from "./trimStr";
 export { default as networkRequest } from "./networkRequest";
+export { default as promiseToast } from "./promiseToast";

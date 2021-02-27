@@ -18,6 +18,8 @@ import Card from "./Card";
 
 import { ROOT_USER } from "../../constants";
 import CustomerChart from "./CustomerChart";
+// utils
+import { promiseToast } from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,17 +68,12 @@ const Dashboard = () => {
   }, [dispatch, isRootUser]);
 
   useEffect(() => {
-    fetchData();
+    const promise = axios
+      .get("/admin/dashboard")
+      .then(({ data }) => setCounts(data.data))
+      .catch((err) => console.log(err));
+    promiseToast(promise);
   }, [setCounts]);
-
-  const fetchData = async () => {
-    try {
-      const { data } = await axios.get("/admin/dashboard");
-      setCounts(data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <Page className={classes.root} title="Dashboard">
