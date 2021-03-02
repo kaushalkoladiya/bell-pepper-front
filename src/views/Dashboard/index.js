@@ -11,13 +11,15 @@ import {
   ShoppingBag as ServiceIcon,
   Users as UsersIcon,
   Briefcase as BookingIcon,
+  Gift as BannerIcon,
+  Film as TutorialIcon,
 } from "react-feather";
 // component
 import Page from "../../components/Page";
 import Card from "./Card";
 
 import { ROOT_USER } from "../../constants";
-import CustomerChart from "./CustomerChart";
+import Chart from "./Chart";
 // utils
 import { promiseToast } from "../../utils";
 
@@ -48,6 +50,14 @@ const Dashboard = () => {
     showUsers: false,
     vendors: 0,
     showVendors: false,
+    banners: 0,
+    showBanners: false,
+    categories: 0,
+    showCategories: false,
+    tutorials: 0,
+    showTutorials: false,
+    videos: 0,
+    showVideos: false,
   });
 
   useEffect(() => {
@@ -101,14 +111,14 @@ const Dashboard = () => {
               />
             </Grid>
           )}
-          {counts.showServices && (
+          {counts.showStaffs && (
             <Grid item lg={3} sm={6} xl={3} xs={12}>
               <Card
-                title={"Total Services"}
-                count={counts.services}
-                icon={ServiceIcon}
-                color={colors.cyan[600]}
-                url={`/${isRootUser ? "admin" : "partners"}/services`}
+                title={"Total Staffs"}
+                count={counts.staffs}
+                icon={UsersIcon}
+                color={colors.blueGrey[600]}
+                url={`/${isRootUser ? "admin" : "partners"}/staff`}
               />
             </Grid>
           )}
@@ -118,43 +128,74 @@ const Dashboard = () => {
                 title={"Total Booking"}
                 count={counts.bookings}
                 icon={BookingIcon}
-                color={colors.deepOrange[600]}
+                color={colors.indigo[600]}
                 url={`/${isRootUser ? "admin" : "partners"}/bookings`}
               />
             </Grid>
           )}
-          {counts.showStaffs && (
+          {counts.showCategories && (
             <Grid item lg={3} sm={6} xl={3} xs={12}>
               <Card
-                title={"Total Staffs"}
-                count={counts.staffs}
-                icon={UsersIcon}
-                color={colors.deepPurple[600]}
-                url={`/${isRootUser ? "admin" : "partners"}/staff`}
+                title={"Total Main Services"}
+                count={counts.categories}
+                icon={ServiceIcon}
+                color={colors.cyan[600]}
+                url={`/${isRootUser ? "admin" : "partners"}/categories`}
+              />
+            </Grid>
+          )}
+          {counts.showServices && (
+            <Grid item lg={3} sm={6} xl={3} xs={12}>
+              <Card
+                title={"Total Sub Services"}
+                count={counts.services}
+                icon={ServiceIcon}
+                color={colors.deepOrange[600]}
+                url={`/${isRootUser ? "admin" : "partners"}/services`}
+              />
+            </Grid>
+          )}
+          {counts.showBanners && (
+            <Grid item lg={3} sm={6} xl={3} xs={12}>
+              <Card
+                title={"Total Banners"}
+                count={counts.banners}
+                icon={BannerIcon}
+                color={colors.green[600]}
+                url={`/${isRootUser ? "admin" : "partners"}/banners`}
+              />
+            </Grid>
+          )}
+          {counts.showTutorials && (
+            <Grid item lg={3} sm={6} xl={3} xs={12}>
+              <Card
+                title={"Total Tutorials"}
+                count={counts.tutorials}
+                icon={TutorialIcon}
+                color={colors.lightBlue[600]}
+                url={`/${isRootUser ? "admin" : "partners"}/tutorials`}
               />
             </Grid>
           )}
         </Grid>
-        <Grid container spacing={3}>
-          {isRootUser && (
+        {isRootUser && (
+          <Grid container spacing={3}>
             <Grid item sm={12} lg={6}>
-              <CustomerChart />
+              <Chart
+                url={"/reports/customer"}
+                property={"customers"}
+                title={"Customers Joined"}
+              />
             </Grid>
-          )}
-
-          {/* <Grid item lg={8} md={12} xl={9} xs={12}>
-            <Sales />
+            <Grid item sm={12} lg={6}>
+              <Chart
+                url={"/reports/booking"}
+                property={"bookings"}
+                title={"Bookings"}
+              />
+            </Grid>
           </Grid>
-          <Grid item lg={4} md={6} xl={3} xs={12}>
-            <TrafficByDevice />
-          </Grid>
-          <Grid item lg={4} md={6} xl={3} xs={12}>
-            <LatestProducts />
-          </Grid>
-          <Grid item lg={8} md={12} xl={9} xs={12}>
-            <LatestOrders />
-          </Grid> */}
-        </Grid>
+        )}
       </Container>
     </Page>
   );
