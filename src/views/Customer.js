@@ -24,6 +24,10 @@ const useStyles = makeStyles((theme) => ({
 
 const columns = [
   {
+    name: "UUID",
+    cell: (row) => <ShortString string={row._id} />,
+  },
+  {
     name: "Name",
     cell: (row) => <ShortString string={row.name} />,
     sortable: true,

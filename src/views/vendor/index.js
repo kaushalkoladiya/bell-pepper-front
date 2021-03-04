@@ -93,6 +93,10 @@ const VendorList = () => {
 
   const columns = [
     {
+      name: "UUID",
+      cell: (row) => <ShortString string={row._id} />,
+    },
+    {
       name: "Category",
       cell: (row) => (
         <ProfileName

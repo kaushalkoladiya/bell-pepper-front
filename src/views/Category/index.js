@@ -20,10 +20,10 @@ import Image from "../../components/Image";
 
 // icons
 import { DeleteIcon, EditIcon } from "../../components/Icon";
-
 import DataTable from "../../components/DataTable";
 import SearchBar from "../../components/SearchBar";
 import EditedChip from "../../components/Chip/Edited";
+import ShortString from "../../components/ShortString";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -94,6 +94,10 @@ const Category = () => {
   };
 
   const columns = [
+    {
+      name: "UUID",
+      selector: "_id",
+    },
     {
       name: "Image",
       cell: (row) => (row.hasImage ? <Image image={row.image} /> : "No Image"),

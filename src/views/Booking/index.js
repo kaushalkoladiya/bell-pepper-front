@@ -234,6 +234,10 @@ const BookingList = () => {
 
   const columns = [
     {
+      name: "UUID",
+      cell: (row) => <ShortString string={row._id} />,
+    },
+    {
       name: "Service",
       cell: (row) => <ShortString string={row.serviceId.title} />,
       sortable: true,

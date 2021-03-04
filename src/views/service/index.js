@@ -102,6 +102,10 @@ const VendorListView = () => {
 
   const columns = [
     {
+      name: "UUID",
+      cell: (row) => <ShortString string={row._id} />,
+    },
+    {
       name: "Main Service",
       cell: (row) => (
         <ProfileName

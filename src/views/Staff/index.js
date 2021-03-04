@@ -121,6 +121,10 @@ const Staff = () => {
 
   const columns = [
     {
+      name: "UUID",
+      cell: (row) => <ShortString string={row._id} />,
+    },
+    {
       name: "Name",
       cell: (row) => <ProfileName image={row.image} name={row.name} />,
       sortable: true,
