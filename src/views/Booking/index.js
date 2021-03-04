@@ -6,8 +6,6 @@ import {
   Container,
   makeStyles,
   Chip as MuiChip,
-  Tooltip,
-  Button,
   Typography,
 } from "@material-ui/core";
 // icons
@@ -32,7 +30,6 @@ import {
 } from "../../redux/booking/actions";
 import Dialog from "./Dialog";
 import StaffDialog from "../Staff/StaffDialog";
-import { setEmptyStr, trimStr } from "../../utils";
 import DataTable from "../../components/DataTable";
 import SearchBar from "../../components/SearchBar";
 import Chip from "../../components/Chip";
@@ -334,11 +331,7 @@ const BookingList = () => {
   return (
     <Page className={classes.root} title="Bookings">
       <Container maxWidth={false}>
-        <TableToolbar
-          title="Booking"
-          hideAddButton
-          component={<Instructions />}
-        />
+        <TableToolbar hideAddButton component={<Instructions />} />
         <Box mt={3}>
           <DataTable
             data={data}

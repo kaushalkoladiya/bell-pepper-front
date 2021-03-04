@@ -126,9 +126,21 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         icon: UsersIcon,
       },
       {
-        href: "/admin/bookings",
-        icon: BookingIcon,
+        array: [
+          {
+            href: "/admin/booking/analytic",
+            icon: BarChartIcon,
+            title: "Analytic",
+          },
+          {
+            href: "/admin/bookings",
+            icon: BookingIcon,
+            title: "Orders",
+          },
+        ],
+        nested: true,
         title: "Bookings",
+        icon: BookingIcon,
       },
       {
         href: "/admin/tutorials",

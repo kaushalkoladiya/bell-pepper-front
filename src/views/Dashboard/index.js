@@ -187,13 +187,13 @@ const Dashboard = () => {
                 title={"Customers Joined"}
               />
             </Grid>
-            <Grid item sm={12} lg={6}>
+            {/* <Grid item sm={12} lg={6}>
               <Chart
                 url={"/reports/booking"}
                 property={"bookings"}
                 title={"Bookings"}
               />
-            </Grid>
+            </Grid> */}
           </Grid>
         )}
       </Container>

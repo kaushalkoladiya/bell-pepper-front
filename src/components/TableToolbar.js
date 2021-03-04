@@ -9,6 +9,7 @@ import {
   InputAdornment,
   SvgIcon,
   makeStyles,
+  Typography,
 } from "@material-ui/core";
 import { Search as SearchIcon } from "react-feather";
 import clsx from "clsx";
@@ -45,7 +46,10 @@ function TableToolbar({
               justifyContent: "space-between",
             }}
           >
-            <Box minWidth={400}>{component}</Box>
+            {title && <Typography variant="h4">{title}</Typography>}
+
+            {component && <Box minWidth={400}>{component}</Box>}
+
             {!hideAddButton && (
               <Box display="flex" justifyContent="flex-end">
                 <Button
