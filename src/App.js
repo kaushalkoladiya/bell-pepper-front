@@ -46,7 +46,13 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   (res) => {
-    if (res.config.method !== "get") {
+    const method = res.config.method;
+    if (
+      method === "post" ||
+      method === "put" ||
+      method === "delete" ||
+      method === "patch"
+    ) {
       const payload = { message: res.data.message, type: "success" };
       store.dispatch(openSnackbar(payload));
     }
