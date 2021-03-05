@@ -19,6 +19,7 @@ import CategoryView from "../views/Category";
 import BannerView from "../views/Banner";
 import TutorialView from "../views/Tutorial";
 import VideoView from "../views/Video";
+import CreateNewServiceView from "../views/Service/CreateNew";
 
 const routes = [
   {
@@ -68,6 +69,12 @@ const routes = [
       {
         path: "services",
         element: <PrivateRoute path="/admin" component={ServiceListView} />,
+      },
+      {
+        path: "service/new/:serviceId",
+        element: (
+          <PrivateRoute path="/admin" component={CreateNewServiceView} />
+        ),
       },
       {
         path: "bookings",

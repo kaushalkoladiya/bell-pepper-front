@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, makeStyles } from "@material-ui/core";
-
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+// Mui
+import { Box, Container, makeStyles } from "@material-ui/core";
 
 // redux
 import { useSelector, useDispatch } from "react-redux";
@@ -36,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 const VendorListView = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const serviceData = useSelector((state) => state.service.data);
 
@@ -73,11 +75,13 @@ const VendorListView = () => {
   };
 
   const handleOpenDialog = () => {
-    dispatch(openServiceDialog());
+    navigate("/admin/service/new/create");
+    // dispatch(openServiceDialog());
   };
 
-  const handleOpenServiceDialog = (id) => {
-    dispatch(openServiceDialog(id));
+  const handleEditService = (id) => {
+    // dispatch(openServiceDialog(id));
+    navigate(`/admin/service/new/${id}`);
   };
 
   const handleDelete = (id) => {
@@ -144,7 +148,7 @@ const VendorListView = () => {
       cell: (row) => (
         <div>
           <ToolTipButton
-            onClick={() => handleOpenServiceDialog(row._id)}
+            onClick={() => handleEditService(row._id)}
             title="Edit"
           >
             <EditIcon />
@@ -173,7 +177,7 @@ const VendorListView = () => {
           />
         </Box>
       </Container>
-      <Dialog />
+      {/* <Dialog /> */}
     </Page>
   );
 };

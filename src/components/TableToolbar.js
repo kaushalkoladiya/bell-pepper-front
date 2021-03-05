@@ -31,6 +31,7 @@ function TableToolbar({
   onSearch,
   onAddButtonClick,
   component,
+  backTitle,
   ...rest
 }) {
   const classes = useStyles();
@@ -43,12 +44,14 @@ function TableToolbar({
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: !backTitle && "space-between",
             }}
           >
             {title && <Typography variant="h4">{title}</Typography>}
 
             {component && <Box minWidth={400}>{component}</Box>}
+
+            {backTitle && <Typography variant="h4">{backTitle}</Typography>}
 
             {!hideAddButton && (
               <Box display="flex" justifyContent="flex-end">
