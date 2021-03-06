@@ -24,6 +24,8 @@ import ToolTipButton from "../../components/ToolTipButton";
 import { DeleteIcon, EditIcon } from "../../components/Icon";
 import ProfileName from "../../components/ProfileName";
 import ShortString from "../../components/ShortString";
+import PhotoIcon from "@material-ui/icons/PhotoLibraryRounded";
+import ImagesDialog from "./ImagesDialog";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -83,6 +85,8 @@ const VendorListView = () => {
     // dispatch(openServiceDialog(id));
     navigate(`/admin/service/new/${id}`);
   };
+
+  const handleEditCoverImages = (id) => dispatch(openServiceDialog(id));
 
   const handleDelete = (id) => {
     const data = warning();
@@ -153,6 +157,12 @@ const VendorListView = () => {
           >
             <EditIcon />
           </ToolTipButton>
+          <ToolTipButton
+            title="Add Cover Image"
+            onClick={() => handleEditCoverImages(row._id)}
+          >
+            <PhotoIcon color="primary" />
+          </ToolTipButton>
           <ToolTipButton title="Delete" onClick={() => handleDelete(row._id)}>
             <DeleteIcon />
           </ToolTipButton>
@@ -178,6 +188,7 @@ const VendorListView = () => {
         </Box>
       </Container>
       {/* <Dialog /> */}
+      <ImagesDialog />
     </Page>
   );
 };

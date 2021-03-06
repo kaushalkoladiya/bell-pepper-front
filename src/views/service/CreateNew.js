@@ -19,6 +19,7 @@ import ToolTipButton from "../../components/ToolTipButton";
 // icon
 import EditIcon from "@material-ui/icons/EditRounded";
 import BackIcon from "@material-ui/icons/ArrowBackRounded";
+import PhotoIcon from "@material-ui/icons/PhotoLibraryRounded";
 
 // utile
 import { networkRequest } from "../../utils";
@@ -26,6 +27,7 @@ import CategoryDropdown from "../Category/CategoryDropdown";
 import Page from "../../components/Page";
 import ErrorMessage from "../../components/ErrorMessage";
 import TableToolbar from "../../components/TableToolbar";
+import ImageRotator from "./ImageRotator";
 
 const useStyles = makeStyles((theme) => ({
   imageContainer: {
@@ -62,6 +64,12 @@ const useStyles = makeStyles((theme) => ({
   cancelButton: {
     marginRight: 10,
   },
+  richTextArea: {
+    padding: 10,
+    margin: "10px 0",
+    borderRadius: 5,
+    background: theme.palette.grey[200],
+  },
 }));
 
 const TitleWithCharCount = ({ title, count }) => {
@@ -85,6 +93,8 @@ const CreateNew = () => {
   const navigate = useNavigate();
 
   const serviceId = params.serviceId;
+
+  const [showImages, setShowImages] = useState(false);
 
   const [richTextEditors, setRichTextEditors] = useState({
     description: RichTextEditor.createEmptyValue(),
@@ -116,6 +126,7 @@ const CreateNew = () => {
   });
   const [imageData, setImageData] = useState(null);
   const [imagePath, setImagePath] = useState(null);
+  const [coverImages, setCoverImages] = useState([]);
   const [errors, setErrors] = useState({
     mongoID: null,
     categoryId: null,
@@ -210,6 +221,7 @@ const CreateNew = () => {
         });
 
         setImagePath(_service.image);
+        setCoverImages(_service.coverImage);
       }
     }
   }, [serviceId, _data]);
@@ -309,20 +321,20 @@ const CreateNew = () => {
         <TableToolbar
           hideAddButton
           component={
-            <ToolTipButton title="Back" onClick={handleCancel}>
-              <BackIcon />
-            </ToolTipButton>
+            <div>
+              <ToolTipButton title="Back" onClick={handleCancel}>
+                <BackIcon />
+              </ToolTipButton>
+            </div>
           }
           backTitle={
             formData.mongoID ? "Update Sub Service" : "Create New Sub Service"
           }
         />
-        <Grid container spacing={3}>
-          <Grid item sm={12} className={classes.topSection}></Grid>
-        </Grid>
+
         <form onSubmit={handleSubmit}>
           <Grid container className={classes.leftContainer} spacing={2}>
-            <Grid item sm={12} md={6}>
+            <Grid item sm={12} md={8}>
               <input
                 name="serviceImage"
                 id="serviceImage"
@@ -379,7 +391,7 @@ const CreateNew = () => {
                 error={errors.categoryId}
               />
 
-              <div className={classes.textField}>
+              <div className={classes.richTextArea}>
                 <TitleWithCharCount
                   title={"Certification?"}
                   count={charLength.certification}
@@ -395,10 +407,8 @@ const CreateNew = () => {
                 />
                 <ErrorMessage error={errors.certification} />
               </div>
-            </Grid>
 
-            <Grid item sm={12} md={6}>
-              <div className={classes.textField}>
+              <div className={classes.richTextArea}>
                 <TitleWithCharCount
                   title={"Description"}
                   count={charLength.description}
@@ -414,7 +424,7 @@ const CreateNew = () => {
                 <ErrorMessage error={errors.description} />
               </div>
 
-              <div className={classes.textField}>
+              <div className={classes.richTextArea}>
                 <TitleWithCharCount
                   title={"What the package should Include"}
                   count={charLength.packageInclude}
@@ -431,7 +441,7 @@ const CreateNew = () => {
                 <ErrorMessage error={errors.packageInclude} />
               </div>
 
-              <div className={classes.textField}>
+              <div className={classes.richTextArea}>
                 <TitleWithCharCount
                   title={"What brand will be use in it?"}
                   count={charLength.brandUsed}
@@ -448,7 +458,7 @@ const CreateNew = () => {
                 <ErrorMessage error={errors.brandUsed} />
               </div>
 
-              <div className={classes.textField}>
+              <div className={classes.richTextArea}>
                 <TitleWithCharCount
                   title={"Suitability?"}
                   count={charLength.suitable}
@@ -465,8 +475,27 @@ const CreateNew = () => {
                 <ErrorMessage error={errors.suitable} />
               </div>
             </Grid>
+            <Grid item sm={12} md={4}>
+              {formData.mongoID && (
+                <Grid container spacing={3} style={{ marginTop: 20 }}>
+                  {coverImages.map((item, key) => (
+                    <Grid item md={6} sm={12} key={key}>
+                      <img
+                        alt="cover slide"
+                        src={item}
+                        style={{
+                          borderRadius: 10,
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              )}
+            </Grid>
           </Grid>
-          <Grid item sm={12} className={classes.submitButton}>
+          <Grid item sm={8} className={classes.submitButton}>
             <Button
               variant="contained"
               className={classes.cancelButton}
