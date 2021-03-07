@@ -4,6 +4,7 @@ import {
   DELETE_SERVICE,
   GET_SERVICE,
   OPEN_SERVICE_DIALOG,
+  TOGGLE_SHOW,
   UPDATE_SERVICE,
 } from "./type";
 
@@ -46,6 +47,15 @@ const serviceReducer = (state = initialState, { type, payload }) => {
         ...state,
         data: state.data.filter((category) => {
           return category._id !== payload;
+        }),
+      };
+
+    case TOGGLE_SHOW:
+      return {
+        ...state,
+        data: state.data.map((item) => {
+          if (item._id === payload.id) return { ...item, show: !item.show };
+          else return item;
         }),
       };
 

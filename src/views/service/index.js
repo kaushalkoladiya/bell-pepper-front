@@ -6,7 +6,11 @@ import { Box, Container, makeStyles } from "@material-ui/core";
 
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { deleteService, openServiceDialog } from "../../redux/service/actions";
+import {
+  deleteService,
+  openServiceDialog,
+  toggleShow,
+} from "../../redux/service/actions";
 
 import Page from "../../components/Page";
 
@@ -26,6 +30,7 @@ import ProfileName from "../../components/ProfileName";
 import ShortString from "../../components/ShortString";
 import PhotoIcon from "@material-ui/icons/PhotoLibraryRounded";
 import ImagesDialog from "./ImagesDialog";
+import IOSSwitch from "../../components/IOSSwitch";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -108,6 +113,15 @@ const VendorListView = () => {
       .catch((err) => console.log(err));
   };
 
+  const handleShowChange = async (id) => {
+    try {
+      const { data } = await axios.put(`/service/toggleShow/${id}`);
+      if (data.status === 200) dispatch(toggleShow({ id }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const columns = [
     {
       name: "UUID",
@@ -141,6 +155,15 @@ const VendorListView = () => {
       name: "Price",
       selector: "price",
       sortable: true,
+    },
+    {
+      name: "Is Best?",
+      cell: (row) => (
+        <IOSSwitch
+          onChange={() => handleShowChange(row._id)}
+          checked={row.show}
+        />
+      ),
     },
     {
       name: "Created At",

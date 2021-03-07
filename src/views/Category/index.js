@@ -5,6 +5,7 @@ import {
   openCategoryDialog,
   deleteCategory,
   getCategory,
+  toggleShow,
 } from "../../redux/category/actions";
 // MUI
 import { Box, Container, makeStyles } from "@material-ui/core";
@@ -23,7 +24,7 @@ import { DeleteIcon, EditIcon } from "../../components/Icon";
 import DataTable from "../../components/DataTable";
 import SearchBar from "../../components/SearchBar";
 import EditedChip from "../../components/Chip/Edited";
-import ShortString from "../../components/ShortString";
+import IOSSwitch from "../../components/IOSSwitch";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -93,6 +94,15 @@ const Category = () => {
       .catch((err) => console.log(err));
   };
 
+  const handleShowChange = async (id) => {
+    try {
+      const { data } = await axios.put(`/category/toggleShow/${id}`);
+      if (data.status === 200) dispatch(toggleShow({ id }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const columns = [
     {
       name: "UUID",
@@ -106,6 +116,15 @@ const Category = () => {
       name: "Title",
       selector: "name",
       sortable: true,
+    },
+    {
+      name: "Show",
+      cell: (row) => (
+        <IOSSwitch
+          onChange={() => handleShowChange(row._id)}
+          checked={row.show}
+        />
+      ),
     },
     {
       name: "Created At",

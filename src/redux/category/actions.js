@@ -5,6 +5,7 @@ import {
   ADD_NEW_CATEGORY,
   UPDATE_CATEGORY,
   DELETE_CATEGORY,
+  TOGGLE_SHOW,
 } from "./type";
 
 export const getCategory = (payload) => ({
@@ -33,5 +34,10 @@ export const updateCategory = (payload) => ({
 
 export const deleteCategory = (payload) => ({
   type: DELETE_CATEGORY,
+  payload,
+});
+
+export const toggleShow = (payload) => ({
+  type: TOGGLE_SHOW,
   payload,
 });

@@ -4,6 +4,7 @@ import {
   DELETE_CATEGORY,
   GET_CATEGORY,
   OPEN_CATEGORY_DIALOG,
+  TOGGLE_SHOW,
   UPDATE_CATEGORY,
 } from "./type";
 
@@ -46,6 +47,15 @@ const categoryReducer = (state = initialState, { type, payload }) => {
         ...state,
         data: state.data.filter((item) => {
           return item._id !== payload;
+        }),
+      };
+
+    case TOGGLE_SHOW:
+      return {
+        ...state,
+        data: state.data.map((item) => {
+          if (item._id === payload.id) return { ...item, show: !item.show };
+          else return item;
         }),
       };
 
