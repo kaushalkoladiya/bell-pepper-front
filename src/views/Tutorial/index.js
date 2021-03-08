@@ -17,7 +17,7 @@ import Page from "../../components/Page";
 import Toolbar from "./Toolbar";
 import Dialog from "./Dialog";
 import { getVideo } from "../../redux/video/actions";
-import { warning, alert } from "../../utils/alert";
+import { warning, alert, permissionError } from "../../utils/alert";
 import TutorialCard from "../../components/TutorialCard";
 
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +36,7 @@ const ProductList = () => {
   const [data, setData] = useState([]);
 
   const { data: tutorialsData } = useSelector((state) => state.tutorial);
+  const hasPermission = useSelector((state) => state.admin.data.hasPermission);
 
   useEffect(() => {
     setData(tutorialsData);
@@ -56,10 +57,12 @@ const ProductList = () => {
   }, [dispatch]);
 
   const handleOpenDialog = (id = null) => {
+    if (!hasPermission) return permissionError();
     dispatch(openTutorialDialog(id));
   };
 
   const handleDelete = (id) => {
+    if (!hasPermission) return permissionError();
     const data = warning();
     data
       .then(async (isDeleted) => {

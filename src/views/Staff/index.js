@@ -29,7 +29,7 @@ import TableToolbar from "../../components/TableToolbar";
 import Dialog from "./Dialog";
 import ToolTipButton from "../../components/ToolTipButton";
 import { DeleteIcon, EditIcon } from "../../components/Icon";
-import { warning, alert } from "../../utils/alert";
+import { warning, alert, permissionError } from "../../utils/alert";
 import { ROOT_USER } from "../../constants";
 import ShortString from "../../components/ShortString";
 
@@ -54,6 +54,7 @@ const Staff = () => {
 
   const staffData = useSelector((state) => state.staff.data);
   const userType = useSelector((state) => state.admin.userType);
+  const hasPermission = useSelector((state) => state.admin.data.hasPermission);
 
   const isRootUser = userType === ROOT_USER ? true : false;
 
@@ -96,10 +97,12 @@ const Staff = () => {
   };
 
   const handleOpenDialog = (id = null) => {
+    if (!hasPermission) return permissionError();
     dispatch(openStaffDialog(id));
   };
 
   const handleDelete = (id) => {
+    if (!hasPermission) return permissionError();
     const data = warning();
     data
       .then(async (isDeleted) => {

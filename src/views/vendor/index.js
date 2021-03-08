@@ -12,7 +12,7 @@ import DataTable from "../../components/DataTable";
 import SearchBar from "../../components/SearchBar";
 // util
 import { setDate } from "../../utils";
-import { warning, alert } from "../../utils/alert";
+import { warning, alert, permissionError } from "../../utils/alert";
 import ToolTipButton from "../../components/ToolTipButton";
 import ProfileName from "../../components/ProfileName";
 import ShortString from "../../components/ShortString";
@@ -31,6 +31,7 @@ const VendorList = () => {
   const dispatch = useDispatch();
 
   const vendorData = useSelector((state) => state.vendor.data);
+  const hasPermission = useSelector((state) => state.admin.data.hasPermission);
 
   const [data, setData] = useState([]);
 
@@ -70,6 +71,7 @@ const VendorList = () => {
   };
 
   const handleDelete = (id) => {
+    if (!hasPermission) return permissionError();
     const data = warning(
       "Make sure all the related booking and staff will be\n deleted automatically!"
     );

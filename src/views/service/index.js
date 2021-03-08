@@ -21,7 +21,7 @@ import { setDate } from "../../utils";
 import Image from "../../components/Image";
 import SearchBar from "../../components/SearchBar";
 import DataTable from "../../components/DataTable";
-import { warning, alert } from "../../utils/alert";
+import { warning, alert, permissionError } from "../../utils/alert";
 import ToolTipButton from "../../components/ToolTipButton";
 
 // icons
@@ -46,6 +46,7 @@ const VendorListView = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const hasPermission = useSelector((state) => state.admin.data.hasPermission);
   const serviceData = useSelector((state) => state.service.data);
 
   const [data, setData] = useState([]);
@@ -82,18 +83,24 @@ const VendorListView = () => {
   };
 
   const handleOpenDialog = () => {
+    if (!hasPermission) return permissionError();
     navigate("/admin/service/new/create");
     // dispatch(openServiceDialog());
   };
 
   const handleEditService = (id) => {
+    if (!hasPermission) return permissionError();
     // dispatch(openServiceDialog(id));
     navigate(`/admin/service/new/${id}`);
   };
 
-  const handleEditCoverImages = (id) => dispatch(openServiceDialog(id));
+  const handleEditCoverImages = (id) => {
+    if (!hasPermission) return permissionError();
+    dispatch(openServiceDialog(id));
+  };
 
   const handleDelete = (id) => {
+    if (!hasPermission) return permissionError();
     const data = warning();
     data
       .then(async (isDeleted) => {
@@ -114,6 +121,7 @@ const VendorListView = () => {
   };
 
   const handleShowChange = async (id) => {
+    if (!hasPermission) return permissionError();
     try {
       const { data } = await axios.put(`/service/toggleShow/${id}`);
       if (data.status === 200) dispatch(toggleShow({ id }));
@@ -157,7 +165,7 @@ const VendorListView = () => {
       sortable: true,
     },
     {
-      name: "Is Best?",
+      name: "Is Best Offer?",
       cell: (row) => (
         <IOSSwitch
           onChange={() => handleShowChange(row._id)}

@@ -34,7 +34,7 @@ import DataTable from "../../components/DataTable";
 import SearchBar from "../../components/SearchBar";
 import Chip from "../../components/Chip";
 import ToolTipButton from "../../components/ToolTipButton";
-import { warning, alert } from "../../utils/alert";
+import { warning, alert, permissionError } from "../../utils/alert";
 import VendorDialogDropdown from "../Vendor/Dropdown";
 import CancelIcon from "@material-ui/icons/CancelRounded";
 import DoneIcon from "@material-ui/icons/DoneRounded";
@@ -157,6 +157,7 @@ const BookingList = () => {
 
   const bookingData = useSelector((state) => state.booking.data);
   const userType = useSelector((state) => state.admin.userType);
+  const hasPermission = useSelector((state) => state.admin.data.hasPermission);
 
   const isRootUser = userType === ROOT_USER ? true : false;
 
@@ -198,10 +199,12 @@ const BookingList = () => {
   };
 
   const handleOpenBookingDialog = (id) => {
+    if (!hasPermission) return permissionError();
     dispatch(openBookingDialog(id));
   };
 
   const handleOpenAssignDialog = (bookingId, vendorId = null) => {
+    if (!hasPermission) return permissionError();
     if (bookingId && vendorId) {
       //staff
       dispatch(openStaffDialog({ bookingId, vendorId }));
@@ -212,6 +215,7 @@ const BookingList = () => {
   };
 
   const handleDelete = (id) => {
+    if (!hasPermission) return permissionError();
     const data = warning();
     data
       .then(async (isDeleted) => {

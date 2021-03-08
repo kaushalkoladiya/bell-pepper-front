@@ -15,7 +15,7 @@ import TableToolbar from "../../components/TableToolbar";
 import Dialog from "./Dialog";
 import ToolTipButton from "../../components/ToolTipButton";
 import { setDate } from "../../utils";
-import { warning, alert } from "../../utils/alert";
+import { warning, alert, permissionError } from "../../utils/alert";
 import axios from "axios";
 import Image from "../../components/Image";
 
@@ -40,6 +40,7 @@ const Category = () => {
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
 
+  const hasPermission = useSelector((state) => state.admin.data.hasPermission);
   const { data: categoriesData } = useSelector((state) => state.category);
 
   useEffect(() => {
@@ -71,10 +72,12 @@ const Category = () => {
   };
 
   const handleOpenDialog = (id = null) => {
+    if (!hasPermission) return permissionError();
     dispatch(openCategoryDialog(id));
   };
 
   const handleDelete = (id) => {
+    if (!hasPermission) return permissionError();
     const data = warning();
     data
       .then(async (isDeleted) => {
@@ -95,6 +98,7 @@ const Category = () => {
   };
 
   const handleShowChange = async (id) => {
+    if (!hasPermission) return permissionError();
     try {
       const { data } = await axios.put(`/category/toggleShow/${id}`);
       if (data.status === 200) dispatch(toggleShow({ id }));

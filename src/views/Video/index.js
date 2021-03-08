@@ -15,7 +15,7 @@ import TutorialCard from "../../components/TutorialCard";
 import Toolbar from "./Toolbar";
 import Dialog from "./Dialog";
 import { deleteVideo, openVideoDialog } from "../../redux/video/actions";
-import { warning, alert } from "../../utils/alert";
+import { warning, alert, permissionError } from "../../utils/alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,6 +37,7 @@ const Video = () => {
   const [data, setData] = useState([]);
 
   const { data: videosData } = useSelector((state) => state.video);
+  const hasPermission = useSelector((state) => state.admin.data.hasPermission);
 
   useEffect(() => {
     if (params.tutorialId) {
@@ -55,6 +56,7 @@ const Video = () => {
   };
 
   const handleDelete = (id) => {
+    if (!hasPermission) return permissionError();
     const data = warning();
     data
       .then(async (isDeleted) => {

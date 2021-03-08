@@ -24,7 +24,7 @@ import DataTable from "../../components/DataTable";
 import IOSSwitch from "../../components/IOSSwitch";
 import { DeleteIcon } from "../../components/Icon";
 // utils
-import { warning, alert } from "../../utils/alert";
+import { warning, alert, permissionError } from "../../utils/alert";
 import { setDate } from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
@@ -41,6 +41,7 @@ const Sticker = () => {
   const classes = useStyles();
   const [data, setData] = useState([]);
 
+  const hasPermission = useSelector((state) => state.admin.data.hasPermission);
   const bannerData = useSelector((state) => state.banner.data);
 
   useEffect(() => {
@@ -60,10 +61,12 @@ const Sticker = () => {
   }, [bannerData]);
 
   const handleOpenDialog = () => {
+    if (!hasPermission) return permissionError();
     dispatch(openBannerDialog());
   };
 
   const handleDelete = (id) => {
+    if (!hasPermission) return permissionError();
     const data = warning();
     data
       .then(async (isDeleted) => {
