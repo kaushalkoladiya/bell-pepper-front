@@ -137,6 +137,11 @@ const NavBar = ({ onMobileClose, openMobile }) => {
             icon: BookingIcon,
             title: "Orders",
           },
+          {
+            href: "/admin/cleaning-bookings",
+            icon: BookingIcon,
+            title: "Cleaning Orders",
+          },
         ],
         nested: true,
         title: "Bookings",

@@ -252,6 +252,36 @@ const BookingList = () => {
       sortable: true,
     },
     {
+      name: "Instruction",
+      cell: (row) => <ShortString string={row.description} />,
+      sortable: true,
+    },
+    {
+      name: "Material",
+      cell: (row) => (row.isMaterialRequired ? "on" : "off"),
+      sortable: true,
+    },
+    {
+      name: "Frequency",
+      selector: "frequency",
+      sortable: true,
+    },
+    {
+      name: "Hours",
+      selector: "howManyHours",
+      sortable: true,
+    },
+    {
+      name: "Professions",
+      selector: "howManyProfessions",
+      sortable: true,
+    },
+    {
+      name: "Date & Time",
+      cell: (row) => `${row.date} ${row.time}`,
+      sortable: true,
+    },
+    {
       name: "Status",
       cell: (row) => (
         <div>
@@ -307,15 +337,17 @@ const BookingList = () => {
   ];
 
   return (
-    <Page className={classes.root} title="Bookings">
+    <Page className={classes.root} title="Cleaning Bookings">
       <Container maxWidth={false}>
         <TableToolbar hideAddButton component={<Instructions />} />
         <Box mt={3}>
           <DataTable
             data={data}
-            title="Booking"
+            title="Cleaning Booking"
             columns={columns}
-            actions={<SearchBar title="Booking" onSearch={handleSearch} />}
+            actions={
+              <SearchBar title="Cleaning Booking" onSearch={handleSearch} />
+            }
           />
         </Box>
       </Container>

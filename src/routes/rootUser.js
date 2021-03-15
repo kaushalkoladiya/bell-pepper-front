@@ -11,6 +11,7 @@ import DashboardView from "../views/Dashboard";
 import LoginView from "../views/auth/LoginView";
 import ServiceListView from "../views/Service";
 import BookingListView from "../views/Booking";
+import CleaningBookingListView from "../views/Booking/Cleaning";
 import BookingAnalyticView from "../views/Booking/Analytic";
 import SettingsView from "../views/Settings";
 import VendorListView from "../views/Vendor";
@@ -79,6 +80,12 @@ const routes = [
       {
         path: "bookings",
         element: <PrivateRoute path="/admin" component={BookingListView} />,
+      },
+      {
+        path: "cleaning-bookings",
+        element: (
+          <PrivateRoute path="/admin" component={CleaningBookingListView} />
+        ),
       },
       {
         path: "booking/analytic",
