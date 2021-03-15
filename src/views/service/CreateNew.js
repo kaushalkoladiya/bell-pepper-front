@@ -19,7 +19,6 @@ import ToolTipButton from "../../components/ToolTipButton";
 // icon
 import EditIcon from "@material-ui/icons/EditRounded";
 import BackIcon from "@material-ui/icons/ArrowBackRounded";
-import PhotoIcon from "@material-ui/icons/PhotoLibraryRounded";
 
 // utile
 import { networkRequest } from "../../utils";
@@ -27,7 +26,6 @@ import CategoryDropdown from "../Category/CategoryDropdown";
 import Page from "../../components/Page";
 import ErrorMessage from "../../components/ErrorMessage";
 import TableToolbar from "../../components/TableToolbar";
-import ImageRotator from "./ImageRotator";
 
 const useStyles = makeStyles((theme) => ({
   imageContainer: {
@@ -93,8 +91,6 @@ const CreateNew = () => {
   const navigate = useNavigate();
 
   const serviceId = params.serviceId;
-
-  const [showImages, setShowImages] = useState(false);
 
   const [richTextEditors, setRichTextEditors] = useState({
     description: RichTextEditor.createEmptyValue(),
