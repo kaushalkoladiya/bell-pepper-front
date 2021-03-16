@@ -20,7 +20,8 @@ import CategoryView from "../views/Category";
 import BannerView from "../views/Banner";
 import TutorialView from "../views/Tutorial";
 import VideoView from "../views/Video";
-import CreateNewServiceView from "../views/Service/CreateNew";
+import ServiceView from "../views/Service/CreateNew";
+import LaundryServiceView from "../views/Service/CreateOrEdit/Laundry";
 
 const routes = [
   {
@@ -72,12 +73,6 @@ const routes = [
         element: <PrivateRoute path="/admin" component={ServiceListView} />,
       },
       {
-        path: "service/new/:serviceId",
-        element: (
-          <PrivateRoute path="/admin" component={CreateNewServiceView} />
-        ),
-      },
-      {
         path: "bookings",
         element: <PrivateRoute path="/admin" component={BookingListView} />,
       },
@@ -95,6 +90,14 @@ const routes = [
         path: "settings",
         element: <PrivateRoute path="/admin" component={SettingsView} />,
       },
+      {
+        path: "service/new/:serviceId",
+        element: <PrivateRoute path="/admin" component={ServiceView} />,
+      },
+      // {
+      //   path: "service/new-laundry/:serviceId",
+      //   element: <PrivateRoute path="/admin" component={LaundryServiceView} />,
+      // },
       { path: "*", element: <Navigate to="/404" /> },
     ],
   },

@@ -16,7 +16,6 @@ import Page from "../../components/Page";
 
 import TableToolbar from "../../components/TableToolbar";
 import { getService } from "../../redux/service/actions";
-import Dialog from "./Dialog";
 import { setDate } from "../../utils";
 import Image from "../../components/Image";
 import SearchBar from "../../components/SearchBar";

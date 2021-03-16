@@ -4,33 +4,29 @@ import RichTextEditor from "react-rte";
 
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { addNewService, updateService } from "../../redux/service/actions";
+import { addNewService, updateService } from "../../../redux/service/actions";
 
 // Mui
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import { Container, Grid } from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 
 // components
-import Image from "../../components/Image";
-import ToolTipButton from "../../components/ToolTipButton";
+import Image from "../../../components/Image";
+import ToolTipButton from "../../../components/ToolTipButton";
 
 // icon
 import EditIcon from "@material-ui/icons/EditRounded";
 import BackIcon from "@material-ui/icons/ArrowBackRounded";
 
 // utile
-import { networkRequest } from "../../utils";
-import CategoryDropdown from "../Category/CategoryDropdown";
-import Page from "../../components/Page";
-import ErrorMessage from "../../components/ErrorMessage";
-import TableToolbar from "../../components/TableToolbar";
-import RichTextBox from "../../components/RichTextBox";
-import MainTimeLine from "./TimeLine";
-import CleaningTimeLine from "./TimeLine/Cleaning";
-import { cleaningBookingState } from "./api";
-import Cleaning from "./CreateOrEdit/Cleaning";
+import { networkRequest } from "../../../utils";
+import CategoryDropdown from "../../Category/CategoryDropdown";
+import Page from "../../../components/Page";
+import ErrorMessage from "../../../components/ErrorMessage";
+import TableToolbar from "../../../components/TableToolbar";
+import RichTextBox from "../../../components/RichTextBox";
 
 const useStyles = makeStyles((theme) => ({
   imageContainer: {
@@ -51,8 +47,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "right",
     margin: "20px 0",
   },
-  formContainer: {
+  leftContainer: {
     marginTop: 20,
+    alignItem: "center",
   },
   bottomSection: {
     marginTop: 20,
@@ -66,23 +63,35 @@ const useStyles = makeStyles((theme) => ({
   cancelButton: {
     marginRight: 10,
   },
-  categoryDropdown: {
-    marginLeft: 30,
-  },
-  titleContainer: {
-    display: "flex",
-    alignItems: "center",
+  richTextArea: {
+    padding: 10,
+    margin: "10px 0",
+    borderRadius: 5,
+    background: theme.palette.grey[200],
   },
 }));
 
-const CreateOrEditService = () => {
+const TitleWithCharCount = ({ title, count }) => {
+  const classes = useStyles();
+  return (
+    <div className={classes.largeTextField}>
+      <Typography variant="h5" color="textSecondary">
+        {title}
+      </Typography>
+      <Typography variant="caption" color="textSecondary">
+        Only {450 - count} character remains.
+      </Typography>
+    </div>
+  );
+};
+
+const Laundry = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const params = useParams();
   const navigate = useNavigate();
 
   const serviceId = params.serviceId;
-
   const [richTextEditors, setRichTextEditors] = useState({
     description: RichTextEditor.createEmptyValue(),
     packageInclude: RichTextEditor.createEmptyValue(),
@@ -90,12 +99,17 @@ const CreateOrEditService = () => {
     suitable: RichTextEditor.createEmptyValue(),
     certification: RichTextEditor.createEmptyValue(),
   });
-
   const [formData, setFormData] = useState({
     mongoID: null,
     categoryId: null,
     title: "",
     description: "",
+    price: "",
+    discount: "",
+    packageInclude: "",
+    brandUsed: "",
+    suitable: "",
+    certification: "",
   });
 
   const [imageData, setImageData] = useState(null);
@@ -151,10 +165,6 @@ const CreateOrEditService = () => {
         suitable: RichTextEditor.createEmptyValue(),
         certification: RichTextEditor.createEmptyValue(),
       });
-      setImageData("");
-      setImagePath("");
-      setCoverImages([]);
-      setInsertType("");
     };
   }, [serviceId]);
 
@@ -214,12 +224,8 @@ const CreateOrEditService = () => {
   const handleChangeFormData = (name, value) =>
     setFormData({ ...formData, [name]: value });
 
-  const handleCategoryChange = (e) => {
-    const _value = e.target.value;
-    if (_value === "6034864cc539ac08fd7c90e1") setInsertType("cleaning");
-    else if (_value === "603a2e86cbc49a449bab97f7") setInsertType("gas");
-    handleChangeFormData("categoryId", _value);
-  };
+  const handleCategoryChange = (e) =>
+    handleChangeFormData("categoryId", e.target.value);
 
   const handleErrorChange = (name, value) =>
     setErrors({
@@ -271,17 +277,16 @@ const CreateOrEditService = () => {
 
   const handleCancel = () => navigate("/admin/services");
 
-  const timelineProps = {
-    media: imageData,
-    ...formData,
-  };
-
-  let timeline = <MainTimeLine {...timelineProps} />;
-  let restFields = <div />;
+  let fields = [];
 
   if (insertType === "cleaning") {
-    timeline = <CleaningTimeLine {...timelineProps} />;
-    restFields = <Cleaning />;
+    fields = [
+      {
+        funcArg: "certification",
+        placeholder: "Certification",
+        title: "Certification",
+      },
+    ];
   }
 
   return (
@@ -302,7 +307,7 @@ const CreateOrEditService = () => {
         />
 
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={2} className={classes.formContainer}>
+          <Grid container className={classes.leftContainer} spacing={2}>
             <Grid item sm={12} md={8}>
               <input
                 name="laundry-serviceImage"
@@ -318,26 +323,47 @@ const CreateOrEditService = () => {
               </ToolTipButton>
               <ErrorMessage error={errors.image} />
 
-              <div className={classes.titleContainer}>
-                <TextField
-                  className={classes.textField}
-                  value={formData.title}
-                  name="title"
-                  onChange={handleInputChange}
-                  error={errors.title ? true : false}
-                  helperText={errors.title}
-                  label="Title"
-                  pattern="^\w+(\s+\w+)*$"
-                  fullWidth
-                />
-                <div className={classes.categoryDropdown}>
-                  <CategoryDropdown
-                    category={formData.categoryId}
-                    onChange={handleCategoryChange}
-                    error={errors.categoryId}
-                  />
-                </div>
-              </div>
+              <TextField
+                className={classes.textField}
+                value={formData.title}
+                name="title"
+                onChange={handleInputChange}
+                error={errors.title ? true : false}
+                helperText={errors.title}
+                label="Title"
+                pattern="^\w+(\s+\w+)*$"
+                fullWidth
+              />
+
+              {/* <TextField
+                className={classes.textField}
+                value={formData.price}
+                name="price"
+                onChange={handleInputChange}
+                error={errors.price ? true : false}
+                helperText={errors.price}
+                label="Price"
+                type="number"
+                fullWidth
+              /> */}
+
+              {/* <TextField
+                className={classes.textField}
+                value={formData.discount}
+                name="discount"
+                onChange={handleInputChange}
+                error={errors.discount ? true : false}
+                helperText={errors.discount}
+                label="Discount"
+                type="number"
+                fullWidth
+              /> */}
+
+              <CategoryDropdown
+                category={formData.categoryId}
+                onChange={handleCategoryChange}
+                error={errors.categoryId}
+              />
 
               <RichTextBox
                 title={"Description"}
@@ -346,7 +372,15 @@ const CreateOrEditService = () => {
                 funcArg={"description"}
               />
 
-              {restFields}
+              {fields.map((item, key) => (
+                <RichTextBox
+                  key={key}
+                  title={item.title}
+                  placeholder={item.placeholder}
+                  onTextChange={handleChangeFormData}
+                  funcArg={item.funcArg}
+                />
+              ))}
             </Grid>
             <Grid item sm={12} md={4}>
               {formData.mongoID && (
@@ -366,7 +400,6 @@ const CreateOrEditService = () => {
                   ))}
                 </Grid>
               )}
-              <div>{timeline}</div>
             </Grid>
           </Grid>
           <Grid item sm={8} className={classes.submitButton}>
@@ -387,4 +420,4 @@ const CreateOrEditService = () => {
   );
 };
 
-export default CreateOrEditService;
+export default Laundry;

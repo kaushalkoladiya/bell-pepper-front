@@ -1,3 +1,4 @@
+import { cleaningBookingState } from "./state";
 import {
   ADD_NEW_SERVICE,
   CLOSE_SERVICE_DIALOG,
@@ -12,6 +13,7 @@ const initialState = {
   data: [],
   dialogId: null,
   isDialogOpen: false,
+  cleaning: cleaningBookingState,
 };
 
 const serviceReducer = (state = initialState, { type, payload }) => {

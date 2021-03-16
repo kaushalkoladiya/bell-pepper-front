@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import RichTextEditor from "react-rte";
-
+import h2p from "html2plaintext";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { addNewService, updateService } from "../../redux/service/actions";
@@ -10,7 +10,7 @@ import { addNewService, updateService } from "../../redux/service/actions";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import { Container, Grid } from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 
 // components
 import Image from "../../components/Image";
@@ -26,11 +26,6 @@ import CategoryDropdown from "../Category/CategoryDropdown";
 import Page from "../../components/Page";
 import ErrorMessage from "../../components/ErrorMessage";
 import TableToolbar from "../../components/TableToolbar";
-import RichTextBox from "../../components/RichTextBox";
-import MainTimeLine from "./TimeLine";
-import CleaningTimeLine from "./TimeLine/Cleaning";
-import { cleaningBookingState } from "./api";
-import Cleaning from "./CreateOrEdit/Cleaning";
 
 const useStyles = makeStyles((theme) => ({
   imageContainer: {
@@ -51,8 +46,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "right",
     margin: "20px 0",
   },
-  formContainer: {
+  leftContainer: {
     marginTop: 20,
+    alignItem: "center",
   },
   bottomSection: {
     marginTop: 20,
@@ -66,16 +62,29 @@ const useStyles = makeStyles((theme) => ({
   cancelButton: {
     marginRight: 10,
   },
-  categoryDropdown: {
-    marginLeft: 30,
-  },
-  titleContainer: {
-    display: "flex",
-    alignItems: "center",
+  richTextArea: {
+    padding: 10,
+    margin: "10px 0",
+    borderRadius: 5,
+    background: theme.palette.grey[200],
   },
 }));
 
-const CreateOrEditService = () => {
+const TitleWithCharCount = ({ title, count }) => {
+  const classes = useStyles();
+  return (
+    <div className={classes.largeTextField}>
+      <Typography variant="h5" color="textSecondary">
+        {title}
+      </Typography>
+      <Typography variant="caption" color="textSecondary">
+        Only {450 - count} character remains.
+      </Typography>
+    </div>
+  );
+};
+
+const CreateNew = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const params = useParams();
@@ -96,13 +105,24 @@ const CreateOrEditService = () => {
     categoryId: null,
     title: "",
     description: "",
+    price: "",
+    discount: "",
+    packageInclude: "",
+    brandUsed: "",
+    suitable: "",
+    certification: "",
   });
 
+  const [charLength, setCharLength] = useState({
+    description: "",
+    packageInclude: "",
+    brandUsed: "",
+    suitable: "",
+    certification: "",
+  });
   const [imageData, setImageData] = useState(null);
   const [imagePath, setImagePath] = useState(null);
   const [coverImages, setCoverImages] = useState([]);
-  const [insertType, setInsertType] = useState("");
-
   const [errors, setErrors] = useState({
     mongoID: null,
     categoryId: null,
@@ -151,10 +171,6 @@ const CreateOrEditService = () => {
         suitable: RichTextEditor.createEmptyValue(),
         certification: RichTextEditor.createEmptyValue(),
       });
-      setImageData("");
-      setImagePath("");
-      setCoverImages([]);
-      setInsertType("");
     };
   }, [serviceId]);
 
@@ -177,15 +193,27 @@ const CreateOrEditService = () => {
           certification: _service.certification,
         });
 
-        const createRTEValue = (value) =>
-          RichTextEditor.createValueFromString(value, "html");
-
         setRichTextEditors({
-          description: createRTEValue(_service.description),
-          packageInclude: createRTEValue(_service.packageInclude),
-          brandUsed: createRTEValue(_service.brandUsed),
-          suitable: createRTEValue(_service.suitable),
-          certification: createRTEValue(_service.certification),
+          description: RichTextEditor.createValueFromString(
+            _service.description,
+            "html"
+          ),
+          packageInclude: RichTextEditor.createValueFromString(
+            _service.packageInclude,
+            "html"
+          ),
+          brandUsed: RichTextEditor.createValueFromString(
+            _service.brandUsed,
+            "html"
+          ),
+          suitable: RichTextEditor.createValueFromString(
+            _service.suitable,
+            "html"
+          ),
+          certification: RichTextEditor.createValueFromString(
+            _service.certification,
+            "html"
+          ),
         });
 
         setImagePath(_service.image);
@@ -205,8 +233,9 @@ const CreateOrEditService = () => {
     }
   };
 
-  const handleEditImage = () =>
-    document.getElementById("laundry-serviceImage").click();
+  const handleEditImage = () => {
+    document.getElementById("serviceImage").click();
+  };
 
   const handleInputChange = (e) =>
     handleChangeFormData(e.target.name, e.target.value);
@@ -214,11 +243,22 @@ const CreateOrEditService = () => {
   const handleChangeFormData = (name, value) =>
     setFormData({ ...formData, [name]: value });
 
-  const handleCategoryChange = (e) => {
-    const _value = e.target.value;
-    if (_value === "6034864cc539ac08fd7c90e1") setInsertType("cleaning");
-    else if (_value === "603a2e86cbc49a449bab97f7") setInsertType("gas");
-    handleChangeFormData("categoryId", _value);
+  const handleCategoryChange = (e) =>
+    handleChangeFormData("categoryId", e.target.value);
+
+  const handleCharLengthChange = (name, value) =>
+    setCharLength({ ...charLength, [name]: value });
+
+  const handleRTChange = (e, name) => {
+    handleChangeFormData(name, e.toString("html"));
+    setRichTextEditors({ ...richTextEditors, [name]: e });
+    const length = h2p(e.toString("html")).length;
+    handleCharLengthChange(name, length);
+    if (length > 450) {
+      return handleErrorChange(name, "Text is too long!");
+    } else {
+      return handleErrorChange(name, "");
+    }
   };
 
   const handleErrorChange = (name, value) =>
@@ -271,19 +311,6 @@ const CreateOrEditService = () => {
 
   const handleCancel = () => navigate("/admin/services");
 
-  const timelineProps = {
-    media: imageData,
-    ...formData,
-  };
-
-  let timeline = <MainTimeLine {...timelineProps} />;
-  let restFields = <div />;
-
-  if (insertType === "cleaning") {
-    timeline = <CleaningTimeLine {...timelineProps} />;
-    restFields = <Cleaning />;
-  }
-
   return (
     <Page className={classes.root} title="Create New Sub Service">
       <Container maxWidth={false}>
@@ -302,11 +329,11 @@ const CreateOrEditService = () => {
         />
 
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={2} className={classes.formContainer}>
+          <Grid container className={classes.leftContainer} spacing={2}>
             <Grid item sm={12} md={8}>
               <input
-                name="laundry-serviceImage"
-                id="laundry-serviceImage"
+                name="serviceImage"
+                id="serviceImage"
                 type="file"
                 hidden
                 accept="image/*"
@@ -318,35 +345,131 @@ const CreateOrEditService = () => {
               </ToolTipButton>
               <ErrorMessage error={errors.image} />
 
-              <div className={classes.titleContainer}>
-                <TextField
-                  className={classes.textField}
-                  value={formData.title}
-                  name="title"
-                  onChange={handleInputChange}
-                  error={errors.title ? true : false}
-                  helperText={errors.title}
-                  label="Title"
-                  pattern="^\w+(\s+\w+)*$"
-                  fullWidth
-                />
-                <div className={classes.categoryDropdown}>
-                  <CategoryDropdown
-                    category={formData.categoryId}
-                    onChange={handleCategoryChange}
-                    error={errors.categoryId}
-                  />
-                </div>
-              </div>
-
-              <RichTextBox
-                title={"Description"}
-                placeholder={"Item description"}
-                onTextChange={handleChangeFormData}
-                funcArg={"description"}
+              <TextField
+                className={classes.textField}
+                value={formData.title}
+                name="title"
+                onChange={handleInputChange}
+                error={errors.title ? true : false}
+                helperText={errors.title}
+                label="Title"
+                pattern="^\w+(\s+\w+)*$"
+                fullWidth
               />
 
-              {restFields}
+              <TextField
+                className={classes.textField}
+                value={formData.price}
+                name="price"
+                onChange={handleInputChange}
+                error={errors.price ? true : false}
+                helperText={errors.price}
+                label="Price"
+                type="number"
+                fullWidth
+              />
+
+              <TextField
+                className={classes.textField}
+                value={formData.discount}
+                name="discount"
+                onChange={handleInputChange}
+                error={errors.discount ? true : false}
+                helperText={errors.discount}
+                label="Discount"
+                type="number"
+                fullWidth
+              />
+
+              <CategoryDropdown
+                category={formData.categoryId}
+                onChange={handleCategoryChange}
+                error={errors.categoryId}
+              />
+
+              <div className={classes.richTextArea}>
+                <TitleWithCharCount
+                  title={"Certification?"}
+                  count={charLength.certification}
+                />
+
+                <RichTextEditor
+                  value={richTextEditors.certification}
+                  editorStyle={{
+                    border: errors.certification ? "2px solid red" : "none",
+                  }}
+                  onChange={(e) => handleRTChange(e, "certification")}
+                  placeholder="Description"
+                />
+                <ErrorMessage error={errors.certification} />
+              </div>
+
+              <div className={classes.richTextArea}>
+                <TitleWithCharCount
+                  title={"Description"}
+                  count={charLength.description}
+                />
+                <RichTextEditor
+                  value={richTextEditors.description}
+                  editorStyle={{
+                    border: errors.description ? "2px solid red" : "none",
+                  }}
+                  onChange={(e) => handleRTChange(e, "description")}
+                  placeholder="Description"
+                />
+                <ErrorMessage error={errors.description} />
+              </div>
+
+              <div className={classes.richTextArea}>
+                <TitleWithCharCount
+                  title={"What the package should Include"}
+                  count={charLength.packageInclude}
+                />
+
+                <RichTextEditor
+                  value={richTextEditors.packageInclude}
+                  editorStyle={{
+                    border: errors.packageInclude ? "2px solid red" : "none",
+                  }}
+                  onChange={(e) => handleRTChange(e, "packageInclude")}
+                  placeholder="Description"
+                />
+                <ErrorMessage error={errors.packageInclude} />
+              </div>
+
+              <div className={classes.richTextArea}>
+                <TitleWithCharCount
+                  title={"What brand will be use in it?"}
+                  count={charLength.brandUsed}
+                />
+
+                <RichTextEditor
+                  value={richTextEditors.brandUsed}
+                  editorStyle={{
+                    border: errors.brandUsed ? "2px solid red" : "none",
+                  }}
+                  onChange={(e) => handleRTChange(e, "brandUsed")}
+                  placeholder="Description"
+                />
+                <ErrorMessage error={errors.brandUsed} />
+              </div>
+
+              <div className={classes.richTextArea}>
+                <TitleWithCharCount
+                  title={"Suitability?"}
+                  count={charLength.suitable}
+                />
+
+                <RichTextEditor
+                  value={richTextEditors.suitable}
+                  editorStyle={{
+                    border: errors.suitable ? "2px solid red" : "none",
+                  }}
+                  onChange={(e) => handleRTChange(e, "suitable")}
+                  placeholder="Description"
+                />
+                <ErrorMessage error={errors.suitable} />
+              </div>
             </Grid>
             <Grid item sm={12} md={4}>
               {formData.mongoID && (
@@ -366,7 +489,6 @@ const CreateOrEditService = () => {
                   ))}
                 </Grid>
               )}
-              <div>{timeline}</div>
             </Grid>
           </Grid>
           <Grid item sm={8} className={classes.submitButton}>
@@ -387,4 +509,4 @@ const CreateOrEditService = () => {
   );
 };
 
-export default CreateOrEditService;
+export default CreateNew;
