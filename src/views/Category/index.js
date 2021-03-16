@@ -15,7 +15,7 @@ import TableToolbar from "../../components/TableToolbar";
 import Dialog from "./Dialog";
 import ToolTipButton from "../../components/ToolTipButton";
 import { setDate } from "../../utils";
-import { warning, alert, permissionError } from "../../utils/alert";
+import { warning, alert, permissionError, notAllowed } from "../../utils/alert";
 import axios from "axios";
 import Image from "../../components/Image";
 
@@ -77,24 +77,25 @@ const Category = () => {
   };
 
   const handleDelete = (id) => {
-    if (!hasPermission) return permissionError();
-    const data = warning();
-    data
-      .then(async (isDeleted) => {
-        if (isDeleted) {
-          // delete here
-          try {
-            const { data } = await axios.delete(`/category/${id}`);
-            if (data.status === 200) {
-              dispatch(deleteCategory(id));
-              alert("Deleted!", "Category has been deleted!", "success");
-            }
-          } catch (error) {
-            console.log(error);
-          }
-        }
-      })
-      .catch((err) => console.log(err));
+    return notAllowed();
+    // if (!hasPermission) return permissionError();
+    // const data = warning();
+    // data
+    //   .then(async (isDeleted) => {
+    //     if (isDeleted) {
+    //       // delete here
+    //       try {
+    //         const { data } = await axios.delete(`/category/${id}`);
+    //         if (data.status === 200) {
+    //           dispatch(deleteCategory(id));
+    //           alert("Deleted!", "Category has been deleted!", "success");
+    //         }
+    //       } catch (error) {
+    //         console.log(error);
+    //       }
+    //     }
+    //   })
+    //   .catch((err) => console.log(err));
   };
 
   const handleShowChange = async (id) => {

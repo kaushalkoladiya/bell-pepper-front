@@ -31,6 +31,13 @@ export const underDevelopment = () => {
   });
 };
 
+export const notAllowed = () => {
+  return swal({
+    title: "This operation is not allowed!",
+    icon: "error",
+  });
+};
+
 export const alert = (title, data, type) => {
   return swal(title, data, type);
 };
