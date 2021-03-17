@@ -1,12 +1,14 @@
 import { cleaningBookingState } from "./state";
 import {
   ADD_NEW_SERVICE,
+  CLEAR_SERVICE_DETAILS,
   CLOSE_SERVICE_DIALOG,
   DELETE_SERVICE,
   GET_SERVICE,
   OPEN_SERVICE_DIALOG,
   TOGGLE_SHOW,
   UPDATE_SERVICE,
+  UPDATE_SERVICE_DETAILS,
 } from "./type";
 
 const initialState = {
@@ -59,6 +61,21 @@ const serviceReducer = (state = initialState, { type, payload }) => {
           if (item._id === payload.id) return { ...item, show: !item.show };
           else return item;
         }),
+      };
+
+    case UPDATE_SERVICE_DETAILS:
+      return {
+        ...state,
+        cleaning: {
+          ...state.cleaning,
+          [payload.key]: payload.value,
+        },
+      };
+
+    case CLEAR_SERVICE_DETAILS:
+      return {
+        ...state,
+        cleaning: cleaningBookingState,
       };
 
     default:

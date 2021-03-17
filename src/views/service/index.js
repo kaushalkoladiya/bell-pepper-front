@@ -20,7 +20,7 @@ import { setDate } from "../../utils";
 import Image from "../../components/Image";
 import SearchBar from "../../components/SearchBar";
 import DataTable from "../../components/DataTable";
-import { warning, alert, permissionError } from "../../utils/alert";
+import { warning, alert, permissionError, notAllowed } from "../../utils/alert";
 import ToolTipButton from "../../components/ToolTipButton";
 
 // icons
@@ -88,9 +88,10 @@ const VendorListView = () => {
   };
 
   const handleEditService = (id) => {
-    if (!hasPermission) return permissionError();
-    // dispatch(openServiceDialog(id));
-    navigate(`/admin/service/new/${id}`);
+    return notAllowed();
+    // if (!hasPermission) return permissionError();
+    // // dispatch(openServiceDialog(id));
+    // navigate(`/admin/service/new/${id}`);
   };
 
   const handleEditCoverImages = (id) => {

@@ -6,6 +6,8 @@ import {
   UPDATE_SERVICE,
   DELETE_SERVICE,
   TOGGLE_SHOW,
+  UPDATE_SERVICE_DETAILS,
+  CLEAR_SERVICE_DETAILS,
 } from "./type";
 
 export const getService = (payload) => ({
@@ -39,5 +41,15 @@ export const deleteService = (payload) => ({
 
 export const toggleShow = (payload) => ({
   type: TOGGLE_SHOW,
+  payload,
+});
+
+export const updateServiceDetails = (payload) => ({
+  type: UPDATE_SERVICE_DETAILS,
+  payload,
+});
+
+export const clearServiceDetails = (payload) => ({
+  type: CLEAR_SERVICE_DETAILS,
   payload,
 });

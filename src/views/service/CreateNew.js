@@ -27,9 +27,6 @@ import Page from "../../components/Page";
 import ErrorMessage from "../../components/ErrorMessage";
 import TableToolbar from "../../components/TableToolbar";
 import RichTextBox from "../../components/RichTextBox";
-import MainTimeLine from "./TimeLine";
-import CleaningTimeLine from "./TimeLine/Cleaning";
-import { cleaningBookingState } from "./api";
 import Cleaning from "./CreateOrEdit/Cleaning";
 
 const useStyles = makeStyles((theme) => ({
@@ -37,11 +34,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     textAlign: "center",
     marginTop: 10,
-  },
-  closeButton: {
-    position: "absolute",
-    right: "10px",
-    top: "5px",
   },
   textCenter: {
     textAlign: "center",
@@ -271,16 +263,9 @@ const CreateOrEditService = () => {
 
   const handleCancel = () => navigate("/admin/services");
 
-  const timelineProps = {
-    media: imageData,
-    ...formData,
-  };
-
-  let timeline = <MainTimeLine {...timelineProps} />;
   let restFields = <div />;
 
   if (insertType === "cleaning") {
-    timeline = <CleaningTimeLine {...timelineProps} />;
     restFields = <Cleaning />;
   }
 
@@ -366,7 +351,6 @@ const CreateOrEditService = () => {
                   ))}
                 </Grid>
               )}
-              <div>{timeline}</div>
             </Grid>
           </Grid>
           <Grid item sm={8} className={classes.submitButton}>

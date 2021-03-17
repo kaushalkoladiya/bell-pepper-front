@@ -31,7 +31,7 @@ TitleWithCharCount.propTypes = {
   count: PropTypes.number.isRequired,
 };
 
-const RichTextBox = ({ title, onTextChange, placeholder, funcArg }) => {
+const RichTextBox = ({ title, onTextChange, placeholder, funcArg, rest }) => {
   const classes = useStyles();
   const [text, setText] = React.useState(RichTextEditor.createEmptyValue());
   const [charLength, setCharLength] = React.useState(0);
@@ -50,7 +50,7 @@ const RichTextBox = ({ title, onTextChange, placeholder, funcArg }) => {
   };
 
   return (
-    <Paper className={classes.textAreaContainer}>
+    <Paper className={classes.textAreaContainer} {...rest}>
       <TitleWithCharCount title={title} count={charLength} />
 
       <RichTextEditor

@@ -17,4 +17,5 @@ export const cleaningBookingState = {
   brandUsed: "",
   suitable: "",
   certification: "",
+  detail: [{ name: "New Name", description: "Dummy Description", price: 0 }],
 };

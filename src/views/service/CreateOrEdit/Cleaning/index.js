@@ -1,11 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
+// redux
+import { cleaningBookingState } from "../../../../redux/service/state";
 // Mui
 import TextField from "@material-ui/core/TextField";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import RichTextBox from "../../../components/RichTextBox";
-import { cleaningBookingState } from "../../../redux/service/state";
 import { Paper, Typography } from "@material-ui/core";
+// components
+import RichTextBox from "../../../../components/RichTextBox";
+import Frequency from "./Frequency";
+import Hour from "./Hour";
+import Staff from "./Staff";
+import Detail from "./Detail";
 
 const useStyles = makeStyles(() => ({
   textField: {
@@ -97,58 +103,13 @@ const Cleaning = () => {
           ))}
         </div>
       </Paper>
-      <Paper className={classes.container}>
-        <Title title={"Frequency"} />
-        <div className={classes.containerItems}>
-          {cleaningBookingState.frequency.map((item) => (
-            <TextField
-              className={classes.textField}
-              placeholder="Price"
-              onBlur={handleOnBlur}
-              value={item.price}
-              label={item.name}
-              type="number"
-              fullWidth
-            />
-          ))}
-        </div>
-      </Paper>
 
-      <Paper className={classes.container}>
-        <Title title={"Hour"} />
-        <div className={classes.containerItems}>
-          {cleaningBookingState.hour.map((item) => (
-            <TextField
-              className={classes.textField}
-              value={item.price}
-              placeholder="Price"
-              onBlur={handleOnBlur}
-              label={item.number}
-              type="number"
-              fullWidth
-            />
-          ))}
-        </div>
-      </Paper>
+      <Frequency />
+      <Hour />
+      <Staff />
+      <Detail />
 
-      <Paper className={classes.container}>
-        <Title title={"Staff"} />
-        <div className={classes.containerItems}>
-          {cleaningBookingState.staff.map((item) => (
-            <TextField
-              className={classes.textField}
-              value={item.price}
-              placeholder="Price"
-              onBlur={handleOnBlur}
-              label={item.number}
-              type="number"
-              fullWidth
-            />
-          ))}
-        </div>
-      </Paper>
-
-      {largeTextFields.map((item, key) => (
+      {/* {largeTextFields.map((item, key) => (
         <RichTextBox
           key={key}
           title={item.title}
@@ -156,7 +117,7 @@ const Cleaning = () => {
           onTextChange={handleOnBlur}
           funcArg={item.funcArg}
         />
-      ))}
+      ))} */}
     </React.Fragment>
   );
 };
