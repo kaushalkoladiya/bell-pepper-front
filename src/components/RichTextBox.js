@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import RichTextEditor from "react-rte";
 import h2p from "html2plaintext";
@@ -31,11 +31,23 @@ TitleWithCharCount.propTypes = {
   count: PropTypes.number.isRequired,
 };
 
-const RichTextBox = ({ title, onTextChange, placeholder, funcArg, rest }) => {
+const RichTextBox = ({
+  title,
+  onTextChange,
+  placeholder,
+  funcArg,
+  error: _error,
+  value,
+  ...rest
+}) => {
   const classes = useStyles();
-  const [text, setText] = React.useState(RichTextEditor.createEmptyValue());
+  const [text, setText] = React.useState(
+    RichTextEditor.createValueFromString(value, "html")
+  );
   const [charLength, setCharLength] = React.useState(0);
   const [error, setError] = React.useState("");
+
+  useEffect(() => setError(_error), [_error]);
 
   const handleRTChange = (e) => {
     onTextChange(funcArg, e.toString("html"));
@@ -50,7 +62,7 @@ const RichTextBox = ({ title, onTextChange, placeholder, funcArg, rest }) => {
   };
 
   return (
-    <Paper className={classes.textAreaContainer} {...rest}>
+    <Paper className={classes.textAreaContainer}>
       <TitleWithCharCount title={title} count={charLength} />
 
       <RichTextEditor
@@ -60,6 +72,7 @@ const RichTextBox = ({ title, onTextChange, placeholder, funcArg, rest }) => {
         }}
         onChange={handleRTChange}
         placeholder={placeholder}
+        {...rest}
       />
       <ErrorMessage error={error} />
     </Paper>
@@ -71,6 +84,8 @@ RichTextBox.propTypes = {
   onTextChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string.isRequired,
   funcArg: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  error: PropTypes.string,
 };
 
 export default RichTextBox;

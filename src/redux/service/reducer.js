@@ -1,4 +1,3 @@
-import { cleaningBookingState } from "./state";
 import {
   ADD_NEW_SERVICE,
   CLEAR_SERVICE_DETAILS,
@@ -10,6 +9,13 @@ import {
   UPDATE_SERVICE,
   UPDATE_SERVICE_DETAILS,
 } from "./type";
+
+const cleaningBookingState = {
+  frequency: [],
+  hour: [],
+  staff: [],
+  detail: [],
+};
 
 const initialState = {
   data: [],
@@ -64,13 +70,23 @@ const serviceReducer = (state = initialState, { type, payload }) => {
       };
 
     case UPDATE_SERVICE_DETAILS:
-      return {
-        ...state,
-        cleaning: {
-          ...state.cleaning,
-          [payload.key]: payload.value,
-        },
-      };
+      if (payload.multiple) {
+        return {
+          ...state,
+          cleaning: {
+            ...state.cleaning,
+            ...payload.data,
+          },
+        };
+      } else {
+        return {
+          ...state,
+          cleaning: {
+            ...state.cleaning,
+            [payload.key]: payload.value,
+          },
+        };
+      }
 
     case CLEAR_SERVICE_DETAILS:
       return {

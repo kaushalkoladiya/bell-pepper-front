@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { updateServiceDetails } from "../../../../redux/service/actions";
+import { updateServiceDetails } from "../../../redux/service/actions";
 // Mui
 import { makeStyles, Paper } from "@material-ui/core";
 // icons
-import AddIcon from "../../../../components/Icon/Add";
-import CheckIcon from "../../../../components/Icon/Check";
+import AddIcon from "../../../components/Icon/Add";
+import CheckIcon from "../../../components/Icon/Check";
 // components
-import ToolTipButton from "../../../../components/ToolTipButton";
-import Title from "./Title";
-import FieldBox from "./FieldBox";
+import ToolTipButton from "../../../components/ToolTipButton";
+import Title from "./Cleaning/Title";
+import FieldBox from "./Cleaning/FieldBox";
 
 const useStyles = makeStyles(() => ({
   textField: {
@@ -93,6 +93,7 @@ const Detail = () => {
             onRemove={handleRemove}
             id={key}
             richTextBox
+            description={item.description}
           />
         ))}
       </div>

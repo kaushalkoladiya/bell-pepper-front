@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     backgroundColor: theme.palette.grey[100],
-    padding: 5,
+    padding: 10,
     margin: "5px 0",
     borderRadius: 10,
   },
@@ -57,7 +57,7 @@ const FieldBox = ({
           placeholder={valueTitle}
           onChange={(e) => onValueChange(e.target.value, id, "price")}
           value={value}
-          label={valueTitle}
+          label={richTextBox ? valueTitle + " (optional)" : valueTitle}
           type="number"
           fullWidth
         />
@@ -72,6 +72,7 @@ const FieldBox = ({
             placeholder={"Description"}
             onTextChange={(key, value) => onValueChange(value, id, key)}
             funcArg={"description"}
+            value={description}
           />
         </div>
       )}

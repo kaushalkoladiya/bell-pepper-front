@@ -88,10 +88,10 @@ const VendorListView = () => {
   };
 
   const handleEditService = (id) => {
-    return notAllowed();
-    // if (!hasPermission) return permissionError();
+    // return notAllowed();
+    if (!hasPermission) return permissionError();
     // // dispatch(openServiceDialog(id));
-    // navigate(`/admin/service/new/${id}`);
+    navigate(`/admin/service/new/${id}`);
   };
 
   const handleEditCoverImages = (id) => {
@@ -155,13 +155,13 @@ const VendorListView = () => {
       sortable: true,
     },
     {
-      name: "Description",
-      cell: (row) => <ShortString string={row.description} />,
+      name: "Price",
+      selector: "price",
       sortable: true,
     },
     {
-      name: "Price",
-      selector: "price",
+      name: "Discount",
+      selector: "discount",
       sortable: true,
     },
     {
