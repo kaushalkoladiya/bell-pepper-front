@@ -299,17 +299,17 @@ const BookingList = () => {
               <AssignmentIcon color="action" fontSize="small" />
             </ToolTipButton>
           )}
-          {row.profession && !row.isCancelled && row.isDone && (
-            <StaffSuccessChip label={row.profession.name} />
+          {row.staffId && !row.isCancelled && row.isDone && (
+            <StaffSuccessChip label={row.staffId.name} />
           )}
-          {row.profession && !row.isCancelled && !row.isDone && (
-            <StaffPendingChip label={row.profession.name} />
+          {row.staffId && !row.isCancelled && !row.isDone && (
+            <StaffPendingChip label={row.staffId.name} />
           )}
           {row.isCancelled && row.cancelledByWhom && (
             <CancelChip label={row.cancelledByWhom} />
           )}
-          {row.profession && row.isDone && <CompletedChip />}
-          {row.profession && !row.isDone && <AssignedChip />}
+          {row.staffId && row.isDone && <CompletedChip />}
+          {row.staffId && !row.isDone && <AssignedChip />}
         </div>
       ),
     },

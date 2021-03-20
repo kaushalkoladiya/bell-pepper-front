@@ -55,7 +55,7 @@ const bookingReducer = (state = initialState, { type, payload }) => {
           item._id === payload.bookingId
             ? {
                 ...item,
-                profession: payload.bookingData.staffId,
+                staffId: payload.bookingData.staffId,
               }
             : item
         ),
