@@ -102,8 +102,8 @@ const VendorList = () => {
       name: "Category",
       cell: (row) => (
         <ProfileName
-          name={row.categoryId.name}
-          image={row.categoryId.image}
+          name={row.categoryId?.name}
+          image={row.categoryId?.image}
           square
         />
       ),
@@ -126,7 +126,9 @@ const VendorList = () => {
     {
       name: "Address",
       cell: (row) =>
-        `${row.address.houseNumber}, ${row.address.street} ${row.address.city}`,
+        row.addressId
+          ? `${row.addressId.houseNumber}, ${row.addressId.street} ${row.addressId.city}`
+          : "-",
       sortable: true,
     },
     {
