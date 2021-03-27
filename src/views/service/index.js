@@ -100,6 +100,7 @@ const VendorListView = () => {
   };
 
   const handleDelete = (id) => {
+    return notAllowed();
     if (!hasPermission) return permissionError();
     const data = warning();
     data

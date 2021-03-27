@@ -243,25 +243,27 @@ const BookingList = () => {
     },
     {
       name: "Service",
-      cell: (row) => <ShortString string={row.serviceId.title} />,
+      cell: (row) => row?.serviceId?.title,
       sortable: true,
     },
     {
       name: "User",
-      cell: (row) => <ShortString string={row.userId.name} />,
+      cell: (row) => <ShortString string={row?.userId?.name} />,
       sortable: true,
     },
     {
       name: "Status",
       cell: (row) => (
         <div>
-          {row.vendorId && <AssignedVendor label={row.vendorId.companyName} />}
+          {row.vendorId && (
+            <AssignedVendor label={row?.vendorId?.companyName} />
+          )}
           {!row.isCancelled && (
             <ToolTipButton
               onClick={() =>
                 isRootUser
                   ? handleOpenAssignDialog(row._id)
-                  : handleOpenAssignDialog(row._id, row.vendorId._id)
+                  : handleOpenAssignDialog(row._id, row?.vendorId?._id)
               }
               title={isRootUser ? "Assign Vendor" : "Assign Employee"}
               placement="top"
@@ -270,10 +272,10 @@ const BookingList = () => {
             </ToolTipButton>
           )}
           {row.staffId && !row.isCancelled && row.isDone && (
-            <StaffSuccessChip label={row.staffId.name} />
+            <StaffSuccessChip label={row?.staffId?.name} />
           )}
           {row.staffId && !row.isCancelled && !row.isDone && (
-            <StaffPendingChip label={row.staffId.name} />
+            <StaffPendingChip label={row?.staffId?.name} />
           )}
           {row.isCancelled && row.cancelledByWhom && (
             <CancelChip label={row.cancelledByWhom} />

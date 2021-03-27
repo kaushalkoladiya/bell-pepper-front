@@ -65,8 +65,8 @@ const theme = createMuiTheme({
       arrow: true,
     },
     MuiTextField: {
-      variant: "outlined",
-      size: "medium",
+      variant: "standard",
+      size: "small",
     },
     MuiSelect: {
       variant: "standard",

@@ -111,7 +111,7 @@ const routes = [
         element: <AuthRoute path="/login" component={LoginView} />,
       },
       { path: "404", element: <NotFoundView /> },
-      { path: "/", element: <Navigate to="/admin/dashboard" /> },
+      // { path: "/", element: <Navigate to="/admin/dashboard" /> },
       { path: "*", element: <Navigate to="/404" /> },
     ],
   },

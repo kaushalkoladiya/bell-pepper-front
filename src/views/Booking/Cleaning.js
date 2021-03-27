@@ -40,6 +40,7 @@ import CancelIcon from "@material-ui/icons/CancelRounded";
 import DoneIcon from "@material-ui/icons/DoneRounded";
 import { ROOT_USER } from "../../constants";
 import ShortString from "../../components/ShortString";
+import { setDate } from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -170,7 +171,7 @@ const BookingList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get("/booking");
+        const { data } = await axios.get("/booking/cleaning");
         dispatch(getBooking(data.data.bookings));
       } catch (error) {
         console.log(error);
@@ -242,11 +243,6 @@ const BookingList = () => {
       cell: (row) => <ShortString string={row._id} />,
     },
     {
-      name: "Service",
-      cell: (row) => <ShortString string={row.serviceId.title} />,
-      sortable: true,
-    },
-    {
       name: "User",
       cell: (row) => <ShortString string={row.userId.name} />,
       sortable: true,
@@ -277,8 +273,18 @@ const BookingList = () => {
       sortable: true,
     },
     {
-      name: "Date & Time",
-      cell: (row) => `${row.date} ${row.time}`,
+      name: "Start Date",
+      cell: (row) => setDate(row.startDate, true),
+      sortable: true,
+    },
+    {
+      name: "End Date",
+      cell: (row) => setDate(row.endDate, true),
+      sortable: true,
+    },
+    {
+      name: "Register On",
+      cell: (row) => setDate(row.createdAt),
       sortable: true,
     },
     {
