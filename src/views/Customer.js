@@ -98,7 +98,7 @@ const CustomerListView = () => {
       } catch (error) {}
     };
     fetchData();
-  }, [dispatch, userData]);
+  }, [dispatch]);
 
   const handleSearch = (e) => {
     const value = e.target.value.toUpperCase();

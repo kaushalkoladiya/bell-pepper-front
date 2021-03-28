@@ -79,7 +79,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const promise = axios
-      .get("/admin/dashboard")
+      .get("/dashboard")
       .then(({ data }) => setCounts(data.data))
       .catch((err) => console.log(err));
     promiseToast(promise);
